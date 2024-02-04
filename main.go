@@ -27,6 +27,8 @@ func main() {
 		Height: 768,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
+			// Handler: app.NewFileLoader(a),
+			// Middleware: app.NewMiddleware(a),
 		},
 		BackgroundColour: &options.RGBA{R: 251, G: 251, B: 251, A: 1},
 		OnStartup:        a.Startup,

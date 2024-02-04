@@ -3,7 +3,6 @@ package biliClient
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"fmt"
 	"net/url"
 	"sort"
 	"strconv"
@@ -52,7 +51,6 @@ func EncWbi(params map[string]string, imgKey, subKey string) map[string]string {
 }
 
 func getMixinKey(orig string) string {
-	fmt.Println("getMixinKey", orig)
 	var str strings.Builder
 	for _, v := range mixinKeyEncTab {
 		if v < len(orig) {

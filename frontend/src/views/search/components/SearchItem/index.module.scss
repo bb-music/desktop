@@ -1,0 +1,73 @@
+.searchItem {
+  position: relative;
+  width: 100%;
+  background-color: #fff;
+  padding: 8px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  gap: 8px;
+  cursor: pointer;
+  border: 1px solid #fff;
+  display: flex;
+  &:hover {
+    border-color: #333;
+  }
+  .cover {
+    width: 50px;
+    height: 50px;
+    border-radius: 2px;
+  }
+  .info {
+    flex: 1;
+    overflow: hidden;
+  }
+  .title {
+    margin-bottom: 8px;
+    white-space: nowrap;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    :global {
+      * {
+        font-style: normal;
+      }
+    }
+  }
+  .tags {
+    font-size: 12px;
+    gap: 12px;
+    display: flex;
+    align-items: center;
+  }
+  .loading {
+    display: flex;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+  }
+  .operate {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    gap: 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    &.show {
+      display: flex;
+    }
+  }
+}

@@ -56,7 +56,8 @@ a {
   }
 }
 
-input {
+input,
+textarea {
   width: 100%;
   padding: 4px 12px;
   height: 40px;
@@ -66,16 +67,30 @@ input {
   &:focus {
     outline: 2px solid #333;
   }
+  font-family: 微软雅黑;
+}
+textarea {
+  min-height: 65px;
+  padding: 12px;
+  resize: vertical;
 }
 button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   height: 40px;
   padding: 6px 20px;
   background: #333;
   color: #fff;
   border-radius: 2px;
-  border: none;
+  border: 1px solid #333;
   cursor: pointer;
   white-space: nowrap;
+  box-sizing: border-box;
+  &.cancel {
+    background: transparent;
+    color: var(--font-color);
+  }
 }
 .i-icon {
   display: inline-flex;
@@ -97,4 +112,21 @@ button {
 ::-webkit-scrollbar-thumb {
   background-color: #aaa;
   border-radius: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  td,
+  th {
+    text-align-last: left;
+    padding: 6px 10px;
+  }
+  tbody {
+    tr {
+      &:nth-child(2n-1) {
+        background-color: #f1f1f1;
+      }
+    }
+  }
 }

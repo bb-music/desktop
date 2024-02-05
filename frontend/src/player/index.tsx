@@ -20,6 +20,8 @@ import { useEffect, useState } from 'react';
 import { musicItem2Url } from '.';
 import { PlayerStatus } from '.';
 import { PlayerModeMap } from '.';
+import { DownloadMusic, UpdateDownloadDir } from '@wails/go/app/App';
+import { useConfigStore } from '@/store/config';
 
 export * from './types';
 export * from './utils';
@@ -28,7 +30,8 @@ export * from './constants';
 
 export function Player({ className, style }: { className?: string; style?: React.CSSProperties }) {
   const player = usePlayerStore();
-  const [listShow, setListShow] = useState(true);
+  const config = useConfigStore();
+  const [listShow, setListShow] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   useEffect(() => {
     player.init();
@@ -158,19 +161,35 @@ export function Player({ className, style }: { className?: string; style?: React
                 <div className={styles.name}>
                   {index + 1}. {item.name}
                 </div>
-                <div className={styles.operate}>
-                  <a
+                <div
+                  className={styles.operate}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  <span
                     className={styles.operateLink}
-                    download
-                    href={musicItem2Url(item)}
-                    target='_blank'
+                    onClick={async (e) => {
+                      if (!config.downloadDir) {
+                        await UpdateDownloadDir();
+                        await config.load();
+                        return;
+                      }
+                      DownloadMusic({
+                        aid: item.aid + '',
+                        cid: item.cid + '',
+                        bvid: item.bvid + '',
+                        name: item.name,
+                      }).then((res) => {
+                        console.log(res);
+                      });
+                    }}
                   >
                     下载
-                  </a>
+                  </span>
                   <span
                     className={styles.operateLink}
                     onClick={(e) => {
-                      e.stopPropagation();
                       player.removePlayerList([item.id]);
                     }}
                   >

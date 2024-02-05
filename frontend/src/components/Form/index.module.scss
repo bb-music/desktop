@@ -1,0 +1,16 @@
+.formItem {
+  display: flex;
+  margin-bottom: 15px;
+  :global {
+    .ui-form-item-label {
+      margin-right: 10px;
+      padding-top: 15px;
+    }
+    .ui-form-item-content {
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      flex: 1;
+    }
+  }
+}

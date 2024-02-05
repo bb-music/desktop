@@ -1,18 +1,10 @@
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Routes,
-  Route,
-  useNavigate,
-  NavigateFunction,
-  NavigateOptions,
-  To,
-} from 'react-router-dom';
+import { Routes, Route, useNavigate, NavigateOptions, To } from 'react-router-dom';
 import Home from './views/home';
 import Search from './views/search';
 import PartList from './views/parts';
 import MyMusicList from './views/my';
 import Config from './views/config';
+import MusicOrderDetail from './views/musicOrderDetail';
 
 export let router: {
   push: (to: To, options?: NavigateOptions) => void;
@@ -47,6 +39,10 @@ export function AppRoutes() {
       <Route
         path='/config'
         Component={Config}
+      />
+      <Route
+        path='/music-order-detail'
+        Component={MusicOrderDetail}
       />
     </Routes>
   );

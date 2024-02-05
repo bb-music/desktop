@@ -6,28 +6,24 @@ import (
 )
 
 type Client struct {
-	signData SignData
+	SignData SignData `json:"sing_data"`
 }
 
-func (c *Client) New() error {
-	_, err := c.LoadSignData()
-	if err != nil {
-		return err
-	}
-	return nil
+func (c *Client) New() {
+	// _, err := c.LoadSignData()
+	// if err != nil {
+	// 	return err
+	// }
+	// return nil
 }
 
 func (c *Client) LoadSignData() (SignData, error) {
 	if data, err := GetWbiKeysApi(); err != nil {
 		return SignData{}, err
 	} else {
-		c.signData = data
+		c.SignData = data
 		return data, nil
 	}
-}
-
-func (c *Client) GetSignData() SignData {
-	return c.signData
 }
 
 func (c *Client) UpdateSignData(data SignData) error {
@@ -38,15 +34,15 @@ func (c *Client) UpdateSignData(data SignData) error {
 	if data.SubKey == "" {
 		return errors.New("SubKey 不能为空")
 	}
-	c.signData = data
+	c.SignData = data
 	return nil
 }
 
 func (c *Client) Sign(params map[string]string) map[string]string {
-	if c.signData.ImgKey == "" || c.signData.SubKey == "" {
+	if c.SignData.ImgKey == "" || c.SignData.SubKey == "" {
 		c.LoadSignData()
 	}
-	return EncWbi(params, c.signData.ImgKey, c.signData.SubKey)
+	return EncWbi(params, c.SignData.ImgKey, c.SignData.SubKey)
 }
 
 type SearchParams struct {

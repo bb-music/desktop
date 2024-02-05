@@ -3,14 +3,19 @@ import { MusicItem } from '.';
 import qs from 'querystring';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import { configStore } from '@/store/config';
 dayjs.extend(duration);
 
 export function musicItem2Url(music: MusicItem) {
   const q = new URLSearchParams();
-  q.set('aid', music.aid?.toString()!);
-  q.set('bvid', music.bvid?.toString()!);
-  q.set('cid', music.cid?.toString()!);
-  return `http://localhost:7840/videofile/${music.name}.mp4?${q.toString()}`;
+  const aid = music.aid?.toString()!;
+  const bvid = music.bvid?.toString()!;
+  const cid = music.cid?.toString()!;
+  q.set('aid', aid);
+  q.set('bvid', bvid);
+  q.set('cid', cid);
+  const port = configStore.getState().videoProxyPort;
+  return `http://localhost:${port}/videofile/${music.name}?${q.toString()}`;
 }
 
 export function partItem2MusicItem(part: {

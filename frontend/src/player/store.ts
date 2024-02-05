@@ -104,7 +104,6 @@ export const playerStore = create<PlayerStore>()((set, get) => {
         store.audio.play();
         store.addPlayerHistory();
       } else {
-        console.log(store.playerStatus, store.current, store.audio);
         if (store.playerStatus === PlayerStatus.Play) {
           store.pause();
         } else {

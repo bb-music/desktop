@@ -4,6 +4,7 @@ import duration from 'dayjs/plugin/duration';
 import { partItem2MusicItem, usePlayerStore } from '@/player';
 import { biliClient } from '@wails/go/models';
 import { transformImgUrl } from '@/utils';
+import { useLocalMusicOrder } from '@/views/my/store/localMusicOrder';
 
 dayjs.extend(duration);
 
@@ -19,6 +20,7 @@ export function PartItem({
   style?: React.CSSProperties;
 }) {
   const player = usePlayerStore();
+  const musicLocalOrder = useLocalMusicOrder();
   return (
     <div
       className={styles.partItem}
@@ -47,7 +49,15 @@ export function PartItem({
         >
           立即播放
         </span>
-        <span>加入歌单</span>
+        <span
+          onClick={() => {
+            musicLocalOrder.appendMusic(musicLocalOrder.list[0].id, [
+              partItem2MusicItem({ ...data, aid, bvid }),
+            ]);
+          }}
+        >
+          加入歌单
+        </span>
         <span
           onClick={() => {
             player.addPlayerList([partItem2MusicItem({ ...data, aid, bvid })]);

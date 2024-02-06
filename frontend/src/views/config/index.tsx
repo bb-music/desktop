@@ -2,10 +2,26 @@ import { useConfigStore } from '@/store/config';
 import styles from './index.module.scss';
 import PageTitle from '@/components/PageTitle';
 import { FormItem } from '@/components/Form';
-import { LoadSignData, UpdateClientSignData, UpdateDownloadDir } from '@wails/go/app/App';
+import { LoadSignData, UpdateDownloadDir } from '@wails/go/app/App';
+import {
+  UserMusicOrderOrigin,
+  UserMusicOrderOriginType,
+  UserMusicOrderOriginTypeMap,
+} from '@/utils/userMusicOrder/common';
+import { useEffect } from 'react';
+import { GithubUserMusicOrderOrigin } from '@/utils/userMusicOrder';
 
 export default function Config() {
   const config = useConfigStore();
+
+  useEffect(() => {
+    config.userMusicOrderOrigin.forEach((c) => {
+      if (c.type === UserMusicOrderOriginType.Github) {
+        new GithubUserMusicOrderOrigin(c);
+      }
+    });
+  }, []);
+
   return (
     <div style={{ width: '100%' }}>
       <PageTitle>设置</PageTitle>
@@ -58,7 +74,7 @@ export default function Config() {
           />
         </FormItem>
         <br />
-        <div className={styles.subTitle}>数据源设置</div>
+        <div className={styles.subTitle}>歌单广场源</div>
         <button
           onClick={() => {
             config.updateMusicOrderOpenOrigin([...config.musicOrderOpenOrigin, '']);
@@ -99,6 +115,77 @@ export default function Config() {
             </FormItem>
           );
         })}
+        <br />
+        <div className={styles.subTitle}>歌单同步源</div>
+        <GithubConfig />
+      </div>
+    </div>
+  );
+}
+
+export function GithubConfig() {
+  const config = useConfigStore();
+  const item = config.userMusicOrderOrigin.find(
+    (item) => item.type === UserMusicOrderOriginType.Github
+  ) as UserMusicOrderOrigin.GithubConfig | undefined;
+  useEffect(() => {
+    if (!item) {
+      config.updateUserMusicOrderOrigin([
+        ...config.userMusicOrderOrigin,
+        {
+          type: UserMusicOrderOriginType.Github,
+          token: '',
+          repo: '',
+          enabled: false,
+        },
+      ]);
+    }
+  }, [config.userMusicOrderOrigin]);
+  if (!item) return null;
+  console.log('item: ', item);
+
+  const updateHandler = (key: 'repo' | 'token' | 'enabled', value: string | boolean) => {
+    config.updateUserMusicOrderOrigin(
+      config.userMusicOrderOrigin.map((i) => {
+        if (i.type !== UserMusicOrderOriginType.Github) return i;
+        return {
+          ...i,
+          [key]: value,
+        };
+      })
+    );
+  };
+  return (
+    <div>
+      <div>{UserMusicOrderOriginTypeMap.get(item.type)?.label}</div>
+      <div>
+        <FormItem label='仓库地址'>
+          <input
+            type='text'
+            value={item.repo}
+            onChange={(e) => {
+              updateHandler('repo', e.target.value.trim());
+            }}
+          />
+        </FormItem>
+        <FormItem label='token'>
+          <input
+            type='text'
+            value={item.token}
+            onChange={(e) => {
+              updateHandler('token', e.target.value.trim());
+            }}
+          />
+        </FormItem>
+        <FormItem label='是否开启'>
+          <input
+            type='checkbox'
+            checked={item.enabled}
+            onChange={(e) => {
+              updateHandler('enabled', e.target.checked);
+            }}
+          />
+        </FormItem>
       </div>
     </div>
   );

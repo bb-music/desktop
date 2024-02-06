@@ -63,9 +63,7 @@ export class GiteeOriginLoader implements MusicOrderOriginLoader {
               return r.json() as Promise<FileInfo>;
             })
             .then((r) => {
-              return {
-                content: isJson<MusicOrderItem>(decode(r.content))!,
-              };
+              return isJson<MusicOrderItem>(decode(r.content))!;
             });
         })
     );

@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { biliClient } from '@wails/go/models';
 import { GetConfig, LoadSignData, SetDownloadDir, UpdateClientSignData } from '@wails/go/app/App';
 import { persist, createJSONStorage } from 'zustand/middleware';
+import { UserMusicOrderOrigin, UserMusicOrderOriginType } from '@/utils/userMusicOrder/common';
 
 interface ConfigStoreState {
   initLoading?: boolean;
@@ -10,12 +11,16 @@ interface ConfigStoreState {
   downloadDir?: string;
   /** 歌单广场来源 */
   musicOrderOpenOrigin: string[];
+  /** 个人歌单同步 */
+  userMusicOrderOrigin: UserMusicOrderOrigin.Config[];
 }
 interface ConfigStoreHandler {
   init: () => Promise<void>;
   load: () => Promise<void>;
   /** 更新歌单广场源 */
   updateMusicOrderOpenOrigin: (list: string[]) => void;
+  /** 更新用户同步源 */
+  updateUserMusicOrderOrigin: (list: UserMusicOrderOrigin.Config[]) => void;
 }
 
 type ConfigStore = ConfigStoreState & ConfigStoreHandler;
@@ -25,6 +30,14 @@ export const configStore = create(
     (set, get) => {
       return {
         musicOrderOpenOrigin: [],
+        userMusicOrderOrigin: [
+          // {
+          //   type: UserMusicOrderOriginType.Gitee,
+          //   username: '975794403@qq.com',
+          //   password: 'ff27b634a51eaa5b36ddb702ce4a2a1a',
+          //   repoName: 'bb-music-order-open',
+          // },
+        ],
         load: async () => {
           const res = await GetConfig();
           set({
@@ -53,6 +66,9 @@ export const configStore = create(
         },
         updateMusicOrderOpenOrigin: (list) => {
           set({ musicOrderOpenOrigin: list });
+        },
+        updateUserMusicOrderOrigin: (list) => {
+          set({ userMusicOrderOrigin: list });
         },
       };
     },

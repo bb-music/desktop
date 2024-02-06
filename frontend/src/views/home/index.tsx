@@ -35,8 +35,8 @@ export default function Home() {
       <PageTitle>歌单广场</PageTitle>
       {list.map((item) => {
         return (
-          <div>
-            {/* <div>{item.origin}</div> */}
+          <div key={item.origin}>
+            <div>{item.origin}</div>
             <div className={styles.list}>
               {item.list.map((i) => {
                 return (

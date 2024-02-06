@@ -10,6 +10,10 @@ export function GetConfig() {
   return window['go']['app']['App']['GetConfig']();
 }
 
+export function GetJsonOrigin(arg1) {
+  return window['go']['app']['App']['GetJsonOrigin'](arg1);
+}
+
 export function GetSignData() {
   return window['go']['app']['App']['GetSignData']();
 }

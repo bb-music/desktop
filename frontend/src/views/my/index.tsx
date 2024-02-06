@@ -7,6 +7,7 @@ import { FormItem } from '@/components/Form';
 import { router } from '@/router';
 import { MusicOrderItem } from '@/interface';
 import { musicOrderDetailStore } from '../musicOrderDetail/store';
+import { toMusicOrderDetail } from '@/utils';
 
 export default function MyMusicList() {
   return (
@@ -27,11 +28,6 @@ class FormModal {
     name: '',
     desc: '',
   };
-}
-
-function toMusicOrderDetail(data: MusicOrderItem) {
-  musicOrderDetailStore.getState().setData(data);
-  router.push('/music-order-detail');
 }
 
 export function LocalMusicOrder() {

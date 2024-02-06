@@ -22,6 +22,7 @@ import { PlayerStatus } from '.';
 import { PlayerModeMap } from '.';
 import { DownloadMusic, UpdateDownloadDir } from '@wails/go/app/App';
 import { useConfigStore } from '@/store/config';
+import { downloadMusic } from './utils';
 
 export * from './types';
 export * from './utils';
@@ -169,20 +170,8 @@ export function Player({ className, style }: { className?: string; style?: React
                 >
                   <span
                     className={styles.operateLink}
-                    onClick={async (e) => {
-                      if (!config.downloadDir) {
-                        await UpdateDownloadDir();
-                        await config.load();
-                        return;
-                      }
-                      DownloadMusic({
-                        aid: item.aid + '',
-                        cid: item.cid + '',
-                        bvid: item.bvid + '',
-                        name: item.name,
-                      }).then((res) => {
-                        console.log(res);
-                      });
+                    onClick={() => {
+                      downloadMusic(item);
                     }}
                   >
                     下载

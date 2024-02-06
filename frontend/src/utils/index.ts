@@ -1,3 +1,7 @@
+import { MusicOrderItem } from '@/interface';
+import { router } from '@/router';
+import { musicOrderDetailStore } from '@/views/musicOrderDetail/store';
+
 export * from './catchStore';
 /** 合并 className */
 export function cls(...classList: Array<string | undefined>) {
@@ -24,4 +28,10 @@ export function isJson<T = Array<any> | Record<string, any>>(val: string): T | u
   } catch (e) {
     return;
   }
+}
+
+/** 跳转歌单详情 */
+export function toMusicOrderDetail(data: MusicOrderItem) {
+  musicOrderDetailStore.getState().setData(data);
+  router.push('/music-order-detail');
 }

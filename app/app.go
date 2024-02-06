@@ -3,6 +3,7 @@ package app
 import (
 	"bbmusic/biliClient"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -35,8 +36,8 @@ func (a *App) Startup(ctx context.Context) {
 	// port, _ := GetFreePort()
 	port := 56592
 	a.VideoProxyPort = port
-	// 启动一个视频代理服务
-	VideoProxyServer(a, port)
+	// 启动一个代理服务
+	ProxyServer(a, port)
 }
 
 /** 暴露给前端的配置 **/
@@ -93,6 +94,45 @@ func (a *App) GetVideoDetail(params biliClient.GetVideoDetailParams) (biliClient
 /** 获取视频地址 **/
 func (a *App) GetVideoUrl(params biliClient.GetVideoUrlParams) (biliClient.VideoUrlResponse, error) {
 	return a.client.GetVideoUrl(params)
+}
+
+type MusicOrderItem struct {
+	ID     string      `json:"id"`
+	Name   string      `json:"name"`
+	Desc   string      `json:"desc"`
+	Author string      `json:"author"`
+	List   []MusicItem `json:"list"`
+}
+
+type MusicItem struct {
+	AID      int    `json:"aid"`
+	BVID     string `json:"bvid"`
+	CID      int    `json:"cid"`
+	Name     string `json:"name"`
+	Duration int    `json:"duration"`
+	ID       string `json:"id"`
+}
+
+/** 获取歌单源数据 **/
+func (a *App) GetJsonOrigin(originUrl string) ([]MusicOrderItem, error) {
+	resp, err := http.Get(originUrl)
+	if err != nil {
+		return []MusicOrderItem{}, err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		return []MusicOrderItem{}, err
+	}
+	if body, err := io.ReadAll(resp.Body); err != nil {
+		return []MusicOrderItem{}, err
+	} else {
+		result := []MusicOrderItem{}
+		if err := json.Unmarshal(body, &result); err != nil {
+			return []MusicOrderItem{}, err
+
+		}
+		return result, nil
+	}
 }
 
 type DownloadMusicParams struct {

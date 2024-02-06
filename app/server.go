@@ -8,8 +8,15 @@ import (
 	"net/url"
 )
 
-// 视频代理服务
-func VideoProxyServer(app *App, port int) {
+func proxyHandler(target *url.URL) http.HandlerFunc {
+	proxy := httputil.NewSingleHostReverseProxy(target)
+	return func(w http.ResponseWriter, r *http.Request) {
+		proxy.ServeHTTP(w, r)
+	}
+}
+
+func ProxyServer(app *App, port int) {
+	// 视频代理服务
 	http.HandleFunc("/videofile/", func(w http.ResponseWriter, r *http.Request) {
 		query := r.URL.Query()
 		aid := query.Get("aid")

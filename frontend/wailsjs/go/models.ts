@@ -52,6 +52,66 @@ export namespace app {
 	        this.name = source["name"];
 	    }
 	}
+	export class MusicItem {
+	    aid: number;
+	    bvid: string;
+	    cid: number;
+	    name: string;
+	    duration: number;
+	    id: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new MusicItem(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.aid = source["aid"];
+	        this.bvid = source["bvid"];
+	        this.cid = source["cid"];
+	        this.name = source["name"];
+	        this.duration = source["duration"];
+	        this.id = source["id"];
+	    }
+	}
+	export class MusicOrderItem {
+	    id: string;
+	    name: string;
+	    desc: string;
+	    author: string;
+	    list: MusicItem[];
+	
+	    static createFrom(source: any = {}) {
+	        return new MusicOrderItem(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.name = source["name"];
+	        this.desc = source["desc"];
+	        this.author = source["author"];
+	        this.list = this.convertValues(source["list"], MusicItem);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
 
 }
 

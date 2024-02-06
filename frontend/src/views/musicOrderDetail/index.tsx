@@ -2,10 +2,11 @@ import PageTitle from '@/components/PageTitle';
 import { useMusicOrderDetailStore } from './store';
 import styles from './index.module.scss';
 import { Download } from '@icon-park/react';
-import { seconds2mmss } from '@/player';
+import { downloadMusic, seconds2mmss, usePlayerStore } from '@/player';
 
 export default function MusicOrderDetail() {
   const { data } = useMusicOrderDetailStore();
+  const player = usePlayerStore();
   if (!data) return null;
   return (
     <div
@@ -18,8 +19,8 @@ export default function MusicOrderDetail() {
         <thead>
           <tr>
             <th style={{ width: 40 }}>#</th>
-            <th style={{ width: 80 }}>操作</th>
             <th>标题</th>
+            <th style={{ width: 180 }}>操作</th>
             <th style={{ width: 70 }}>时间</th>
           </tr>
         </thead>
@@ -28,10 +29,30 @@ export default function MusicOrderDetail() {
             return (
               <tr key={item.id}>
                 <td>{index + 1}</td>
-                <td>
-                  <Download />
-                </td>
                 <td>{item.name}</td>
+                <td style={{ fontSize: 12, display: 'flex', gap: '5px' }}>
+                  <a
+                    onClick={() => {
+                      player.play(item);
+                    }}
+                  >
+                    播放
+                  </a>
+                  <a
+                    onClick={() => {
+                      player.addPlayerList(item);
+                    }}
+                  >
+                    添加到歌单
+                  </a>
+                  <a
+                    onClick={() => {
+                      downloadMusic(item);
+                    }}
+                  >
+                    下载
+                  </a>
+                </td>
                 <td>{seconds2mmss(item.duration)}</td>
               </tr>
             );

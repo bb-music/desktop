@@ -36,7 +36,7 @@ interface PlayerStoreHandler {
   /** 播放完成后下一首 */
   endNext: () => void;
   /** 添加歌曲到播放列表 */
-  addPlayerList: (values: MusicItem[]) => void;
+  addPlayerList: (values: MusicItem | MusicItem[]) => void;
   /** 将歌曲从播放列表移除 */
   removePlayerList: (ids: string[]) => void;
   /** 清空播放列表 */
@@ -190,7 +190,8 @@ export const playerStore = create<PlayerStore>()((set, get) => {
         }
       }
     },
-    addPlayerList: (ms) => {
+    addPlayerList: (m) => {
+      const ms = Array.isArray(m) ? m : [m];
       const store = get();
       const playerList = store.playerList.filter((p) => !ms.find((m) => m.id === p.id));
       playerList.push(...ms);

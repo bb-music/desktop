@@ -7,6 +7,8 @@ export function DownloadMusic(arg1:app.DownloadMusicParams):Promise<string>;
 
 export function GetConfig():Promise<app.AppConfig>;
 
+export function GetJsonOrigin(arg1:string):Promise<Array<app.MusicOrderItem>>;
+
 export function GetSignData():Promise<biliClient.SignData>;
 
 export function GetVideoDetail(arg1:biliClient.GetVideoDetailParams):Promise<biliClient.VideoDetailResponse>;

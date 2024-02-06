@@ -63,7 +63,8 @@ func (c *Client) Search(params SearchParams) (SearchResponse, error) {
 	})
 	url := "https://api.bilibili.com/x/web-interface/wbi/search/type"
 	result := BiliResponse[SearchResponse]{}
-	_, err := Request().SetQueryParams(query).SetResult(&result).Get(url)
+	resp, err := Request().SetQueryParams(query).SetResult(&result).Get(url)
+	fmt.Printf("\nRESP %+v \n", resp)
 	if err != nil {
 		fmt.Printf("搜索出错 %+v", err)
 		return SearchResponse{}, err

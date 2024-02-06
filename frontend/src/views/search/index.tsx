@@ -12,7 +12,7 @@ export default function Search() {
     <>
       <SearchForm />
       <div className={styles.searchList}>
-        {store.data.map((item) => {
+        {store.data?.map((item) => {
           if (hideTypes.includes(item.type)) return null;
           return (
             <SearchItem

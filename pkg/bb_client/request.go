@@ -1,4 +1,4 @@
-package biliClient
+package bb_client
 
 import "github.com/go-resty/resty/v2"
 

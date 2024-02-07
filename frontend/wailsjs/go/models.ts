@@ -2,7 +2,7 @@ export namespace app {
 	
 	export class AppConfig {
 	    video_proxy_port: number;
-	    sign_data: biliClient.SignData;
+	    sign_data: bb_client.SignData;
 	    download_dir: string;
 	
 	    static createFrom(source: any = {}) {
@@ -12,7 +12,7 @@ export namespace app {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.video_proxy_port = source["video_proxy_port"];
-	        this.sign_data = this.convertValues(source["sign_data"], biliClient.SignData);
+	        this.sign_data = this.convertValues(source["sign_data"], bb_client.SignData);
 	        this.download_dir = source["download_dir"];
 	    }
 	
@@ -115,7 +115,7 @@ export namespace app {
 
 }
 
-export namespace biliClient {
+export namespace bb_client {
 	
 	export class Argueinfo {
 	    argue_msg: string;

@@ -1,11 +1,11 @@
 import { create } from 'zustand';
-import { biliClient } from '@wails/go/models';
+import { bb_client } from '@wails/go/models';
 
 interface VideoStoreState {
-  data?: biliClient.VideoDetailResponse;
+  data?: bb_client.VideoDetailResponse;
 }
 interface VideoStoreHandler {
-  setData: (data: biliClient.VideoDetailResponse) => void;
+  setData: (data: bb_client.VideoDetailResponse) => void;
 }
 
 type VideoStore = VideoStoreState & VideoStoreHandler;

@@ -1,8 +1,6 @@
-package biliClient
+package bb_client
 
-import (
-	"strings"
-)
+import "strings"
 
 func GetWbiKeysApi() (SignData, error) {
 	result := BiliResponse[WbiKeysResult]{}

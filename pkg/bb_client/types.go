@@ -1,4 +1,4 @@
-package biliClient
+package bb_client
 
 type BiliResponse[T any] struct {
 	Code    int16  `json:"code"`
@@ -15,11 +15,6 @@ type WbiKeysData struct {
 type WbiKeysResult struct {
 	IsLogin bool        `json:"isLogin"`
 	WbiImg  WbiKeysData `json:"wbi_img"`
-}
-
-type SignData struct {
-	ImgKey string `json:"img_key"`
-	SubKey string `json:"sub_key"`
 }
 
 type Pagination struct {

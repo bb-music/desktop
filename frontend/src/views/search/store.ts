@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { biliClient } from '@wails/go/models';
+import { bb_client } from '@wails/go/models';
 import { Search } from '@wails/go/app/App';
 
 interface SearchParams {
@@ -10,12 +10,12 @@ interface SearchParams {
 
 interface SearchStoreState {
   params: SearchParams;
-  data: biliClient.SearchResultItem[];
+  data: bb_client.SearchResultItem[];
   loading: boolean;
 }
 interface SearchStoreHandler {
   setParams: (params: Partial<SearchParams>) => void;
-  run: () => Promise<biliClient.SearchResponse>;
+  run: () => Promise<bb_client.SearchResponse>;
 }
 
 type SearchStore = SearchStoreState & SearchStoreHandler;

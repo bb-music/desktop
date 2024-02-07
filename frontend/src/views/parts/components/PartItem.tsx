@@ -2,7 +2,7 @@ import styles from '../index.module.scss';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import { partItem2MusicItem, usePlayerStore } from '@/player';
-import { biliClient } from '@wails/go/models';
+import { bb_client } from '@wails/go/models';
 import { transformImgUrl } from '@/utils';
 import { useLocalMusicOrder } from '@/views/my/store/localMusicOrder';
 
@@ -14,7 +14,7 @@ export function PartItem({
   bvid,
   style,
 }: {
-  data: biliClient.VideoDetailPage;
+  data: bb_client.VideoDetailPage;
   aid: number;
   bvid: string;
   style?: React.CSSProperties;

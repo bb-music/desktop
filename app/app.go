@@ -1,7 +1,7 @@
 package app
 
 import (
-	"bbmusic/biliClient"
+	"bbmusic/pkg/bb_client"
 	"context"
 	"encoding/json"
 	"errors"
@@ -15,15 +15,15 @@ import (
 )
 
 type AppConfig struct {
-	VideoProxyPort int                 `json:"video_proxy_port"` // 视频代理服务端口号
-	SignData       biliClient.SignData `json:"sign_data"`        // 签名
-	DownloadDir    string              `json:"download_dir"`     // 下载保存目录
+	VideoProxyPort int                `json:"video_proxy_port"` // 视频代理服务端口号
+	SignData       bb_client.SignData `json:"sign_data"`        // 签名
+	DownloadDir    string             `json:"download_dir"`     // 下载保存目录
 }
 
 type App struct {
 	AppConfig
 	ctx    context.Context
-	client biliClient.Client
+	client bb_client.Client
 }
 
 func NewApp() *App {
@@ -67,32 +67,32 @@ func (a *App) UpdateDownloadDir() (string, error) {
 }
 
 /** 更新秘钥配置 **/
-func (a *App) UpdateClientSignData(params biliClient.SignData) error {
+func (a *App) UpdateClientSignData(params bb_client.SignData) error {
 	return a.client.UpdateSignData(params)
 }
 
 /** 加载秘钥配置 **/
-func (a *App) LoadSignData() (biliClient.SignData, error) {
+func (a *App) LoadSignData() (bb_client.SignData, error) {
 	return a.client.LoadSignData()
 }
 
 /** 获取秘钥配置 **/
-func (a *App) GetSignData() biliClient.SignData {
+func (a *App) GetSignData() bb_client.SignData {
 	return a.client.SignData
 }
 
 /** 搜索视频 **/
-func (a *App) Search(params biliClient.SearchParams) (biliClient.SearchResponse, error) {
+func (a *App) Search(params bb_client.SearchParams) (bb_client.SearchResponse, error) {
 	return a.client.Search(params)
 }
 
 /** 视频详情 **/
-func (a *App) GetVideoDetail(params biliClient.GetVideoDetailParams) (biliClient.VideoDetailResponse, error) {
+func (a *App) GetVideoDetail(params bb_client.GetVideoDetailParams) (bb_client.VideoDetailResponse, error) {
 	return a.client.GetVideoDetail(params)
 }
 
 /** 获取视频地址 **/
-func (a *App) GetVideoUrl(params biliClient.GetVideoUrlParams) (biliClient.VideoUrlResponse, error) {
+func (a *App) GetVideoUrl(params bb_client.GetVideoUrlParams) (bb_client.VideoUrlResponse, error) {
 	return a.client.GetVideoUrl(params)
 }
 
@@ -136,7 +136,7 @@ func (a *App) GetJsonOrigin(originUrl string) ([]MusicOrderItem, error) {
 }
 
 type DownloadMusicParams struct {
-	biliClient.GetVideoUrlParams
+	bb_client.GetVideoUrlParams
 	Name string `json:"name"`
 }
 
@@ -188,7 +188,7 @@ func DownloadUrl(path string, url string) error {
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("Referer", "https://www.bilibili.com/")
 	req.Header.Set("Cookie", "")
-	req.Header.Set("User-Agent", biliClient.UserAgent)
+	req.Header.Set("User-Agent", bb_client.UserAgent)
 
 	resp, errA := http.DefaultClient.Do(req)
 	if errA != nil {

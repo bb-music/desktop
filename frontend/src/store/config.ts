@@ -1,12 +1,12 @@
 import { create } from 'zustand';
-import { biliClient } from '@wails/go/models';
+import { bb_client } from '@wails/go/models';
 import { GetConfig, LoadSignData, SetDownloadDir, UpdateClientSignData } from '@wails/go/app/App';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { UserMusicOrderOrigin, UserMusicOrderOriginType } from '@/utils/userMusicOrder/common';
 
 interface ConfigStoreState {
   initLoading?: boolean;
-  signData?: biliClient.SignData;
+  signData?: bb_client.SignData;
   videoProxyPort?: number;
   downloadDir?: string;
   /** 歌单广场来源 */

@@ -1,12 +1,12 @@
 import styles from './index.module.scss';
 import { cls, transformImgUrl } from '@/utils';
-import { biliClient } from '@wails/go/models';
+import { bb_client } from '@wails/go/models';
 import { GetVideoDetail } from '@wails/go/app/App';
 import { useState } from 'react';
 import { router } from '@/router';
 import { useVideoStore } from '@/store/video';
 
-export default function SearchItem({ data }: { data: biliClient.SearchResultItem }) {
+export default function SearchItem({ data }: { data: bb_client.SearchResultItem }) {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const videoStore = useVideoStore();

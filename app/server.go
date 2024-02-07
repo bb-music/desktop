@@ -1,7 +1,7 @@
 package app
 
 import (
-	"bbmusic/biliClient"
+	"bbmusic/pkg/bb_client"
 	"fmt"
 	"net/http"
 	"net/http/httputil"
@@ -24,8 +24,8 @@ func ProxyServer(app *App, port int) {
 		cid := query.Get("cid")
 
 		// 取出播放地址
-		resp, _ := app.client.GetVideoUrl(biliClient.GetVideoUrlParams{
-			GetVideoDetailParams: biliClient.GetVideoDetailParams{
+		resp, _ := app.client.GetVideoUrl(bb_client.GetVideoUrlParams{
+			GetVideoDetailParams: bb_client.GetVideoDetailParams{
 				Aid:  aid,
 				Bvid: bvid,
 			},
@@ -41,7 +41,7 @@ func ProxyServer(app *App, port int) {
 			proxy.Director = func(r *http.Request) {
 				r.Header.Set("Referer", "https://www.bilibili.com/")
 				r.Header.Set("Cookie", "")
-				r.Header.Set("User-Agent", biliClient.UserAgent)
+				r.Header.Set("User-Agent", bb_client.UserAgent)
 			}
 			proxy.ModifyResponse = func(resp *http.Response) error {
 				return nil

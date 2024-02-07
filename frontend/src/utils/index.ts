@@ -4,7 +4,7 @@ import { musicOrderDetailStore } from '@/views/musicOrderDetail/store';
 
 export * from './catchStore';
 /** 合并 className */
-export function cls(...classList: Array<string | undefined>) {
+export function cls(...classList: Array<string | undefined | boolean>) {
   return classList.filter((i) => !!i).join(' ');
 }
 

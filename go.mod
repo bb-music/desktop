@@ -3,6 +3,7 @@ module bbmusic
 go 1.18
 
 require (
+	github.com/duke-git/lancet/v2 v2.2.9
 	github.com/go-resty/resty/v2 v2.11.0
 	github.com/wailsapp/wails/v2 v2.6.0
 )

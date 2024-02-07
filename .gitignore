@@ -3,3 +3,5 @@ node_modules
 frontend/dist
 .vscode
 /download_temp
+
+/config/*

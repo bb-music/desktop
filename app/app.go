@@ -5,6 +5,7 @@ import (
 	"context"
 	"path/filepath"
 
+	"github.com/duke-git/lancet/v2/fileutil"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -16,6 +17,9 @@ type App struct {
 
 func NewApp() *App {
 	configDir, _ := filepath.Abs("./config")
+	if fileutil.IsExist(configDir) == false {
+		fileutil.CreateDir(configDir)
+	}
 	return &App{
 		AppConfig: AppConfig{
 			ConfigDir: configDir,

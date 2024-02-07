@@ -2,8 +2,9 @@
 package app
 
 import (
-	"os"
 	"path/filepath"
+
+	"github.com/duke-git/lancet/v2/fileutil"
 )
 
 const storageName = "cache_storage"
@@ -12,31 +13,25 @@ const storageName = "cache_storage"
 func (a *App) GetStorage(key string) (string, error) {
 	dir := a.AppConfig.ConfigDir
 	p := filepath.Join(dir, storageName, key+".json")
-	res, err := os.ReadFile(p)
-	if err != nil {
-		return "", err
+
+	if fileutil.IsExist(p) == false {
+		return "", nil
 	}
-	return string(res), nil
+
+	return fileutil.ReadFileToString(p)
 }
 
 // 写
 func (a *App) SetStorage(key string, value string) error {
 	dir := a.AppConfig.ConfigDir
 	p := filepath.Join(dir, storageName, key+".json")
-	err := os.WriteFile(p, []byte(value), 0644)
-	if err != nil {
-		return err
-	}
-	return nil
+
+	return fileutil.WriteStringToFile(p, value, false)
 }
 
 // 删除
 func (a *App) RemoveStorage(key string) error {
 	dir := a.AppConfig.ConfigDir
 	p := filepath.Join(dir, storageName, key+".json")
-	err := os.Remove(p)
-	if err != nil {
-		return err
-	}
-	return nil
+	return fileutil.RemoveFile(p)
 }

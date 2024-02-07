@@ -5,7 +5,6 @@ package bb_client
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 )
 
@@ -18,6 +17,12 @@ func (c *Client) GetWbiKeysApi() (SignData, error) {
 	result := BiliResponse[WbiKeysResult]{}
 
 	_, err := c.Request().SetResult(&result).Get("https://api.bilibili.com/x/web-interface/nav")
+	if err != nil {
+		return SignData{}, err
+	}
+	if err := ValidateResp(result); err != nil {
+		return SignData{}, err
+	}
 
 	imgURL := result.Data.WbiImg.ImgUrl
 	subURL := result.Data.WbiImg.SubUrl
@@ -42,6 +47,9 @@ func (c *Client) LoadSpiData() (SpiData, error) {
 	if err != nil {
 		return SpiData{}, err
 	}
+	if err := ValidateResp(result); err != nil {
+		return SpiData{}, err
+	}
 	c.SpiData = result.Data
 	return result.Data, nil
 
@@ -59,7 +67,6 @@ func (c *Client) LoadSignData() (SignData, error) {
 
 // 更新 key
 func (c *Client) UpdateSignData(data SignData) error {
-	fmt.Printf("SignData %+v", data)
 	if data.ImgKey == "" {
 		return errors.New("ImgKey 不能为空")
 	}

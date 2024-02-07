@@ -3,6 +3,8 @@
 import {app} from '../models';
 import {bb_client} from '../models';
 
+export function ClientInit():Promise<void>;
+
 export function DownloadMusic(arg1:app.DownloadMusicParams):Promise<string>;
 
 export function GetConfig():Promise<app.AppConfig>;
@@ -11,15 +13,21 @@ export function GetJsonOrigin(arg1:string):Promise<Array<app.MusicOrderItem>>;
 
 export function GetSignData():Promise<bb_client.SignData>;
 
+export function GetStorage(arg1:string):Promise<string>;
+
 export function GetVideoDetail(arg1:bb_client.GetVideoDetailParams):Promise<bb_client.VideoDetailResponse>;
 
 export function GetVideoUrl(arg1:bb_client.GetVideoUrlParams):Promise<bb_client.VideoUrlResponse>;
 
 export function LoadSignData():Promise<bb_client.SignData>;
 
+export function RemoveStorage(arg1:string):Promise<void>;
+
 export function Search(arg1:bb_client.SearchParams):Promise<bb_client.SearchResponse>;
 
 export function SetDownloadDir(arg1:string):Promise<void>;
+
+export function SetStorage(arg1:string,arg2:string):Promise<void>;
 
 export function UpdateClientSignData(arg1:bb_client.SignData):Promise<void>;
 

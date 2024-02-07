@@ -4,6 +4,7 @@ export namespace app {
 	    video_proxy_port: number;
 	    sign_data: bb_client.SignData;
 	    download_dir: string;
+	    config_dir: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new AppConfig(source);
@@ -14,6 +15,7 @@ export namespace app {
 	        this.video_proxy_port = source["video_proxy_port"];
 	        this.sign_data = this.convertValues(source["sign_data"], bb_client.SignData);
 	        this.download_dir = source["download_dir"];
+	        this.config_dir = source["config_dir"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

@@ -3,6 +3,7 @@ package bb_client
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"fmt"
 	"net/url"
 	"sort"
 	"strconv"
@@ -66,4 +67,19 @@ func sanitizeString(s string) string {
 		s = strings.ReplaceAll(s, char, "")
 	}
 	return s
+}
+
+func ValidateResp[T any](resp BiliResponse[T]) error {
+	if resp.Code != 0 {
+		msg := BiliResponseCodeMap[int(resp.Code)]
+		if msg == "" {
+			msg = fmt.Sprintf("未知错误，错误码: %v", resp.Code)
+		}
+		return &BiliReqError[T]{
+			Code:    int(resp.Code),
+			Message: msg,
+			Resp:    resp,
+		}
+	}
+	return nil
 }

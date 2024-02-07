@@ -17,6 +17,12 @@ func (c *Client) GetVideoDetail(params GetVideoDetailParams) (VideoDetailRespons
 	url := "https://api.bilibili.com/x/web-interface/view"
 	result := BiliResponse[VideoDetailResponse]{}
 	resp, err := c.Request().SetQueryParams(query).SetResult(&result).Get(url)
+	if err != nil {
+		return VideoDetailResponse{}, err
+	}
+	if err := ValidateResp(result); err != nil {
+		return VideoDetailResponse{}, err
+	}
 	fmt.Printf("resp %+v", resp)
 	if err != nil {
 		fmt.Printf("获取详情出错 %+v", err)
@@ -42,7 +48,9 @@ func (c *Client) GetVideoUrl(params GetVideoUrlParams) (VideoUrlResponse, error)
 	result := BiliResponse[VideoUrlResponse]{}
 	_, err := c.Request().SetQueryParams(query).SetResult(&result).Get(url)
 	if err != nil {
-		fmt.Printf("获取地址出错 %+v", err)
+		return VideoUrlResponse{}, err
+	}
+	if err := ValidateResp(result); err != nil {
 		return VideoUrlResponse{}, err
 	}
 	return result.Data, nil

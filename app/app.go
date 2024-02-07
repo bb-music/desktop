@@ -32,7 +32,7 @@ func NewApp() *App {
 
 func (a *App) Startup(ctx context.Context) {
 	a.ctx = ctx
-	a.client.New()
+	a.client.Init()
 	// port, _ := GetFreePort()
 	port := 56592
 	a.VideoProxyPort = port

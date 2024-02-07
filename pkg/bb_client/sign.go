@@ -6,6 +6,7 @@ package bb_client
 import (
 	"errors"
 	"fmt"
+	"strings"
 )
 
 type SignData struct {
@@ -13,11 +14,42 @@ type SignData struct {
 	SubKey string `json:"sub_key"`
 }
 
-// func (c * Client) Get
+func (c *Client) GetWbiKeysApi() (SignData, error) {
+	result := BiliResponse[WbiKeysResult]{}
+
+	_, err := c.Request().SetResult(&result).Get("https://api.bilibili.com/x/web-interface/nav")
+
+	imgURL := result.Data.WbiImg.ImgUrl
+	subURL := result.Data.WbiImg.SubUrl
+
+	imgKey := strings.Split(strings.Split(imgURL, "/")[len(strings.Split(imgURL, "/"))-1], ".")[0]
+	subKey := strings.Split(strings.Split(subURL, "/")[len(strings.Split(subURL, "/"))-1], ".")[0]
+
+	return SignData{
+		imgKey,
+		subKey,
+	}, err
+}
+
+type SpiData struct {
+	UUID_V3 string `json:"b_3"`
+	UUID_V4 string `json:"b_4"`
+}
+
+func (c *Client) LoadSpiData() (SpiData, error) {
+	result := BiliResponse[SpiData]{}
+	_, err := c.Request().SetResult(&result).Get("https://api.bilibili.com/x/frontend/finger/spi")
+	if err != nil {
+		return SpiData{}, err
+	}
+	c.SpiData = result.Data
+	return result.Data, nil
+
+}
 
 // 获取 key
 func (c *Client) LoadSignData() (SignData, error) {
-	if data, err := GetWbiKeysApi(); err != nil {
+	if data, err := c.GetWbiKeysApi(); err != nil {
 		return SignData{}, err
 	} else {
 		c.SignData = data

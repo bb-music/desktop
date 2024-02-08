@@ -5,10 +5,10 @@ export function Header() {
   return (
     <div className={styles.headerContainer}>
       <div className={styles.menu}>
-        <NavLink href='/'>歌单广场</NavLink>
-        <NavLink href='/my'>我的歌单</NavLink>
-        <NavLink href='/config'>设置</NavLink>
-        <NavLink href='/search'>搜索</NavLink>
+        <NavLink to='/'>歌单广场</NavLink>
+        <NavLink to='/my'>我的歌单</NavLink>
+        <NavLink to='/config'>设置</NavLink>
+        <NavLink to='/search'>搜索</NavLink>
       </div>
     </div>
   );

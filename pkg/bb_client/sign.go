@@ -20,8 +20,12 @@ func (c *Client) GetWbiKeysApi() (SignData, error) {
 	if err != nil {
 		return SignData{}, err
 	}
-	if err := ValidateResp(result); err != nil {
-		return SignData{}, err
+
+	// 这里不能先根据 code 来判断返回结果了
+	if result.Data.WbiImg.ImgUrl == "" || result.Data.WbiImg.SubUrl == "" {
+		if err := ValidateResp(result); err != nil {
+			return SignData{}, err
+		}
 	}
 
 	imgURL := result.Data.WbiImg.ImgUrl

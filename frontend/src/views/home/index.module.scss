@@ -14,9 +14,9 @@
     border-radius: 4px;
     height: 60px;
     &:hover {
-      border-color: var(--main-color);
+      border-color: rgb(var(--main-color));
       .name {
-        color: var(--main-color);
+        color: rgb(var(--main-color));
       }
     }
     .name {

@@ -18,7 +18,7 @@
       justify-content: center;
       align-items: center;
       height: 45px;
-      color: var(--font-color);
+      color: rgb(var(--font-color));
       .title {
         font-size: 18px;
       }
@@ -34,7 +34,7 @@
         align-items: center;
         cursor: pointer;
         &:hover {
-          color: var(--main-color);
+          color: rgb(var(--main-color));
         }
       }
     }

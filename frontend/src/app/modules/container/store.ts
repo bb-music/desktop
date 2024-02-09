@@ -63,7 +63,7 @@ export function registerContainerStore() {
   if (!useContainerStore) {
     useContainerStore = create<ContainerStore>()((set, get) => {
       return {
-        active: PageView.OpenMusicOrder,
+        active: PageView.Setting,
         setActive: (active, props) => {
           set({ active, props });
         },

@@ -1,14 +1,10 @@
 .dark {
   --bg-color: 32, 32, 32; // 主背景色
-
   --header-bg: 32, 32, 32; // 顶栏背景色
-
   --sidebar-bg: 36, 36, 34; // 侧边栏背景色
   --sidebar-active-bg: 32, 32, 32; // 侧边栏条目选中时背景色
   --sidebar-icon-color: 120, 120, 120; // 侧边栏图标颜色
-
   --content-bg: 38, 38, 38; // 内容区域背景色
-
   --player-bg: 32, 32, 32; // 播放器背景色
 
   // 字体颜色
@@ -16,5 +12,48 @@
   // 字体高亮色
   --font-active-color: 251, 251, 251;
 
-  --main-color: 211, 58, 49;
+  --main-color: 211, 58, 49; // 主色
+  --main-color-light: 252, 82, 69; // 主色浅一些
+
+  // input
+  --input-bg-color: 52, 52, 52;
+  --input-border-color: 33, 33, 33;
+  --input-font-color: 184, 184, 184;
+  --input-radius: 4px;
+  --input-padding: 4px 8px;
+  --input-default-width: 320px;
+  --input-default-height: 34px;
+  --input-font-size: 14px;
+
+  // button
+  --button-bg: transparent;
+  --button-hover-bg: rgb(48, 48, 48);
+  --button-border-color: rgb(69, 69, 69);
+  --button-border-style: solid;
+  --button-font-color: rgb(179, 179, 179);
+  --button-padding: 4px 24px;
+  --button-height: 34px;
+  --button-radius: 20px;
+  --button-font-size: 14px;
+
+  // button-primary
+  --button-primary-font-color: rgb(251, 251, 251);
+  --button-primary-border-style: solid;
+  --button-primary-border-color: solid;
+  --button-primary-bg: linear-gradient(
+    to right,
+    rgb(var(--main-color-light)),
+    rgb(var(--main-color))
+  );
+  --button-primary-hover-bg: rgb(var(--main-color));
+
+  // button-link
+  --button-link-font-color: rgb(var(--main-color));
+  --button-link-hover-color: rgb(var(--main-color-light));
+  --button-link-padding: 4px 0px;
+
+  // button-text
+  --button-text-font-color: rgb(var(--font-color));
+  --button-text-hover-color: rgb(var(--main-color-light));
+  --button-text-padding: 4px 0px;
 }

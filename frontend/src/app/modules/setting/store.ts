@@ -1,87 +1,36 @@
 import { create } from 'zustand';
-import { bb_client } from '@wails/go/models';
-import { GetConfig, LoadSignData, SetDownloadDir, UpdateClientSignData } from '@wails/go/app/App';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import { UserMusicOrderOrigin } from '@/utils/userMusicOrder/common';
-import { PersistStore } from '@/app/interface/store';
+import { StateStorage } from 'zustand/middleware';
+import { BaseStore } from '@/app/interface/store';
+import { SettingInfo } from '@/app/api/setting';
+import { api } from '@/app/api';
 
-interface SettingStoreState {
-  initLoading?: boolean;
-  signData?: bb_client.SignData;
-  videoProxyPort?: number;
-  downloadDir?: string;
-  /** 歌单广场来源 */
-  musicOrderOpenOrigin: string[];
-  /** 个人歌单同步 */
-  userMusicOrderOrigin: UserMusicOrderOrigin.Config[];
-}
+interface SettingStoreState extends SettingInfo {}
+
 interface SettingStoreHandler {
-  init: () => Promise<void>;
   load: () => Promise<void>;
-  /** 更新歌单广场源 */
-  updateMusicOrderOpenOrigin: (list: string[]) => void;
-  /** 更新用户同步源 */
-  updateUserMusicOrderOrigin: (list: UserMusicOrderOrigin.Config[]) => void;
 }
 
 type SettingStore = SettingStoreState & SettingStoreHandler;
 
-export let useSettingStore: PersistStore<SettingStore>;
+export let useSettingStore: BaseStore<SettingStore>;
 
-export function registerSettingStore() {
+export function registerSettingStore(storage: StateStorage) {
   if (!useSettingStore) {
-    useSettingStore = create(
-      persist<SettingStore>(
-        (set, get) => {
-          return {
-            musicOrderOpenOrigin: [],
-            userMusicOrderOrigin: [
-              // {
-              //   type: UserMusicOrderOriginType.Gitee,
-              //   username: '975794403@qq.com',
-              //   password: 'ff27b634a51eaa5b36ddb702ce4a2a1a',
-              //   repoName: 'bb-music-order-open',
-              // },
-            ],
-            load: async () => {
-              const res = await GetConfig();
-              set({
-                signData: res.sign_data,
-                videoProxyPort: res.video_proxy_port,
-                downloadDir: res.download_dir,
-              });
-            },
-            init: async () => {
-              set({ initLoading: true });
-              const signData = get().signData;
-              const { img_key, sub_key } = signData || {};
-              if (get().downloadDir) {
-                await SetDownloadDir(get().downloadDir!);
-              }
-              if (signData && img_key && sub_key) {
-                await UpdateClientSignData({
-                  img_key,
-                  sub_key,
-                });
-              } else {
-                await LoadSignData();
-                await get().load();
-              }
-              set({ initLoading: false });
-            },
-            updateMusicOrderOpenOrigin: (list) => {
-              set({ musicOrderOpenOrigin: list });
-            },
-            updateUserMusicOrderOrigin: (list) => {
-              set({ userMusicOrderOrigin: list });
-            },
-          };
+    useSettingStore = create<SettingStore>()((set, get) => {
+      return {
+        ...new SettingInfo(),
+        load: async () => {
+          const res = await api.setting.getInfo();
+          set({
+            signData: res.signData,
+            videoProxyPort: res.videoProxyPort,
+            downloadDir: res.downloadDir,
+            musicOrderOpenOrigin: res.musicOrderOpenOrigin,
+            userMusicOrderOrigin: res.userMusicOrderOrigin,
+          });
         },
-        {
-          name: 'config-storage',
-          storage: createJSONStorage(() => localStorage),
-        }
-      )
-    );
+      };
+    });
+    useSettingStore.getState().load();
   }
 }

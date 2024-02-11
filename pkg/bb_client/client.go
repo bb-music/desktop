@@ -11,17 +11,21 @@ type Client struct {
 	SpiData  SpiData  `json:"spi_data"`
 }
 
-func (c *Client) Init() error {
-	// 加载 SPI
-	if _, err := c.LoadSpiData(); err != nil {
-		return err
-	}
-	// 加载 签名
-	if _, err := c.LoadSignData(); err != nil {
-		return err
-	}
-	return nil
+func New() *Client {
+	return &Client{}
 }
+
+// func (c *Client) Init() error {
+// 	// 加载 SPI
+// 	if _, err := c.GetSpiData(); err != nil {
+// 		return err
+// 	}
+// 	// 加载 签名
+// 	if _, err := c.GetSignData(); err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
 
 func (c *Client) Request() *resty.Request {
 	client := resty.New()

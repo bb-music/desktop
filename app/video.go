@@ -9,14 +9,22 @@ import (
 	"net/http"
 )
 
-/** 视频详情 **/
-func (a *App) GetVideoDetail(params bb_client.GetVideoDetailParams) (bb_client.VideoDetailResponse, error) {
-	return a.client.GetVideoDetail(params)
+// 视频详情
+func (a *App) GetVideoDetail(params bb_client.GetVideoDetailParams, auth AuthParams) (bb_client.VideoDetailResponse, error) {
+	client := bb_client.Client{
+		SignData: auth.SignData,
+		SpiData:  auth.SpiData,
+	}
+	return client.GetVideoDetail(params)
 }
 
-/** 获取视频地址 **/
-func (a *App) GetVideoUrl(params bb_client.GetVideoUrlParams) (bb_client.VideoUrlResponse, error) {
-	return a.client.GetVideoUrl(params)
+// 获取视频地址
+func (a *App) GetVideoUrl(params bb_client.GetVideoUrlParams, auth AuthParams) (bb_client.VideoUrlResponse, error) {
+	client := bb_client.Client{
+		SignData: auth.SignData,
+		SpiData:  auth.SpiData,
+	}
+	return client.GetVideoUrl(params)
 }
 
 type MusicOrderItem struct {
@@ -36,7 +44,7 @@ type MusicItem struct {
 	ID       string `json:"id"`
 }
 
-/** 获取歌单源数据 **/
+// 获取歌单源数据
 func (a *App) GetJsonOrigin(originUrl string) ([]MusicOrderItem, error) {
 	resp, err := http.Get(originUrl)
 	if err != nil {
@@ -60,15 +68,20 @@ func (a *App) GetJsonOrigin(originUrl string) ([]MusicOrderItem, error) {
 
 type DownloadMusicParams struct {
 	bb_client.GetVideoUrlParams
-	Name string `json:"name"`
+	Name        string `json:"name"`
+	DownloadDir string `json:"download_dir"`
 }
 
-/** 下载 **/
-func (a *App) DownloadMusic(params DownloadMusicParams) (string, error) {
-	if a.DownloadDir == "" {
+// 下载
+func (a *App) DownloadMusic(params DownloadMusicParams, auth AuthParams) (string, error) {
+	client := bb_client.Client{
+		SignData: auth.SignData,
+		SpiData:  auth.SpiData,
+	}
+	if params.DownloadDir == "" {
 		return "", errors.New("请先选择下载目录")
 	}
-	resp, err := a.client.GetVideoUrl(params.GetVideoUrlParams)
+	resp, err := client.GetVideoUrl(params.GetVideoUrlParams)
 	uuid := params.GetVideoUrlParams.Aid + "_" + params.GetVideoUrlParams.Bvid + "_" + params.GetVideoUrlParams.Cid
 
 	if err != nil {
@@ -77,14 +90,14 @@ func (a *App) DownloadMusic(params DownloadMusicParams) (string, error) {
 	durlLen := len(resp.Durl)
 	if durlLen > 0 {
 		if durlLen == 1 {
-			p := fmt.Sprintf("%+v/%+v_%+v.%+v", a.DownloadDir, params.Name, uuid, resp.Format)
+			p := fmt.Sprintf("%+v/%+v_%+v.%+v", params.DownloadDir, params.Name, uuid, resp.Format)
 			if e := DownloadUrl(p, resp.Durl[0].Url); e != nil {
 				fmt.Printf("error%+v\n", e)
 				return "", e
 			}
 		} else {
 			for i := 0; i < durlLen; i++ {
-				p := fmt.Sprintf("%+v/%+v_%+v/%+v.%+v", a.DownloadDir, params.Name, uuid, i+1, resp.Format)
+				p := fmt.Sprintf("%+v/%+v_%+v/%+v.%+v", params.DownloadDir, params.Name, uuid, i+1, resp.Format)
 				go DownloadUrl(p, resp.Durl[0].Url)
 			}
 		}

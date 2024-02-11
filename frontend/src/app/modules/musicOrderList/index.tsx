@@ -2,6 +2,7 @@
  * 歌单列表
  */
 import styles from './index.module.scss';
+export * from './origin';
 
 export interface MusicOrderListProps {}
 

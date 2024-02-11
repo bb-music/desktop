@@ -4,7 +4,6 @@
 package bb_client
 
 import (
-	"errors"
 	"strings"
 )
 
@@ -13,7 +12,7 @@ type SignData struct {
 	SubKey string `json:"sub_key"`
 }
 
-func (c *Client) GetWbiKeysApi() (SignData, error) {
+func (c *Client) getWbiKeysApi() (SignData, error) {
 	result := BiliResponse[WbiKeysResult]{}
 
 	_, err := c.Request().SetResult(&result).Get("https://api.bilibili.com/x/web-interface/nav")
@@ -45,7 +44,8 @@ type SpiData struct {
 	UUID_V4 string `json:"b_4"`
 }
 
-func (c *Client) LoadSpiData() (SpiData, error) {
+// 获取 spi
+func (c *Client) GetSpiData() (SpiData, error) {
 	result := BiliResponse[SpiData]{}
 	_, err := c.Request().SetResult(&result).Get("https://api.bilibili.com/x/frontend/finger/spi")
 	if err != nil {
@@ -54,37 +54,23 @@ func (c *Client) LoadSpiData() (SpiData, error) {
 	if err := ValidateResp(result); err != nil {
 		return SpiData{}, err
 	}
-	c.SpiData = result.Data
 	return result.Data, nil
 
 }
 
 // 获取 key
-func (c *Client) LoadSignData() (SignData, error) {
-	if data, err := c.GetWbiKeysApi(); err != nil {
+func (c *Client) GetSignData() (SignData, error) {
+	if data, err := c.getWbiKeysApi(); err != nil {
 		return SignData{}, err
 	} else {
-		c.SignData = data
 		return data, nil
 	}
 }
 
-// 更新 key
-func (c *Client) UpdateSignData(data SignData) error {
-	if data.ImgKey == "" {
-		return errors.New("ImgKey 不能为空")
-	}
-	if data.SubKey == "" {
-		return errors.New("SubKey 不能为空")
-	}
-	c.SignData = data
-	return nil
-}
-
 // 对参数进行签名
-func (c *Client) Sign(params map[string]string) map[string]string {
+func (c *Client) sign(params map[string]string) map[string]string {
 	if c.SignData.ImgKey == "" || c.SignData.SubKey == "" {
-		c.LoadSignData()
+		c.GetSignData()
 	}
 	return EncWbi(params, c.SignData.ImgKey, c.SignData.SubKey)
 }

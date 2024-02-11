@@ -11,13 +11,12 @@ import (
 
 type App struct {
 	AppConfig
-	ctx    context.Context
-	client bb_client.Client
+	ctx context.Context
 }
 
 func NewApp() *App {
 	configDir, _ := filepath.Abs("./config")
-	if fileutil.IsExist(configDir) == false {
+	if !fileutil.IsExist(configDir) {
 		fileutil.CreateDir(configDir)
 	}
 	return &App{
@@ -34,10 +33,11 @@ func (a *App) Startup(ctx context.Context) {
 	port := 56592
 	a.VideoProxyPort = port
 	// 启动一个代理服务
-	ProxyServer(a, port)
+	ProxyServer(port)
 }
 
-// 客户端初始化，加载秘钥和 uuid
-func (a *App) ClientInit() error {
-	return a.client.Init()
+// 请求时需要的认证数据
+type AuthParams struct {
+	SignData bb_client.SignData `json:"sign_data"` // 签名
+	SpiData  bb_client.SpiData  `json:"spi_data"`  // 风控数据
 }

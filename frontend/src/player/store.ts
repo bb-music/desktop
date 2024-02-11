@@ -1,11 +1,10 @@
-import { CacheStorage } from '@/utils';
 import { MusicItem, createAudio, musicItem2Url } from '.';
 import { PlayerMode, PlayerStatus } from './constants';
 import { create } from 'zustand';
 
-const cacheStore = new CacheStorage<
-  Pick<PlayerStoreState, 'current' | 'playerList' | 'playerMode'>
->('BB_Player');
+// const cacheStore = new CacheStorage<
+//   Pick<PlayerStoreState, 'current' | 'playerList' | 'playerMode'>
+// >('BB_Player');
 
 interface PlayerStoreState {
   /** 播放器 */
@@ -52,7 +51,8 @@ interface PlayerStoreHandler {
 type PlayerStore = PlayerStoreState & PlayerStoreHandler;
 const AUDIO_ID = 'BBAudio';
 export const playerStore = create<PlayerStore>()((set, get) => {
-  const cacheState = cacheStore.get();
+  const cacheState = void 0;
+  // const cacheState = cacheStore.get();
 
   return {
     audio: createAudio(AUDIO_ID)!,
@@ -258,10 +258,10 @@ export const playerStore = create<PlayerStore>()((set, get) => {
 });
 
 playerStore.subscribe((state) => {
-  cacheStore.set({
-    playerList: state.playerList,
-    current: state.current,
-    playerMode: state.playerMode,
-  });
+  // cacheStore.set({
+  //   playerList: state.playerList,
+  //   current: state.current,
+  //   playerMode: state.playerMode,
+  // });
 });
 export const usePlayerStore = playerStore;

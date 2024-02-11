@@ -2,8 +2,6 @@ export namespace app {
 	
 	export class AppConfig {
 	    video_proxy_port: number;
-	    sign_data: bb_client.SignData;
-	    download_dir: string;
 	    config_dir: string;
 	
 	    static createFrom(source: any = {}) {
@@ -13,9 +11,21 @@ export namespace app {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.video_proxy_port = source["video_proxy_port"];
-	        this.sign_data = this.convertValues(source["sign_data"], bb_client.SignData);
-	        this.download_dir = source["download_dir"];
 	        this.config_dir = source["config_dir"];
+	    }
+	}
+	export class AuthParams {
+	    sign_data: bb_client.SignData;
+	    spi_data: bb_client.SpiData;
+	
+	    static createFrom(source: any = {}) {
+	        return new AuthParams(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.sign_data = this.convertValues(source["sign_data"], bb_client.SignData);
+	        this.spi_data = this.convertValues(source["spi_data"], bb_client.SpiData);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
@@ -41,6 +51,7 @@ export namespace app {
 	    bvid: string;
 	    cid: string;
 	    name: string;
+	    download_dir: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new DownloadMusicParams(source);
@@ -52,6 +63,7 @@ export namespace app {
 	        this.bvid = source["bvid"];
 	        this.cid = source["cid"];
 	        this.name = source["name"];
+	        this.download_dir = source["download_dir"];
 	    }
 	}
 	export class MusicItem {
@@ -450,6 +462,20 @@ export namespace bb_client {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.img_key = source["img_key"];
 	        this.sub_key = source["sub_key"];
+	    }
+	}
+	export class SpiData {
+	    b_3: string;
+	    b_4: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new SpiData(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.b_3 = source["b_3"];
+	        this.b_4 = source["b_4"];
 	    }
 	}
 	export class Supportformat {

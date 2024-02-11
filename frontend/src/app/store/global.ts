@@ -1,7 +1,9 @@
 import { create } from 'zustand';
 import styles from '../theme/dark.module.scss';
-interface GlobalStoreState {
-  theme: string;
+
+export interface GlobalStoreState {
+  /** 主题 */
+  theme?: string;
 }
 interface GlobalStoreHandler {
   setState: (state: Partial<GlobalStoreState>) => void;

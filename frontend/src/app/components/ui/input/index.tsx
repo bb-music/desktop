@@ -19,7 +19,9 @@ export function Input({ className, style, type, value, disabled, readOnly, onCha
       style={style}
       type={type}
       value={value}
-      onChange={onChange}
+      onChange={(e) => {
+        onChange?.(e);
+      }}
       disabled={disabled}
       readOnly={readOnly}
     />

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { bb_client } from '@wails/go/models';
-import { GetConfig, LoadSignData, SetDownloadDir, UpdateClientSignData } from '@wails/go/app/App';
+import { GetConfig, LoadSignData, SetDownloadDir, SetSignData } from '@wails/go/app/App';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { UserMusicOrderOrigin, UserMusicOrderOriginType } from '@/utils/userMusicOrder/common';
 
@@ -54,7 +54,7 @@ export const configStore = create(
             await SetDownloadDir(get().downloadDir!);
           }
           if (signData && img_key && sub_key) {
-            await UpdateClientSignData({
+            await SetSignData({
               img_key,
               sub_key,
             });

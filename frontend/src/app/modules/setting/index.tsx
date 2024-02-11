@@ -6,6 +6,8 @@ import styles from './index.module.scss';
 import { Input } from '@/app/components/ui/input';
 import { Button } from '@/app/components/ui/button';
 import { ReactNode } from 'react';
+import { useSettingStore } from './store';
+import { api } from '@/app/api';
 
 export interface SettingProps {}
 
@@ -29,35 +31,90 @@ export function Setting() {
 }
 
 export function MainSetting() {
+  const store = useSettingStore();
+  const signUpdateButton = (
+    <Button
+      type='link'
+      onClick={() => {
+        api.setting.updateSignData().then(() => {
+          store.load();
+        });
+      }}
+    >
+      刷新
+    </Button>
+  );
+  const spiUpdateButton = (
+    <Button
+      type='link'
+      onClick={() => {
+        api.setting.updateSpiData().then(() => {
+          store.load();
+        });
+      }}
+    >
+      刷新
+    </Button>
+  );
   return (
     <>
       <SubTitle title='系统设置' />
-      <SettingItem label='下载位置'>
-        <Input
-          value='E:project\bb-music-desktop/download_temp'
-          disabled
-        />
-        <Button type='link'>更改位置</Button>
-      </SettingItem>
+      {api.setting.updateDownloadDir && (
+        <SettingItem label='下载位置'>
+          <Input
+            value={store.downloadDir}
+            disabled
+          />
+          {api.setting.selectDownloadDir && (
+            <Button
+              type='link'
+              onClick={() => {
+                console.log(api);
+                api.setting.selectDownloadDir?.().then((res) => {
+                  api.setting.updateDownloadDir?.(res).then(() => {
+                    store.load();
+                  });
+                });
+              }}
+            >
+              更改位置
+            </Button>
+          )}
+        </SettingItem>
+      )}
       <SettingItem label='imgKey'>
         <Input
-          value='download_tempdownload_tempdownload_tempdownload_temp'
+          value={store.signData.imgKey}
           disabled
         />
-        <Button type='link'>刷新</Button>
+        {signUpdateButton}
       </SettingItem>
       <SettingItem label='subKey'>
         <Input
-          value='download_tempdownload_tempdownload_tempdownload_temp'
+          value={store.signData.subKey}
           disabled
         />
-        <Button type='link'>刷新</Button>
+        {signUpdateButton}
+      </SettingItem>
+      <SettingItem label='UUID_V3'>
+        <Input
+          value={store.spiData.uuid_v3}
+          disabled
+        />
+        {spiUpdateButton}
+      </SettingItem>
+      <SettingItem label='UUID_V4'>
+        <Input
+          value={store.spiData.uuid_v4}
+          disabled
+        />
+        {spiUpdateButton}
       </SettingItem>
       <SettingItem label='视频代理服务端口'>
         <Input
-          value='8080'
           style={{ width: 100 }}
           disabled
+          value={store.videoProxyPort?.toString() || ''}
         />
       </SettingItem>
     </>

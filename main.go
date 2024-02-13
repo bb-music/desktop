@@ -25,7 +25,7 @@ func main() {
 			OpenInspectorOnStartup: true,
 		},
 		Title:     "哔哔音乐",
-		Width:     1024,
+		Width:     1064,
 		Height:    768,
 		Frameless: true,
 		Windows: &windows.Options{

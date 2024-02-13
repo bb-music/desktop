@@ -17,11 +17,8 @@ import {
 import styles from './index.module.scss';
 import { usePlayerStore, PlayerMode, seconds2mmss } from '.';
 import { useEffect, useState } from 'react';
-import { musicItem2Url } from '.';
 import { PlayerStatus } from '.';
 import { PlayerModeMap } from '.';
-import { DownloadMusic, UpdateDownloadDir } from '@wails/go/app/App';
-import { useConfigStore } from '@/store/config';
 import { downloadMusic } from './utils';
 
 export * from './types';
@@ -31,7 +28,6 @@ export * from './constants';
 
 export function Player({ className, style }: { className?: string; style?: React.CSSProperties }) {
   const player = usePlayerStore();
-  const config = useConfigStore();
   const [listShow, setListShow] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   useEffect(() => {

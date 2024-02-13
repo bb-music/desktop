@@ -1,9 +1,10 @@
 import { string2Number } from '@/utils';
 import { MusicItem } from '.';
+import qs from 'querystring';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import { configStore } from '@/store/config';
-import { DownloadMusic, UpdateDownloadDir } from '@wails/go/app/App';
+import { DownloadMusic } from '@wails/go/app/App';
 dayjs.extend(duration);
 
 export function musicItem2Url(music: MusicItem) {
@@ -67,16 +68,16 @@ export async function downloadMusic(item: MusicItem) {
   const config = configStore.getState();
   const dir = config.downloadDir;
   if (!dir) {
-    await UpdateDownloadDir();
+    // await UpdateDownloadDir();
     await config.load();
     return;
   }
-  DownloadMusic({
-    aid: item.aid + '',
-    cid: item.cid + '',
-    bvid: item.bvid + '',
-    name: item.name,
-  }).then((res) => {
-    console.log(res);
-  });
+  // DownloadMusic({
+  //   aid: item.aid + '',
+  //   cid: item.cid + '',
+  //   bvid: item.bvid + '',
+  //   name: item.name,
+  // }).then((res) => {
+  //   console.log(res);
+  // });
 }

@@ -65,20 +65,20 @@ export const playerStore = create<PlayerStore>()((set, get) => {
     init() {
       const audio = get().audio;
       if (typeof document !== 'undefined') {
-        if (!document.getElementById(AUDIO_ID)) {
-          document.body.appendChild(audio);
-        }
-        const playerList = cacheState?.playerList ?? [];
-        const current = cacheState?.current || playerList[0];
-        if (current) {
-          audio.setAttribute('src', musicItem2Url(current));
-        }
-        set({
-          playerList,
-          playerMode: cacheState?.playerMode ?? PlayerMode.ListLoop,
-          current,
-          playerHistory: [current?.id].filter((f) => !!f),
-        });
+        // if (!document.getElementById(AUDIO_ID)) {
+        //   document.body.appendChild(audio);
+        // }
+        // const playerList = cacheState?.playerList ?? [];
+        // const current = cacheState?.current || playerList[0];
+        // if (current) {
+        //   audio.setAttribute('src', musicItem2Url(current));
+        // }
+        // set({
+        //   playerList,
+        //   playerMode: cacheState?.playerMode ?? PlayerMode.ListLoop,
+        //   current,
+        //   playerHistory: [current?.id].filter((f) => !!f),
+        // });
       }
     },
     play: (m) => {

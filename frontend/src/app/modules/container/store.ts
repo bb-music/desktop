@@ -1,9 +1,8 @@
 import { create } from 'zustand';
 import { OpenMusicOrder, OpenMusicOrderProps } from '../openMusicOrder';
 import { MusicOrderDetail, MusicOrderDetailProps } from '../musicOrderDetail';
-import { Search, SearchProps } from '../search';
+import { Search, SearchProps } from '../search/index';
 import { Setting, SettingProps } from '../setting';
-import { BaseStore } from '@/app/interface/store';
 
 export const enum PageView {
   OpenMusicOrder = 'OpenMusicOrder', // 广场
@@ -57,26 +56,17 @@ interface ContainerStoreHandler {
 
 type ContainerStore = ContainerStoreState & ContainerStoreHandler;
 
-export let useContainerStore: BaseStore<ContainerStore>;
-
-export function registerContainerStore() {
-  if (!useContainerStore) {
-    useContainerStore = create<ContainerStore>()((set, get) => {
-      return {
-        active: PageView.Setting,
-        setActive: (active, props) => {
-          set({ active, props });
-        },
-      };
-    });
-  }
-}
+export const useContainerStore = create<ContainerStore>()((set, get) => {
+  return {
+    active: PageView.OpenMusicOrder,
+    setActive: (active, props) => {
+      set({ active, props });
+    },
+  };
+});
 
 /** 切换视图 */
-export function openPage(page: PageView.OpenMusicOrder, props?: OpenMusicOrderProps): void;
-export function openPage(page: PageView.MusicOrderDetail, props?: MusicOrderDetailProps): void;
-export function openPage(page: PageView.Search, props?: SearchProps): void;
-export function openPage(page: PageView.Setting, props?: SettingProps): void;
+
 export function openPage(page: PageView, props?: PageViewProps) {
   useContainerStore.getState().setActive(page, props);
 }

@@ -28,11 +28,12 @@ func (a *App) GetVideoUrl(params bb_client.GetVideoUrlParams, auth AuthParams) (
 }
 
 type MusicOrderItem struct {
-	ID     string      `json:"id"`
-	Name   string      `json:"name"`
-	Desc   string      `json:"desc"`
-	Author string      `json:"author"`
-	List   []MusicItem `json:"list"`
+	ID        string      `json:"id"`
+	Name      string      `json:"name"`
+	Cover     string      `json:"cover"`
+	Desc      string      `json:"desc"`
+	Author    string      `json:"author"`
+	MusicList []MusicItem `json:"musicList"`
 }
 
 type MusicItem struct {
@@ -51,6 +52,10 @@ func (a *App) GetJsonOrigin(originUrl string) ([]MusicOrderItem, error) {
 		return []MusicOrderItem{}, err
 	}
 	defer resp.Body.Close()
+	fmt.Println("===============================")
+	fmt.Printf("resp%v\n", resp)
+	fmt.Println("===============================")
+
 	if resp.StatusCode != 200 {
 		return []MusicOrderItem{}, err
 	}
@@ -62,6 +67,8 @@ func (a *App) GetJsonOrigin(originUrl string) ([]MusicOrderItem, error) {
 			return []MusicOrderItem{}, err
 
 		}
+		fmt.Printf("resp%v\n", result)
+
 		return result, nil
 	}
 }

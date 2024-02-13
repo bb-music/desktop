@@ -2,9 +2,10 @@ import { createRoot } from 'react-dom/client';
 import './style.scss';
 import { BBMusicApp } from '@/app';
 import { PcContainer } from './app/modules/container';
-import { cacheStorage } from './lib/cacheStorage';
-import { apiInstance, settingCache } from './api';
+import { apiInstance } from './api';
 import { useEffect, useState } from 'react';
+import { settingCache } from './api/setting';
+import { cacheStorage } from './lib/cacheStorage';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -17,8 +18,11 @@ function Root() {
   const init = async () => {
     setInitLoading(true);
     const res = await settingCache.get();
-    if (!res?.signData) {
+    if (!res?.signData?.imgKey || !res?.signData?.subKey) {
       await apiInstance.setting.updateSignData();
+    }
+    if (!res?.spiData?.uuid_v3 || !res?.spiData?.uuid_v4) {
+      await apiInstance.setting.updateSpiData();
     }
     setInitLoading(false);
   };
@@ -38,8 +42,8 @@ function Root() {
     >
       {!initLoading && (
         <BBMusicApp
-          cacheStorage={cacheStorage}
           apiInstance={apiInstance}
+          cacheStorage={cacheStorage}
         >
           <PcContainer />
         </BBMusicApp>

@@ -1,234 +1,143 @@
-.playerContainer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  z-index: 90;
-  --block-height: 50px;
-}
 .player {
   position: relative;
-  z-index: 90;
-  background: linear-gradient(to right, #302d2e, #444, #302d2e);
-  color: #fff;
-  box-shadow: 0 0 6px #302d2e;
-  margin: 0 auto;
-  height: var(--block-height);
+  flex: 0 0 var(--player-height);
+  height: var(--player-height);
+  background: rgb(var(--player-color));
+  height: 2px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px;
+  width: 100%;
+}
+.progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--player-progress-bg);
+  .loaded {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100px;
+    background-color: rgb(var(--main-color));
+  }
+}
+
+.info {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  .operateButtons {
+  gap: 14px;
+  flex: 0 0 200px;
+  .cover {
+    width: 40px;
+    height: 40px;
+    background-color: #eee;
+    border-radius: 4px;
+  }
+  .duration {
+    font-size: 12px;
     display: flex;
-    align-items: center;
-    gap: 20px;
-    .icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      opacity: 0.7;
-      cursor: pointer;
-      &:hover {
-        opacity: 1;
-      }
-    }
-    .prev,
-    .next {
-      font-size: 24px;
-    }
-    .play {
-      font-size: 34px;
-    }
-    .modeIcon {
-      font-size: 22px;
-    }
-    .musicListIcon {
-      display: flex;
-      align-items: center;
-      font-size: 22px;
-      background-color: #111;
-      border-radius: 2px;
-
-      .total {
-        font-size: 12px;
-        padding: 0 4px 0 0px;
-      }
-    }
-  }
-  .info {
-    flex: 1;
-    margin: 0 30px;
-    .name {
-      margin-bottom: 4px;
-      font-size: 12px;
-      padding-left: 4px;
-    }
-    .progress {
-      height: 10px;
-      width: 100%;
-      background: #000;
-      border-radius: 10px;
-      margin-right: 10px;
-      .current {
-        position: relative;
-        height: 10px;
-        border-radius: 10px;
-        background-color: #fff;
-        display: flex;
-        align-items: center;
-        .btn {
-          position: absolute;
-          right: -9px;
-          width: 18px;
-          height: 18px;
-          border-radius: 50%;
-          background-color: #111;
-          border: 2px solid #fff;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          &::after {
-            content: '';
-            width: 4px;
-            height: 4px;
-            background-color: #fff;
-            border-radius: 50%;
-          }
-        }
-      }
-    }
-    .duration {
-      font-size: 12px;
-      color: #aaa;
-      display: flex;
-      gap: 4px;
-      align-items: center;
-      line-height: 1;
-    }
+    gap: 4px;
+    color: var(--font-light-color);
   }
 }
-.operateLink {
-  cursor: pointer;
-  &:hover {
-    text-decoration: underline;
+.playerOperate {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  font-size: 30px;
+  color: rgb(var(--main-color));
+  .play {
+    font-size: 40px;
+  }
+  .icon {
+    cursor: pointer;
   }
 }
-.playerList {
-  position: absolute;
-  z-index: 89;
-  width: 100%;
-  max-width: var(--max-width);
-  bottom: var(--block-height);
-  background-color: #333;
-  left: 50%;
-  transform: translateX(-50%) translateY(100%);
-  color: #fff;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  transition: all 0.3s;
-  &.show {
-    transform: translateX(-50%) translateY(0);
-  }
-  :global {
-    /* 自定义滚动条轨道 */
-    ::-webkit-scrollbar-track {
-      background-color: #333;
-    }
-
-    /* 自定义滚动条滑块 */
-    ::-webkit-scrollbar-thumb {
-      background-color: #666;
-      border-radius: 10px;
-    }
-  }
-  .header {
+.operate {
+  flex: 0 0 200px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  font-size: 24px;
+  .icon {
     height: 40px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 0 10px 0 20px;
-    border-bottom: 1px solid #111;
-    line-height: 1;
+    cursor: pointer;
+    &:hover {
+      color: rgb(var(--main-color));
+    }
+  }
+}
+.playerListContainer {
+  position: fixed;
+  top: var(--header-height);
+  bottom: var(--player-height);
+  right: 0;
+  width: 420px;
+  background-color: var(--player-list-bg);
+  z-index: 80;
+  .headerInfo {
+    padding: 16px;
     .title {
-      font-size: 16px;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 16px;
     }
-    .searchInput {
-      height: 26px;
-      width: 200px;
-      font-size: 12px;
-      color: #aaa;
-      background-color: #111;
-      border-color: #111;
-    }
-    .operateLink {
+    .total {
+      color: var(--font-light-color);
       font-size: 12px;
     }
-    .operateButtons {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-    .close {
-      height: 30px;
-      width: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .operateBtn {
       cursor: pointer;
-      border-radius: 4px;
+    }
+    .clear {
+      color: var(--link-color);
+      cursor: pointer;
       &:hover {
-        background-color: #111;
+        color: var(--link-hover-color);
       }
     }
   }
   .list {
-    max-height: 320px;
-    overflow-y: auto;
-    padding-bottom: 100px;
-
-    .item {
+    .name {
       display: flex;
       align-items: center;
-      padding: 7px 15px 7px 4px;
-      font-size: 12px;
-      color: #ccc;
-      cursor: pointer;
+      padding-left: 2px;
       &.active {
-        background-color: #222;
-      }
-      .icon {
-        font-size: 18px;
-        width: 16px;
-        height: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .name {
-        flex: 1;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-      .operate {
-        display: none;
-        gap: 1em;
-        margin: 0 2em;
-        span {
-          &:hover {
-            text-decoration: underline;
+        color: rgb(var(--main-color));
+        .icon {
+          span {
+            display: flex;
           }
         }
       }
-      &:hover {
-        color: #fff;
-        background-color: #111;
-        .operate {
-          display: flex;
+      svg {
+        font-size: 14px;
+      }
+      .icon {
+        width: 14px;
+        height: 14px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 2px;
+        span {
+          display: none;
         }
+      }
+    }
+    td {
+      &:last-of-type {
+        text-align: right;
+        padding-right: 16px;
       }
     }
   }

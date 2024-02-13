@@ -1,4 +1,7 @@
-import { UserMusicOrderOrigin } from '../modules/musicOrderList';
+interface UserMusicOrderOriginItem<T = Record<string, any>> {
+  name: string;
+  config: T;
+}
 
 export class SettingInfo {
   /** 签名信息 */
@@ -22,9 +25,9 @@ export class SettingInfo {
   /** 文件下载目录 */
   downloadDir?: string;
   /** 歌单广场来源 */
-  musicOrderOpenOrigin: string[] = [];
+  openMusicOrderOrigin: string[] = [];
   /** 个人歌单同步源 */
-  userMusicOrderOrigin: UserMusicOrderOrigin.Config[] = [];
+  userMusicOrderOrigin: UserMusicOrderOriginItem[] = [];
 }
 
 export abstract class Setting {
@@ -39,7 +42,7 @@ export abstract class Setting {
   /** 更新下载目录 */
   abstract updateDownloadDir?: (dir: string) => Promise<void>;
   /** 更新歌单广场来源 */
-  abstract updateMusicOrderOpenOrigin: (value: string[]) => Promise<void>;
+  abstract updateOpenMusicOrderOrigin: (value: string[]) => Promise<void>;
   /** 更新个人歌单同步源 */
-  abstract updateUserMusicOrderOrigin: (value: UserMusicOrderOrigin.Config[]) => Promise<void>;
+  abstract updateUserMusicOrderOrigin: (value: UserMusicOrderOriginItem[]) => Promise<void>;
 }

@@ -1,5 +1,7 @@
 package bb_client
 
+import "fmt"
+
 type SearchParams struct {
 	Keyword string `json:"keyword"`
 	Page    string `json:"page"`
@@ -17,6 +19,7 @@ func (c *Client) Search(params SearchParams) (SearchResponse, error) {
 		"keyword":     params.Keyword,
 		"page":        params.Page,
 	})
+	fmt.Printf("query: %+v\n", query)
 	url := "https://api.bilibili.com/x/web-interface/wbi/search/type"
 	result := BiliResponse[SearchResponse]{}
 	_, err := c.Request().SetQueryParams(query).SetResult(&result).Get(url)

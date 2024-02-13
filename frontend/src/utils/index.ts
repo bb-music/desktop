@@ -1,6 +1,7 @@
 import { MusicOrderItem } from '@/interface';
 import { router } from '@/router';
 import { musicOrderDetailStore } from '@/views/musicOrderDetail/store';
+import dayjs from 'dayjs';
 
 export * from './catchStore';
 /** 合并 className */
@@ -34,4 +35,18 @@ export function isJson<T = Array<any> | Record<string, any>>(val: string): T | u
 export function toMusicOrderDetail(data: MusicOrderItem) {
   musicOrderDetailStore.getState().setData(data);
   router.push('/music-order-detail');
+}
+
+/**
+ * mm:ss 转为 秒
+ */
+export function mmss2seconds(str: string) {
+  const [m, s] = str.split(':').map(Number);
+  return m * 60 + s;
+}
+
+export function html2text(str: string) {
+  const html = document.createElement('div');
+  html.innerHTML = str;
+  return html.innerText;
 }

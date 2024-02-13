@@ -29,8 +29,7 @@ export class JsonCacheStorage<T> {
   };
   async update(key: keyof T, value: T[keyof T]): Promise<void> {
     const res = await this.get();
-    if (res) {
-      this.set({ ...res, [key]: value });
-    }
+    const data = { ...res!, [key]: value };
+    await this.set(data);
   }
 }

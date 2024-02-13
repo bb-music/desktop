@@ -1,4 +1,4 @@
-import { MusicOrderItem } from '@/interface';
+import { MusicOrderItem } from '@/app/api/music';
 
 export abstract class MusicOrderOriginLoader {
   constructor(origin: string) {}

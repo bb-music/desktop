@@ -91,9 +91,10 @@ export namespace app {
 	export class MusicOrderItem {
 	    id: string;
 	    name: string;
+	    cover: string;
 	    desc: string;
 	    author: string;
-	    list: MusicItem[];
+	    musicList: MusicItem[];
 	
 	    static createFrom(source: any = {}) {
 	        return new MusicOrderItem(source);
@@ -103,9 +104,10 @@ export namespace app {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.id = source["id"];
 	        this.name = source["name"];
+	        this.cover = source["cover"];
 	        this.desc = source["desc"];
 	        this.author = source["author"];
-	        this.list = this.convertValues(source["list"], MusicItem);
+	        this.musicList = this.convertValues(source["musicList"], MusicItem);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

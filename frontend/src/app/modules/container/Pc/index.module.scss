@@ -29,8 +29,8 @@
 }
 
 .header {
-  height: 54px;
-  flex: 0 0 54px;
+  height: var(--header-height);
+  flex: 0 0 var(--header-height);
   background-color: rgb(var(--header-bg));
   display: flex;
   justify-content: space-between;
@@ -78,10 +78,13 @@
 .main {
   flex: 1;
   background-color: rgb(var(--content-bg));
+  overflow-x: hidden;
   overflow-y: auto;
   display: flex;
 }
 .content {
+  overflow: hidden;
+  overflow-y: auto;
   flex: 1;
 }
 
@@ -90,6 +93,7 @@
   position: sticky;
   top: 0;
   width: 240px;
+  flex: 0 0 240px;
   height: 100%;
   padding: 2px 0;
   overflow-y: auto;
@@ -156,10 +160,4 @@
       }
     }
   }
-}
-
-.player {
-  flex: 0 0 60px;
-  height: 60px;
-  background: rgb(var(--player-color));
 }

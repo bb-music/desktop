@@ -1,5 +1,4 @@
 import React from 'react';
-import { BaseElementProps } from '@/app/interface';
 import { cls } from '@/app/utils';
 import styles from './index.module.scss';
 import { UIPrefix } from '@/app/consts';

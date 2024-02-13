@@ -1,6 +1,6 @@
-import { cls } from '../../utils';
+import { Image } from '@/app/components/ui/image';
+import styles from './index.module.scss';
 import {
-  Close,
   GoEnd,
   GoStart,
   MusicList,
@@ -12,213 +12,161 @@ import {
   ShuffleOne,
   SortAmountDown,
 } from '@icon-park/react';
-import styles from './index.module.scss';
-import { usePlayerStore, PlayerMode, seconds2mmss } from '.';
+import { usePlayerStore } from './store';
+import { cls } from '@/utils';
+import { PlayerMode, PlayerModeMap, PlayerStatus } from './constants';
 import { useEffect, useState } from 'react';
-import { PlayerStatus } from '.';
-import { PlayerModeMap } from '.';
-import { downloadMusic } from './utils';
+import { seconds2mmss } from './utils';
+import { Table } from '@/app/components/ui/table';
 
-export * from './types';
-export * from './utils';
-export * from './store';
-export * from './constants';
-
-export function Player({ className, style }: { className?: string; style?: React.CSSProperties }) {
+export function Player() {
   const player = usePlayerStore();
   const [listShow, setListShow] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
+
   useEffect(() => {
-    player.init();
-    player.audio.addEventListener('ended', () => {
-      player.endNext();
-    });
+    const handler = (e: MouseEvent) => {
+      setListShow(false);
+    };
+    document.addEventListener('click', handler);
+    return () => {
+      document.removeEventListener('click', handler);
+    };
   }, []);
+
   return (
-    <div
-      className={cls(styles.playerContainer, className)}
-      style={style}
-    >
-      <div className={styles.player}>
-        <div className={styles.operateButtons}>
-          <div
-            className={cls(styles.icon, styles.prev)}
-            onClick={() => {
-              player.prev();
-            }}
-          >
-            <GoStart strokeWidth={3} />
-          </div>
-          {player.playerStatus === PlayerStatus.Play ? (
-            <div
-              className={cls(styles.icon, styles.play)}
-              onClick={() => {
-                player.pause();
-              }}
-            >
-              <PauseOne strokeWidth={2} />
-            </div>
-          ) : (
-            <div
-              className={cls(styles.icon, styles.play)}
-              onClick={() => {
-                player.play();
-              }}
-            >
-              <Play strokeWidth={2} />
-            </div>
-          )}
-          <div
-            className={cls(styles.icon, styles.next)}
-            onClick={() => {
-              player.next();
-            }}
-          >
-            <GoEnd strokeWidth={3} />
-          </div>
-        </div>
-        <PlayerInfo />
-        <div className={styles.operateButtons}>
-          <div
-            className={cls(styles.modeIcon, styles.icon)}
-            onClick={() => player.togglePlayerMode()}
-            title={PlayerModeMap.get(player.playerMode)?.label}
-          >
-            {player.playerMode === PlayerMode.ListLoop && <PlayCycle strokeWidth={2} />}
-            {player.playerMode === PlayerMode.SignalLoop && <PlayOnce strokeWidth={2} />}
-            {player.playerMode === PlayerMode.Random && <ShuffleOne strokeWidth={2} />}
-            {player.playerMode === PlayerMode.ListOrder && <SortAmountDown strokeWidth={2} />}
-          </div>
-          <div
-            className={cls(styles.icon, styles.musicListIcon)}
-            onClick={(e) => {
-              e.stopPropagation();
-              setListShow(!listShow);
-            }}
-          >
-            <MusicList strokeWidth={2} />
-            <span className={styles.total}>{player.playerList.length}</span>
+    <div className={styles.player}>
+      <div className={styles.progress}>
+        <div className={styles.loaded}></div>
+      </div>
+      <div className={styles.info}>
+        <Image
+          src=''
+          className={styles.cover}
+        ></Image>
+        <div>
+          <div className={styles.name}>歌曲名</div>
+          <div className={styles.duration}>
+            <span>03:22</span>
+            <span>/</span>
+            <span>03:22</span>
           </div>
         </div>
       </div>
-      <div className={cls(styles.playerList, listShow ? styles.show : '')}>
-        <div className={styles.header}>
-          <div className={styles.title}>
-            <span>播放列表</span>
-          </div>
-          <input
-            className={styles.searchInput}
-            type='text'
-            placeholder='输入歌曲名称过滤'
-            value={searchValue}
-            onChange={(e) => {
-              setSearchValue(e.target.value?.trim() || '');
+      <div className={styles.playerOperate}>
+        <GoStart
+          strokeWidth={3}
+          className={cls(styles.icon, styles.prev)}
+          title='上一首'
+          onClick={() => {
+            player.prev();
+          }}
+        />
+        {player.playerStatus === PlayerStatus.Play ? (
+          <PauseOne
+            strokeWidth={2}
+            className={cls(styles.icon, styles.play)}
+            title='暂停'
+            onClick={() => {
+              player.pause();
             }}
           />
-          <div className={styles.operateButtons}>
-            <span
-              className={styles.operateLink}
-              onClick={() => {
-                player.clearPlayerList();
-              }}
-            >
-              清除
-            </span>
-            <span
-              className={styles.close}
-              onClick={() => {
-                setListShow(false);
-              }}
-            >
-              <Close />
-            </span>
-          </div>
+        ) : (
+          <Play
+            theme='filled'
+            strokeWidth={2}
+            title='播放'
+            className={cls(styles.icon, styles.play)}
+            onClick={() => {
+              player.play();
+            }}
+          />
+        )}
+        <GoEnd
+          strokeWidth={3}
+          title='下一首'
+          className={cls(styles.icon, styles.next)}
+          onClick={() => {
+            player.next();
+          }}
+        />
+      </div>
+      <div className={styles.operate}>
+        <div
+          className={cls(styles.modeIcon, styles.icon)}
+          onClick={() => player.togglePlayerMode()}
+          title={PlayerModeMap.get(player.playerMode)?.label}
+        >
+          {player.playerMode === PlayerMode.ListLoop && <PlayCycle strokeWidth={2} />}
+          {player.playerMode === PlayerMode.SignalLoop && <PlayOnce strokeWidth={2} />}
+          {player.playerMode === PlayerMode.Random && <ShuffleOne strokeWidth={2} />}
+          {player.playerMode === PlayerMode.ListOrder && <SortAmountDown strokeWidth={2} />}
         </div>
-        <div className={styles.list}>
-          {player.playerList.map((item, index) => {
-            return (
-              <div
-                className={cls(styles.item, player.current?.id === item.id ? styles.active : '')}
-                key={item.id}
-                style={{ display: item.name.includes(searchValue) ? 'flex' : 'none' }}
-                onClick={() => {
-                  player.play(item);
-                }}
-              >
-                <div className={styles.icon}>
-                  {player.current?.id === item.id && (
-                    <RightOne
-                      theme='filled'
-                      strokeWidth={2}
-                    />
-                  )}
-                </div>
-                <div className={styles.name}>
-                  {index + 1}. {item.name}
-                </div>
-                <div
-                  className={styles.operate}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  <span
-                    className={styles.operateLink}
-                    onClick={() => {
-                      downloadMusic(item);
-                    }}
-                  >
-                    下载
-                  </span>
-                  <span
-                    className={styles.operateLink}
-                    onClick={(e) => {
-                      player.removePlayerList([item.id]);
-                    }}
-                  >
-                    删除
-                  </span>
-                </div>
-                <div className={styles.duration}>{seconds2mmss(item.duration)}</div>
-              </div>
-            );
-          })}
+        <div
+          className={cls(styles.icon, styles.musicListIcon)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setListShow(!listShow);
+          }}
+        >
+          <MusicList strokeWidth={2} />
         </div>
       </div>
+      <PlayerList open={listShow} />
     </div>
   );
 }
 
-function PlayerInfo() {
+function PlayerList({ open }: { open: boolean }) {
   const player = usePlayerStore();
-  const [progress, setProgress] = useState(player.playProgress);
-  const duration = player.current?.duration || 0;
-
-  useEffect(() => {
-    player.audio.addEventListener('timeupdate', (e) => {
-      const target = e.target as HTMLAudioElement;
-      setProgress(target.currentTime);
-    });
-  }, [player.audio]);
-
-  const width = duration + progress === 0 ? 0 : (progress / duration) * 100;
-
   return (
-    <div className={styles.info}>
-      <div className={styles.name}>{player.current?.name || '-'}</div>
-      <div style={{ display: 'flex', alignItems: 'flex-end', gap: '10px' }}>
-        <div className={styles.progress}>
-          <div
-            className={styles.current}
-            style={{ width: width + '%' }}
-          >
-            <div className={styles.btn}></div>
+    <div
+      className={styles.playerListContainer}
+      style={{ display: open ? '' : 'none' }}
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
+      <div className={styles.headerInfo}>
+        <div className={styles.title}>当前播放</div>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <span className={styles.total}>总{player.playerList.length}首</span>
+          <div style={{ display: 'flex', gap: '16px' }}>
+            <span className={styles.operateBtn}>收藏全部</span>
+            <span className={styles.clear}>清空列表</span>
           </div>
         </div>
-        <div className={styles.duration}>
-          <span>{seconds2mmss(progress)}</span>/<span>{seconds2mmss(duration)}</span>
-        </div>
       </div>
+      <Table className={styles.list}>
+        <thead style={{ display: 'none' }}>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {player.playerList.map((item, index) => {
+            return (
+              <tr
+                onDoubleClick={() => {
+                  player.play(item);
+                }}
+              >
+                <td className={cls(styles.name, player.current?.id === item.id && styles.active)}>
+                  <div className={styles.icon}>
+                    <RightOne
+                      theme='filled'
+                      strokeWidth={2}
+                    />
+                  </div>
+                  <span>{item.name}</span>
+                </td>
+                <td>{seconds2mmss(item.duration)}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </Table>
     </div>
   );
 }

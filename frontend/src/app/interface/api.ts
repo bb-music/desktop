@@ -42,7 +42,7 @@ export namespace MusicApi {
       /** 歌单歌曲数 */
       partTotal?: number;
       /** 扩展信息 */
-      extData?: T;
+      extraData?: T;
     }
   }
 }

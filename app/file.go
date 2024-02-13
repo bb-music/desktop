@@ -14,7 +14,7 @@ func (a *App) GetStorage(key string) (string, error) {
 	dir := a.AppConfig.ConfigDir
 	p := filepath.Join(dir, storageName, key+".json")
 
-	if fileutil.IsExist(p) == false {
+	if !fileutil.IsExist(p) {
 		return "", nil
 	}
 
@@ -24,7 +24,11 @@ func (a *App) GetStorage(key string) (string, error) {
 // 写
 func (a *App) SetStorage(key string, value string) error {
 	dir := a.AppConfig.ConfigDir
-	p := filepath.Join(dir, storageName, key+".json")
+	d := filepath.Join(dir, storageName)
+	p := filepath.Join(d, key+".json")
+	if !fileutil.IsExist(d) {
+		fileutil.CreateDir(d)
+	}
 
 	return fileutil.WriteStringToFile(p, value, false)
 }

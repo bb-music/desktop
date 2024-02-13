@@ -1,13 +1,14 @@
 /**
  * 设置页
  */
-import { Plus } from '@icon-park/react';
+import { Help, Plus } from '@icon-park/react';
 import styles from './index.module.scss';
 import { Input } from '@/app/components/ui/input';
 import { Button } from '@/app/components/ui/button';
-import { ReactNode } from 'react';
+import { ReactNode, createRef, useEffect, useRef, useState } from 'react';
 import { useSettingStore } from './store';
 import { api } from '@/app/api';
+import { Modal } from '@/app/components/ui/modal';
 
 export interface SettingProps {}
 
@@ -56,6 +57,9 @@ export function MainSetting() {
       刷新
     </Button>
   );
+  useEffect(() => {
+    console.log(store);
+  }, []);
   return (
     <>
       <SubTitle title='系统设置' />
@@ -121,43 +125,135 @@ export function MainSetting() {
   );
 }
 
+class OpenMusicOrderModal {
+  open = false;
+  value = '';
+}
 export function OpenSetting() {
+  const store = useSettingStore();
+  const [modal, setModal] = useState(new OpenMusicOrderModal());
+
   return (
     <>
       <SubTitle
         title='歌单广场源'
         extra={
-          <Button type='text'>
+          <Button
+            type='text'
+            onClick={() => {
+              setModal({
+                ...new OpenMusicOrderModal(),
+                open: true,
+              });
+            }}
+          >
             <Plus />
             <span>添加源</span>
           </Button>
         }
       />
-      <SettingItem label='广场源1'>
-        <Input value='download_tempdownload_tempdownload_tempdownload_temp' />
-        <Button type='text'>删除</Button>
-      </SettingItem>
-      <SettingItem label='广场源2'>
-        <Input value='download_tempdownload_tempdownload_tempdownload_temp' />
-        <Button type='text'>删除</Button>
-      </SettingItem>
+      {store.openMusicOrderOrigin.map((item, index) => {
+        return (
+          <SettingItem
+            label='广场源1'
+            key={index}
+          >
+            <Input value={item} />
+            <Button type='text'>删除</Button>
+          </SettingItem>
+        );
+      })}
+      <Modal
+        title={
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <span>添加歌单广场源</span>
+            <Help />
+          </div>
+        }
+        open={modal.open}
+        onClose={() => {
+          setModal(new OpenMusicOrderModal());
+        }}
+        onOk={async () => {
+          const v = modal.value.trim();
+          if (v) {
+            await api.setting.updateOpenMusicOrderOrigin([...store.openMusicOrderOrigin, v]);
+            store.load();
+          }
+        }}
+      >
+        <>
+          <Input
+            placeholder='请输入地址'
+            value={modal.value}
+            style={{ width: '100%' }}
+            onChange={(e) => {
+              setModal((s) => ({
+                ...s,
+                value: e.target.value,
+              }));
+            }}
+          />
+        </>
+      </Modal>
     </>
   );
 }
 
 export function OrderSyncSetting() {
+  const setting = useSettingStore();
+  const timerRef = useRef<Record<string, NodeJS.Timeout>>({});
+  useEffect(() => {
+    setting.load();
+  }, []);
+
   return (
     <>
       <SubTitle title='歌单同步' />
+      {api.userRemoteMusicOrder.map((m, index) => {
+        const Comp = m.ConfigElement;
+        const value = setting.userMusicOrderOrigin?.find((u) => u.name === m.name)!;
+        return (
+          <div key={index}>
+            <SubTitle title={<span style={{ color: 'rgb(var(--main-color))' }}>{m.name}</span>} />
+            <Comp
+              value={value?.config}
+              onChange={(value: any) => {
+                let newList = setting.userMusicOrderOrigin || [];
+                if (newList.find((n) => n.name === m.name)) {
+                  newList = setting.userMusicOrderOrigin.map((item) => {
+                    if (item.name !== m.name) return item;
+                    return {
+                      ...item,
+                      config: value,
+                    };
+                  });
+                } else {
+                  newList.push({
+                    name: m.name,
+                    config: value,
+                  });
+                }
+                clearTimeout(timerRef.current?.[m.name]);
+                if (timerRef.current) {
+                  timerRef.current[m.name] = setTimeout(() => {
+                    api.setting.updateUserMusicOrderOrigin(newList);
+                  }, 500);
+                }
+              }}
+            />
+          </div>
+        );
+      })}
     </>
   );
 }
 
 interface SettingItemProps {
-  label?: string;
+  label?: React.ReactNode;
   children?: React.ReactNode;
 }
-function SettingItem({ label, children }: SettingItemProps) {
+export function SettingItem({ label, children }: SettingItemProps) {
   return (
     <div className={styles.settingItem}>
       <label>{label}</label>

@@ -1,16 +1,24 @@
 .dark {
+  --header-height: 54px;
+  --player-height: 64px;
+
   --bg-color: 32, 32, 32; // 主背景色
   --header-bg: 32, 32, 32; // 顶栏背景色
   --sidebar-bg: 36, 36, 34; // 侧边栏背景色
   --sidebar-active-bg: 32, 32, 32; // 侧边栏条目选中时背景色
   --sidebar-icon-color: 120, 120, 120; // 侧边栏图标颜色
   --content-bg: 38, 38, 38; // 内容区域背景色
-  --player-bg: 32, 32, 32; // 播放器背景色
+  --link-color: rgb(133, 185, 230);
+  --link-hover-color: rgb(112, 222, 255);
+
+  --border-color: rgb(48, 48, 48); // 边框颜色
 
   // 字体颜色
   --font-color: 213, 213, 213;
   // 字体高亮色
   --font-active-color: 251, 251, 251;
+  // 字体浅色
+  --font-light-color: rgb(135, 135, 135);
 
   --main-color: 211, 58, 49; // 主色
   --main-color-light: 252, 82, 69; // 主色浅一些
@@ -56,4 +64,23 @@
   --button-text-font-color: rgb(var(--font-color));
   --button-text-hover-color: rgb(var(--main-color-light));
   --button-text-padding: 4px 0px;
+
+  // 搜索页
+  --search-item-bg: rgb(41, 41, 41); // 2n行背景色
+  --search-item-hover-bg: rgb(50, 50, 50);
+
+  // 表格
+  --table-item-bg: rgb(41, 41, 41); // 2n-1行背景色
+  --table-item-hover-bg: rgb(50, 50, 50);
+  --table-item-action-bg: rgb(50, 50, 50);
+  --table-font-color: rgb(142, 142, 142);
+  --table-font-active-color: rgb(182, 182, 182);
+
+  // 弹出框
+  --modal-bg: rgb(54, 54, 54);
+  --modal-font-color: rgb(185, 185, 185);
+
+  // 播放器
+  --player-progress-bg: rgb(35, 35, 35);
+  --player-list-bg: rgb(54, 54, 54);
 }

@@ -12,18 +12,25 @@ import { seconds2mmss } from '@/player';
 import { useState } from 'react';
 import { usePlayerStore } from '../player/store';
 import { useShallow } from 'zustand/react/shallow';
+import { useMusicOrderDetailStore } from './store';
 
 export interface MusicOrderDetailProps {
   data?: MusicOrderItem;
 }
 
-export function MusicOrderDetail({ data }: MusicOrderDetailProps) {
+export function MusicOrderDetail({}: MusicOrderDetailProps) {
   const player = usePlayerStore(useShallow((s) => ({ addPlayerList: s.addPlayerList })));
+  const data = useMusicOrderDetailStore(useShallow((state) => state.data));
   const [searchKeyword, setSearchKeyword] = useState('');
   return (
     <div className={styles.container}>
       <div className={styles.headerCard}>
-        <Image className={styles.cover} />
+        {data?.cover && (
+          <Image
+            className={styles.cover}
+            src={data.cover}
+          />
+        )}
         <div className={styles.info}>
           <div className={styles.title}>{data?.name}</div>
           <div className={styles.operateList}>

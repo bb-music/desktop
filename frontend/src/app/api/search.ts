@@ -1,4 +1,5 @@
 import { ListResult } from './common';
+import { MusicItem } from './music';
 export const enum SearchType {
   Music = 1, // 歌曲
   Order = 2, // 歌单
@@ -11,7 +12,7 @@ export interface SearchItem<T = any> {
   duration: number; // 时长
   author: string; // 作者
   type?: SearchType; // 类型
-  musicList?: T; // 歌单中的歌曲列表
+  musicList?: MusicItem[]; // 歌单中的歌曲列表
   extraData?: T; // 扩展数据
 }
 export interface SearchParams {

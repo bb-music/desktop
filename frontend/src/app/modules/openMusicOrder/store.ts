@@ -1,28 +1,32 @@
 import { create } from 'zustand';
-import { SettingInfo } from '@/app/api/setting';
 import { api } from '@/app/api';
+import { MusicOrderItem } from '@/app/api/music';
+import { settingStore } from '../setting/store';
 
-interface SettingStoreState extends SettingInfo {}
-
-interface SettingStoreHandler {
-  load: () => Promise<void>;
+interface OpenMusicOrderStoreState {
+  list: MusicOrderItem[];
 }
 
-type SettingStore = SettingStoreState & SettingStoreHandler;
+interface OpenMusicOrderStoreHandler {
+  run: () => Promise<void>;
+}
 
-export const useSettingStore = create<SettingStore>()((set, get) => {
+type OpenMusicOrderStore = OpenMusicOrderStoreState & OpenMusicOrderStoreHandler;
+
+export const useOpenMusicOrderStore = create<OpenMusicOrderStore>()((set, get) => {
   return {
-    ...new SettingInfo(),
-    load: async () => {
-      const res = await api.setting.getInfo();
-      set({
-        signData: res.signData,
-        spiData: res.spiData,
-        videoProxyPort: res.videoProxyPort,
-        downloadDir: res.downloadDir,
-        openMusicOrderOrigin: res.openMusicOrderOrigin,
-        userMusicOrderOrigin: res.userMusicOrderOrigin,
+    list: [],
+    run: async () => {
+      const origins = settingStore.getState().openMusicOrderOrigin;
+      const urls = origins.map((u) => u.trim()).filter((u) => !!u);
+      const res = await Promise.all(
+        urls.map((url) => api.openMusicOrder.useOriginGetMusicOrder(url))
+      );
+      const list: MusicOrderItem[] = [];
+      res.forEach((r) => {
+        list.push(...r);
       });
+      set({ list });
     },
   };
 });

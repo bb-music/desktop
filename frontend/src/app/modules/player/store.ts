@@ -1,13 +1,13 @@
-import { createAudio, musicItem2Url } from './utils';
 import { PlayerMode, PlayerStatus } from './constants';
 import { create } from 'zustand';
-import { MusicItem } from '@/app/api/music';
+import { AudioInstance, MusicItem } from '@/app/api/music';
 import { PersistStore } from '@/app/interface/store';
 import { StateStorage, createJSONStorage, persist } from 'zustand/middleware';
+import { api } from '@/app/api';
 
 interface PlayerStoreState {
   /** 播放器 */
-  audio: HTMLAudioElement;
+  audio: AudioInstance;
   /** 当前歌曲 */
   current?: MusicItem;
   /** 播放进度 */
@@ -22,8 +22,9 @@ interface PlayerStoreState {
   playerMode: PlayerMode;
 }
 interface PlayerStoreHandler {
+  init: () => Promise<void>;
   /** 播放 */
-  play: (music?: MusicItem) => void;
+  play: (music?: MusicItem) => Promise<void>;
   /** 暂停 */
   pause: () => void;
   /** 上一首 */
@@ -48,26 +49,37 @@ interface PlayerStoreHandler {
 
 type PlayerStore = PlayerStoreState & PlayerStoreHandler;
 
-const AUDIO_ID = 'BBAudio';
-
 export let playerStore: PersistStore<PlayerStore>;
 export let usePlayerStore: PersistStore<PlayerStore>;
 
 export function registerPlayerStore(cacheStore: StateStorage) {
-  console.log('cacheStore: ', cacheStore);
   if (!!playerStore) return;
   usePlayerStore = playerStore = create(
     persist<PlayerStore>(
       (set, get) => {
         return {
-          audio: createAudio(AUDIO_ID)!,
+          audio: api.music.createAudio(),
           playerStatus: PlayerStatus.Stop,
           playerList: [],
           current: void 0,
           playProgress: 0,
           playerMode: PlayerMode.ListLoop,
           playerHistory: [],
-          play: (m) => {
+          init: async () => {
+            set({
+              audio: api.music.createAudio(),
+              playerStatus: PlayerStatus.Stop,
+            });
+            const store = get();
+            if (store.current) {
+              const url = await api.music.getMusicPlayerUrl(store.current);
+              console.log('url: ', url);
+              store.audio.setSrc(url);
+              console.log('store: ', store);
+            }
+          },
+          play: async (m) => {
+            console.log('m: ', m, get());
             const store = get();
 
             if (!store.current) {
@@ -85,8 +97,8 @@ export function registerPlayerStore(cacheStore: StateStorage) {
                 current: m,
                 playerStatus: PlayerStatus.Play,
               });
-
-              store.audio.setAttribute('src', musicItem2Url(m));
+              const url = await api.music.getMusicPlayerUrl(m);
+              store.audio.setSrc(url);
               store.audio.play();
               store.addPlayerHistory();
             } else {
@@ -157,7 +169,7 @@ export function registerPlayerStore(cacheStore: StateStorage) {
             }
             // 单曲循环
             if (store.playerMode === PlayerMode.SignalLoop) {
-              store.audio.currentTime = 0;
+              store.audio.setCurrentTime(0);
               store.pause();
               store.play(current);
             }

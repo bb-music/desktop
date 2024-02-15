@@ -1,9 +1,44 @@
-import { GetVideoDetail } from '@wails/go/app/App';
+import { GetConfig, GetVideoDetail } from '@wails/go/app/App';
 import { getAuth, settingCache } from './setting';
 import { DownloadMusic } from '@wails/go/app/App';
-import { Music, MusicItem, MusicOrderItem } from '@/app/api/music';
+import { AudioInstance, Music, MusicItem, MusicOrderItem } from '@/app/api/music';
 import { createMusicId } from '@/player';
 import { transformImgUrl } from '@/utils';
+
+class PlayerAudio implements AudioInstance {
+  ctx = new Audio();
+  constructor() {
+    const id = 'BB_MUSIC_AUDIO';
+    const a = document.getElementById(id) as HTMLAudioElement;
+    if (a) {
+      this.ctx = a;
+      return;
+    }
+    const audio = new Audio();
+    audio.style.display = 'none';
+    audio.id = id;
+    this.ctx = audio;
+    document.body.append(audio);
+  }
+  setCurrentTime(time: number): void {
+    this.ctx.currentTime = time;
+  }
+  setSrc(src: string): void {
+    this.ctx.src = src;
+  }
+  play(): void {
+    this.ctx.play();
+  }
+  pause(): void {
+    this.ctx.pause();
+  }
+  addEventListener(event: 'timeupdate' | 'ended', callback: (e: any) => void): void {
+    this.ctx.addEventListener(event, callback);
+  }
+  removeEventListener(event: 'timeupdate' | 'ended', callback: (e: any) => void): void {
+    this.ctx.removeEventListener(event, callback);
+  }
+}
 
 export class MusicInstance implements Music {
   getMusicOrderInfo = async (data: MusicOrderItem) => {
@@ -36,16 +71,25 @@ export class MusicInstance implements Music {
     };
   };
   getMusicPlayerUrl = async (music: MusicItem) => {
+    console.log('music: ', music);
     const q = new URLSearchParams();
     const aid = music.extraData.aid?.toString()!;
     const bvid = music.extraData.bvid?.toString()!;
     const cid = music.extraData.cid?.toString()!;
+    const setting = await settingCache.get();
     q.set('aid', aid);
     q.set('bvid', bvid);
     q.set('cid', cid);
-    const setting = await settingCache.get();
-    const port = setting?.videoProxyPort;
-    return `http://localhost:${port}/videofile/${music.name}?${q.toString()}`;
+    q.set('uuid_v3', setting?.spiData.uuid_v3!);
+    q.set('uuid_v4', setting?.spiData.uuid_v4!);
+    q.set('img_key', setting?.signData.imgKey!);
+    q.set('sub_key', setting?.signData.subKey!);
+    // q.set('name', music.name);
+    const config = await GetConfig();
+    const port = config.video_proxy_port;
+    const url = `http://localhost:${port}/videofile/${music.name}?${q.toString()}`;
+    console.log('url: ', url);
+    return url;
   };
   download = async (music: MusicItem) => {
     const config = await settingCache.get();
@@ -71,4 +115,7 @@ export class MusicInstance implements Music {
       console.log(res);
     });
   };
+  createAudio() {
+    return new PlayerAudio();
+  }
 }

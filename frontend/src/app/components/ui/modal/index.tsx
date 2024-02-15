@@ -11,7 +11,7 @@ interface ModalProps {
   width?: number | string;
   open?: boolean;
   onClose?: () => void;
-  onOk?: () => Promise<unknown>;
+  onOk?: () => Promise<unknown> | void;
 }
 
 export function Modal({

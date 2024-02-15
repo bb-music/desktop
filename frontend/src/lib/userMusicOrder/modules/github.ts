@@ -23,6 +23,7 @@ export class GithubUserMusicOrderAction implements Action {
     let list: MusicOrderItem[] = [];
     try {
       list = await this.getData(config);
+      console.log('list: ', list);
     } catch (e: any) {
       if (e.response.status === 404) {
         // 没有同步文件, 创建

@@ -10,7 +10,7 @@ interface SettingStoreHandler {
 
 type SettingStore = SettingStoreState & SettingStoreHandler;
 
-export const useSettingStore = create<SettingStore>()((set, get) => {
+export const settingStore = create<SettingStore>()((set, get) => {
   return {
     ...new SettingInfo(),
     load: async () => {
@@ -26,3 +26,5 @@ export const useSettingStore = create<SettingStore>()((set, get) => {
     },
   };
 });
+
+export const useSettingStore = settingStore;

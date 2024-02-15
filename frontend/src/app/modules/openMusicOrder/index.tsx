@@ -6,48 +6,30 @@ import styles from './index.module.scss';
 import { User } from '@icon-park/react';
 import { PageView, openPage } from '../container/store';
 import { useSettingStore } from '../setting/store';
-import { useEffect, useState } from 'react';
-import { api } from '@/app/api';
+import { useEffect } from 'react';
 import { MusicOrderItem } from '@/app/api/music';
 import { useShallow } from 'zustand/react/shallow';
+import { useOpenMusicOrderStore } from './store';
 
 export interface OpenMusicOrderProps {}
 
-interface MapListItem {
-  origin: string;
-  list: MusicOrderItem[];
-}
-
 export function OpenMusicOrder() {
+  const store = useOpenMusicOrderStore();
   const origins = useSettingStore(useShallow((state) => state.openMusicOrderOrigin));
-  const [mapList, setMapList] = useState<MapListItem[]>([]);
-  const initHandler = async () => {
-    const urls = origins.map((u) => u.trim()).filter((u) => !!u);
-    const res = await Promise.all(
-      urls.map((url) => api.openMusicOrder.useOriginGetMusicOrder(url))
-    );
-    setMapList(
-      res.map((list, k) => {
-        return {
-          origin: urls[k],
-          list,
-        };
-      })
-    );
-  };
+
   useEffect(() => {
-    initHandler();
+    store.run();
   }, [origins]);
+
   return (
     <div className={styles.container}>
       <div className={styles.musicOrderList}>
-        {mapList.map((item) => {
+        {store.list.map((i) => {
           return (
-            <>
-              {item.list.map((i) => (
-                <MusicOrderItemComp data={i} />
-              ))}
-            </>
+            <MusicOrderItemComp
+              data={i}
+              key={i.id + i.name}
+            />
           );
         })}
       </div>

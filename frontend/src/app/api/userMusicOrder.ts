@@ -24,7 +24,7 @@ export abstract class UserRemoteMusicOrder<T = any> {
 /** 本地歌单 */
 export abstract class UserLocalMusicOrder {
   abstract getList: () => Promise<UserMusicOrderDB>;
-  abstract create: (data: MusicOrderItem) => Promise<void>;
+  abstract create: (data: Omit<MusicOrderItem, 'id'>) => Promise<void>;
   abstract update: (data: MusicOrderItem) => Promise<void>;
   abstract delete: (data: MusicOrderItem) => Promise<void>;
 }

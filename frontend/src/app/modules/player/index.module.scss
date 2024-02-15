@@ -44,6 +44,12 @@
     gap: 4px;
     color: var(--font-light-color);
   }
+  .name {
+    width: 120px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 }
 .playerOperate {
   display: flex;
@@ -85,7 +91,9 @@
   background-color: var(--player-list-bg);
   z-index: 80;
   .headerInfo {
-    padding: 16px;
+    padding: 16px 0;
+    margin: 0 16px;
+    border-bottom: 1px solid #404040;
     .title {
       font-size: 20px;
       font-weight: 700;
@@ -111,6 +119,13 @@
       display: flex;
       align-items: center;
       padding-left: 2px;
+      .nameText {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 300px;
+      }
       &.active {
         color: rgb(var(--main-color));
         .icon {
@@ -131,6 +146,16 @@
         margin-right: 2px;
         span {
           display: none;
+        }
+      }
+    }
+    tr {
+      td {
+        background-color: transparent;
+      }
+      &:nth-child(2n) {
+        td {
+          background-color: var(--player-list-table-2n);
         }
       }
     }

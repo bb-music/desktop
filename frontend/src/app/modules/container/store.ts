@@ -3,6 +3,8 @@ import { OpenMusicOrder, OpenMusicOrderProps } from '../openMusicOrder';
 import { MusicOrderDetail, MusicOrderDetailProps } from '../musicOrderDetail';
 import { Search, SearchProps } from '../search/index';
 import { Setting, SettingProps } from '../setting';
+import { musicOrderDetailStore } from '../musicOrderDetail/store';
+import { MusicOrderItem } from '@/app/api/music';
 
 export const enum PageView {
   OpenMusicOrder = 'OpenMusicOrder', // 广场
@@ -60,6 +62,11 @@ export const useContainerStore = create<ContainerStore>()((set, get) => {
   return {
     active: PageView.OpenMusicOrder,
     setActive: (active, props) => {
+      if (active === PageView.MusicOrderDetail) {
+        musicOrderDetailStore.setState({
+          data: (props as MusicOrderDetailProps)?.data,
+        });
+      }
       set({ active, props });
     },
   };

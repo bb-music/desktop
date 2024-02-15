@@ -9,6 +9,7 @@ import { GithubUserMusicOrderAction } from '@/lib/userMusicOrder';
 import { Input } from '@/app/components/ui/input';
 import { SettingItem } from '@/app/modules/setting';
 import { useEffect, useState } from 'react';
+import { nanoid } from 'nanoid';
 
 const emptyMusicOrder = {
   created_at: Date.now(),
@@ -25,7 +26,7 @@ export class UserLocalMusicOrderInstance implements UserLocalMusicOrder {
     const res = (await userLocalMusicOrderCache.get()) || { ...emptyMusicOrder };
     return res;
   };
-  create = async (data: MusicOrderItem) => {
+  create = async (data: Omit<MusicOrderItem, 'id'>) => {
     const res = (await userLocalMusicOrderCache.get()) || { ...emptyMusicOrder };
     if (res.list.find((l) => l.name.trim() === data.name.trim())) {
       return Promise.reject(new Error('歌单名称重复'));
@@ -33,7 +34,7 @@ export class UserLocalMusicOrderInstance implements UserLocalMusicOrder {
     await userLocalMusicOrderCache.set({
       ...res,
       updated_at: Date.now(),
-      list: [data, ...res.list],
+      list: [{ ...data, id: nanoid() }, ...res.list],
     });
   };
   update = async (data: MusicOrderItem) => {

@@ -18,12 +18,25 @@ import { PlayerMode, PlayerModeMap, PlayerStatus } from './constants';
 import { useEffect, useState } from 'react';
 import { seconds2mmss } from './utils';
 import { Table } from '@/app/components/ui/table';
+import { useShallow } from 'zustand/react/shallow';
 
 export function Player() {
   const player = usePlayerStore();
   const [listShow, setListShow] = useState(false);
+  const [progress, setProgress] = useState(player.playProgress);
 
   useEffect(() => {
+    player.audio.addEventListener('timeupdate', (e) => {
+      const target = e.target as HTMLAudioElement;
+      setProgress(target.currentTime);
+    });
+  }, [player.audio]);
+
+  useEffect(() => {
+    player.init();
+    player.audio.addEventListener('ended', () => {
+      player.endNext();
+    });
     const handler = (e: MouseEvent) => {
       setListShow(false);
     };
@@ -35,20 +48,18 @@ export function Player() {
 
   return (
     <div className={styles.player}>
-      <div className={styles.progress}>
-        <div className={styles.loaded}></div>
-      </div>
+      <PlayerProgress progress={progress} />
       <div className={styles.info}>
         <Image
-          src=''
+          src={player.current?.cover}
           className={styles.cover}
-        ></Image>
+        />
         <div>
-          <div className={styles.name}>歌曲名</div>
+          <div className={styles.name}>{player.current?.name}</div>
           <div className={styles.duration}>
-            <span>03:22</span>
+            <span>{seconds2mmss(progress)}</span>
             <span>/</span>
-            <span>03:22</span>
+            <span>{seconds2mmss(player.current?.duration || 0)}</span>
           </div>
         </div>
       </div>
@@ -132,7 +143,14 @@ function PlayerList({ open }: { open: boolean }) {
           <span className={styles.total}>总{player.playerList.length}首</span>
           <div style={{ display: 'flex', gap: '16px' }}>
             <span className={styles.operateBtn}>收藏全部</span>
-            <span className={styles.clear}>清空列表</span>
+            <span
+              className={styles.clear}
+              onClick={() => {
+                player.clearPlayerList();
+              }}
+            >
+              清空列表
+            </span>
           </div>
         </div>
       </div>
@@ -151,6 +169,7 @@ function PlayerList({ open }: { open: boolean }) {
                 onDoubleClick={() => {
                   player.play(item);
                 }}
+                key={item.id}
               >
                 <td className={cls(styles.name, player.current?.id === item.id && styles.active)}>
                   <div className={styles.icon}>
@@ -159,7 +178,7 @@ function PlayerList({ open }: { open: boolean }) {
                       strokeWidth={2}
                     />
                   </div>
-                  <span>{item.name}</span>
+                  <span className={styles.nameText}>{item.name}</span>
                 </td>
                 <td>{seconds2mmss(item.duration)}</td>
               </tr>
@@ -167,6 +186,25 @@ function PlayerList({ open }: { open: boolean }) {
           })}
         </tbody>
       </Table>
+    </div>
+  );
+}
+
+function PlayerProgress({ progress }: { progress: number }) {
+  const player = usePlayerStore(
+    useShallow((state) => ({
+      current: state.current,
+    }))
+  );
+  const duration = player.current?.duration || 0;
+  const width = duration + progress === 0 ? 0 : (progress / duration) * 100;
+
+  return (
+    <div className={styles.progress}>
+      <div
+        className={styles.loaded}
+        style={{ width: `${width}%` }}
+      ></div>
     </div>
   );
 }

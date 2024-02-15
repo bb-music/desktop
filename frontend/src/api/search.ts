@@ -4,6 +4,7 @@ import { Search } from '@wails/go/app/App';
 import { getAuth } from './setting';
 import { html2text, mmss2seconds, transformImgUrl } from '@/utils';
 import { bb_client } from '@wails/go/models';
+import { createMusicId } from '@/app/modules/player/utils';
 
 export class SearchInstance implements BBSearch {
   getList = async (params: SearchParams) => {
@@ -34,10 +35,8 @@ export class SearchInstance implements BBSearch {
     };
   };
   getItemInfo = async (item: SearchItem<bb_client.SearchResultItem>) => {
-    console.log('item: ', item);
     const auth = await getAuth();
     const data = item.extraData!;
-    console.log('data: ', data);
     const info = await GetVideoDetail(
       {
         aid: data.aid + '',
@@ -48,12 +47,30 @@ export class SearchInstance implements BBSearch {
     if (info.videos > 1) {
       return {
         ...item,
+        musicList: info.pages.map((p) => {
+          const f = { aid: info.aid, bvid: info.bvid, cid: p.cid };
+          return {
+            id: createMusicId(f),
+            cover: p.first_frame,
+            name: p.part,
+            duration: p.duration,
+            author: item.author,
+            extraData: {
+              ...f,
+              ...p,
+            },
+          };
+        }),
         type: SearchType.Order,
+        extraData: info,
       };
     } else {
       return {
         ...item,
         type: SearchType.Music,
+        extraData: {
+          ...info,
+        },
       };
     }
   };

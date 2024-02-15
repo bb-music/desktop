@@ -1,7 +1,7 @@
 import { isJson } from '@/utils';
 import { UserMusicOrderOrigin } from '../common';
 import axios, { AxiosInstance } from 'axios';
-import { MusicOrderItem } from '@/interface';
+import { MusicOrderItem } from '@/app/api/music';
 
 interface ListResponse {
   name: string;

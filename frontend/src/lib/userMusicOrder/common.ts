@@ -1,4 +1,4 @@
-import { MusicOrderItem } from '@/interface';
+import { MusicOrderItem } from '@/app/api/music';
 
 export const enum UserMusicOrderOriginType {
   ExtendClass = 'ExtendClass', // https://extendsclass.com/

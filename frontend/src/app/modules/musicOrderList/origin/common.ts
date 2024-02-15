@@ -1,4 +1,4 @@
-import { MusicOrderItem } from '@/interface';
+import { MusicOrderItem } from '@/app/api/music';
 import { GithubUserMusicOrderOrigin } from './modules/github';
 
 export const enum UserMusicOrderOriginType {

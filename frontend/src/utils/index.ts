@@ -1,9 +1,3 @@
-import { MusicOrderItem } from '@/interface';
-import { router } from '@/router';
-import { musicOrderDetailStore } from '@/views/musicOrderDetail/store';
-import dayjs from 'dayjs';
-
-export * from './catchStore';
 /** 合并 className */
 export function cls(...classList: Array<string | undefined | boolean>) {
   return classList.filter((i) => !!i).join(' ');
@@ -31,12 +25,6 @@ export function isJson<T = Array<any> | Record<string, any>>(val: string): T | u
   }
 }
 
-/** 跳转歌单详情 */
-export function toMusicOrderDetail(data: MusicOrderItem) {
-  musicOrderDetailStore.getState().setData(data);
-  router.push('/music-order-detail');
-}
-
 /**
  * mm:ss 转为 秒
  */
@@ -49,4 +37,12 @@ export function html2text(str: string) {
   const html = document.createElement('div');
   html.innerHTML = str;
   return html.innerText;
+}
+
+export function createMusicId(music: {
+  aid: string | number;
+  bvid: string | number;
+  cid: string | number;
+}) {
+  return [music.aid, music.bvid, music.cid].join('_');
 }

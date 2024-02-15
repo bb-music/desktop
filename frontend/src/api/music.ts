@@ -2,8 +2,7 @@ import { GetConfig, GetVideoDetail } from '@wails/go/app/App';
 import { getAuth, settingCache } from './setting';
 import { DownloadMusic } from '@wails/go/app/App';
 import { AudioInstance, Music, MusicItem, MusicOrderItem } from '@/app/api/music';
-import { createMusicId } from '@/player';
-import { transformImgUrl } from '@/utils';
+import { createMusicId, transformImgUrl } from '@/utils';
 
 class PlayerAudio implements AudioInstance {
   ctx = new Audio();
@@ -60,7 +59,11 @@ export class MusicInstance implements Music {
       author: '',
       musicList: info.pages.map((p) => {
         return {
-          id: createMusicId(p),
+          id: createMusicId({
+            aid: info.aid,
+            bvid: info.bvid,
+            cid: p.cid,
+          }),
           cover: transformImgUrl(p.first_frame),
           name: p.part,
           duration: p.duration,
@@ -88,7 +91,6 @@ export class MusicInstance implements Music {
     const config = await GetConfig();
     const port = config.video_proxy_port;
     const url = `http://localhost:${port}/videofile/${music.name}?${q.toString()}`;
-    console.log('url: ', url);
     return url;
   };
   download = async (music: MusicItem) => {

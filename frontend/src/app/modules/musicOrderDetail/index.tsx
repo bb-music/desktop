@@ -8,11 +8,11 @@ import { Input } from '@/app/components/ui/input';
 import { Download, Search } from '@icon-park/react';
 import { Table } from '@/app/components/ui/table';
 import { MusicOrderItem } from '@/app/api/music';
-import { seconds2mmss } from '@/player';
 import { useState } from 'react';
 import { usePlayerStore } from '../player/store';
 import { useShallow } from 'zustand/react/shallow';
 import { useMusicOrderDetailStore } from './store';
+import { seconds2mmss } from '../player/utils';
 
 export interface MusicOrderDetailProps {
   data?: MusicOrderItem;

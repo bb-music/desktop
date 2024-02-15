@@ -2,9 +2,8 @@ import { GetVideoDetail } from '@wails/go/app/App';
 import { Search as BBSearch, SearchItem, SearchParams, SearchType } from '@/app/api/search';
 import { Search } from '@wails/go/app/App';
 import { getAuth } from './setting';
-import { html2text, mmss2seconds, transformImgUrl } from '@/utils';
+import { createMusicId, html2text, mmss2seconds, transformImgUrl } from '@/utils';
 import { bb_client } from '@wails/go/models';
-import { createMusicId } from '@/app/modules/player/utils';
 
 export class SearchInstance implements BBSearch {
   getList = async (params: SearchParams) => {

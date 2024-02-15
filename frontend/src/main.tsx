@@ -1,11 +1,11 @@
-import { createRoot } from 'react-dom/client';
-import './style.scss';
 import { BBMusicApp } from '@/app';
 import { PcContainer } from './app/modules/container';
 import { apiInstance } from './api';
 import { useEffect, useState } from 'react';
+import { createRoot } from 'react-dom/client';
 import { settingCache } from './api/setting';
 import { cacheStorage } from './lib/cacheStorage';
+import './style.scss';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);

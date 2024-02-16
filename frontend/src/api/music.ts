@@ -22,6 +22,9 @@ class PlayerAudio implements AudioInstance {
   setCurrentTime(time: number): void {
     this.ctx.currentTime = time;
   }
+  getCurrentTime() {
+    return this.ctx.currentTime;
+  }
   setSrc(src: string): void {
     this.ctx.src = src;
   }

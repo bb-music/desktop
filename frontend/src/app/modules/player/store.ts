@@ -2,7 +2,7 @@ import { PlayerMode, PlayerStatus } from './constants';
 import { create } from 'zustand';
 import { AudioInstance, MusicItem } from '@/app/api/music';
 import { PersistStore } from '@/app/interface/store';
-import { StateStorage, createJSONStorage, persist } from 'zustand/middleware';
+import { createJSONStorage, persist } from 'zustand/middleware';
 import { api } from '@/app/api';
 
 interface PlayerStoreState {
@@ -10,8 +10,6 @@ interface PlayerStoreState {
   audio: AudioInstance;
   /** 当前歌曲 */
   current?: MusicItem;
-  /** 播放进度 */
-  playProgress: number;
   /** 播放列表 */
   playerList: MusicItem[];
   /** 已播放，用于计算随机 */
@@ -39,8 +37,6 @@ interface PlayerStoreHandler {
   removePlayerList: (ids: string[]) => void;
   /** 清空播放列表 */
   clearPlayerList: () => void;
-  /** 设置播放进度 */
-  setPlayerProgress: (progress: number) => void;
   /** 切换播放模式 */
   togglePlayerMode: (mode?: PlayerMode) => void;
   /** 添加至播放历史 */
@@ -52,7 +48,7 @@ type PlayerStore = PlayerStoreState & PlayerStoreHandler;
 export let playerStore: PersistStore<PlayerStore>;
 export let usePlayerStore: PersistStore<PlayerStore>;
 
-export function registerPlayerStore(cacheStore: StateStorage) {
+export function registerPlayerStore() {
   if (!!playerStore) return;
   usePlayerStore = playerStore = create(
     persist<PlayerStore>(
@@ -62,7 +58,6 @@ export function registerPlayerStore(cacheStore: StateStorage) {
           playerStatus: PlayerStatus.Stop,
           playerList: [],
           current: void 0,
-          playProgress: 0,
           playerMode: PlayerMode.ListLoop,
           playerHistory: [],
           init: async () => {
@@ -71,11 +66,10 @@ export function registerPlayerStore(cacheStore: StateStorage) {
               playerStatus: PlayerStatus.Stop,
             });
             const store = get();
+
             if (store.current) {
               const url = await api.music.getMusicPlayerUrl(store.current);
-              console.log('url: ', url);
               store.audio.setSrc(url);
-              console.log('store: ', store);
             }
           },
           play: async (m) => {
@@ -214,11 +208,7 @@ export function registerPlayerStore(cacheStore: StateStorage) {
               playerHistory: [],
             });
           },
-          setPlayerProgress: (p) => {
-            set({
-              playProgress: p,
-            });
-          },
+
           togglePlayerMode: (mode) => {
             const store = get();
             if (mode) {
@@ -259,7 +249,7 @@ export function registerPlayerStore(cacheStore: StateStorage) {
       },
       {
         name: 'bb-music-player',
-        storage: createJSONStorage(() => cacheStore),
+        storage: createJSONStorage(() => api.cacheStorage),
       }
     )
   );

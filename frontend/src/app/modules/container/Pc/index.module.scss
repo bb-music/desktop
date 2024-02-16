@@ -89,11 +89,11 @@
 }
 
 .sidebar {
-  background-color: rgba(var(--sidebar-bg), 0.9);
+  background-color: rgb(var(--sidebar-bg));
   position: sticky;
   top: 0;
-  width: 240px;
-  flex: 0 0 240px;
+  width: var(--sidebar-width);
+  flex: 0 0 var(--sidebar-width);
   height: 100%;
   padding: 2px 0;
   overflow-y: auto;

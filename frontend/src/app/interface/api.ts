@@ -3,6 +3,7 @@ export namespace MusicApi {
   export interface BaseResp<T> {
     data: T;
   }
+
   export interface BaseListResp<T> {
     page: number;
     pageSize: number;
@@ -44,5 +45,26 @@ export namespace MusicApi {
       /** 扩展信息 */
       extraData?: T;
     }
+  }
+
+  /** 歌曲 */
+  export interface MusicItem<T = any> {
+    id: string | number; // ID
+    cover?: string; // 封面
+    name: string; // 名称
+    duration: number; // 时长
+    author?: string; // 作者
+    extraData?: T; // 扩展数据
+  }
+
+  /** 歌单 */
+  export interface MusicOrderItem<E = any, T = any> {
+    id: string | number; // ID
+    cover?: string; // 封面
+    name: string; // 名称
+    author?: string; // 作者
+    extraData?: E; // 扩展数据
+    desc?: string; // 描述
+    musicList?: MusicItem<T>[]; // 音乐列表
   }
 }

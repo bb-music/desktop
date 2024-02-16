@@ -2,13 +2,14 @@
   position: relative;
   flex: 0 0 var(--player-height);
   height: var(--player-height);
-  background: rgb(var(--player-color));
+  background: rgb(var(--player-bg));
   height: 2px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 14px;
   width: 100%;
+  z-index: 90;
 }
 .progress {
   position: absolute;
@@ -16,14 +17,43 @@
   left: 0;
   right: 0;
   height: 2px;
+  z-index: 90;
   background-color: var(--player-progress-bg);
+  &::after {
+    position: absolute;
+    content: '';
+    left: 0;
+    right: 0;
+    top: -5px;
+    height: 10px;
+    background: transparent;
+  }
+
   .loaded {
     position: absolute;
     top: 0;
     left: 0;
-    bottom: 0;
+    transform: translateY(-50%);
     width: 100px;
+    height: 2px;
     background-color: rgb(var(--main-color));
+    .dot {
+      position: absolute;
+      right: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgb(var(--main-color));
+      cursor: pointer;
+      display: none;
+    }
+  }
+  &:hover {
+    .dot {
+      display: block;
+    }
   }
 }
 
@@ -31,7 +61,7 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  flex: 0 0 200px;
+  flex: 0 0 300px;
   .cover {
     width: 40px;
     height: 40px;
@@ -67,7 +97,7 @@
   }
 }
 .operate {
-  flex: 0 0 200px;
+  flex: 0 0 300px;
   display: flex;
   justify-content: flex-end;
   gap: 20px;

@@ -4,13 +4,10 @@ import { apiInstance } from './api';
 import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { settingCache } from './api/setting';
-import { cacheStorage } from './lib/cacheStorage';
 import './style.scss';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
-
-root.render(<Root />);
 
 function Root() {
   const [initLoading, setInitLoading] = useState(true);
@@ -41,13 +38,12 @@ function Root() {
       }}
     >
       {!initLoading && (
-        <BBMusicApp
-          apiInstance={apiInstance}
-          cacheStorage={cacheStorage}
-        >
+        <BBMusicApp apiInstance={apiInstance}>
           <PcContainer />
         </BBMusicApp>
       )}
     </div>
   );
 }
+
+root.render(<Root />);

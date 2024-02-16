@@ -22,6 +22,8 @@ export abstract class AudioInstance {
   abstract setSrc(src: string): void;
   /** 设置播放进度 */
   abstract setCurrentTime(time: number): void;
+  /** 获取播放进度 */
+  abstract getCurrentTime(): number;
   /** 播放 */
   abstract play(): void;
   /** 暂停 */

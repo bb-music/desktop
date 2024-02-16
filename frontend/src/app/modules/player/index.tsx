@@ -15,7 +15,7 @@ import {
 import { usePlayerStore } from './store';
 import { cls } from '@/utils';
 import { PlayerMode, PlayerModeMap, PlayerStatus } from './constants';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { seconds2mmss } from './utils';
 import { Table } from '@/app/components/ui/table';
 import { useShallow } from 'zustand/react/shallow';
@@ -23,12 +23,11 @@ import { useShallow } from 'zustand/react/shallow';
 export function Player() {
   const player = usePlayerStore();
   const [listShow, setListShow] = useState(false);
-  const [progress, setProgress] = useState(player.playProgress);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     player.audio.addEventListener('timeupdate', (e) => {
-      const target = e.target as HTMLAudioElement;
-      setProgress(target.currentTime);
+      setProgress(player.audio.getCurrentTime());
     });
   }, [player.audio]);
 
@@ -194,17 +193,49 @@ function PlayerProgress({ progress }: { progress: number }) {
   const player = usePlayerStore(
     useShallow((state) => ({
       current: state.current,
+      audio: state.audio,
     }))
   );
   const duration = player.current?.duration || 0;
-  const width = duration + progress === 0 ? 0 : (progress / duration) * 100;
+  const [width, setWidth] = useState(0);
+  const statusRef = useRef({
+    mouseDown: false,
+  });
+
+  useEffect(() => {
+    if (!statusRef.current.mouseDown) {
+      const width = duration + progress === 0 ? 0 : (progress / duration) * 100;
+      setWidth(width);
+    }
+  }, [progress]);
 
   return (
-    <div className={styles.progress}>
+    <div
+      className={styles.progress}
+      onMouseDown={(e) => {
+        statusRef.current.mouseDown = true;
+      }}
+      onMouseUp={(e) => {
+        statusRef.current.mouseDown = false;
+        const target = e.target as HTMLDivElement;
+        const { width, left } = target.getBoundingClientRect();
+        const p = (e.clientX - left) / width;
+        setWidth(p * 100);
+        const duration = player.current?.duration || 0;
+        player.audio.setCurrentTime(duration * p);
+      }}
+      onMouseMove={(e) => {
+        if (statusRef.current.mouseDown) {
+          console.log('move');
+        }
+      }}
+    >
       <div
         className={styles.loaded}
         style={{ width: `${width}%` }}
-      ></div>
+      >
+        <div className={styles.dot}></div>
+      </div>
     </div>
   );
 }

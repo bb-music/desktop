@@ -33,6 +33,14 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
         )}
         <div className={styles.info}>
           <div className={styles.title}>{data?.name}</div>
+          <div className={styles.desc}>
+            <label>歌曲数</label>
+            <span>{data?.musicList?.length}</span>
+          </div>
+          <div className={styles.desc}>
+            <label>描述</label>
+            <span>{data?.desc || '-'}</span>
+          </div>
           <div className={styles.operateList}>
             <Button type='primary'>播放全部</Button>
             <Button
@@ -44,14 +52,6 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
             </Button>
             <Button>收藏歌单</Button>
             <Button>下载全部</Button>
-          </div>
-          <div className={styles.desc}>
-            <label>歌曲数</label>
-            <span>{data?.musicList?.length}</span>
-          </div>
-          <div className={styles.desc}>
-            <label>描述</label>
-            <span>{data?.desc || '-'}</span>
           </div>
         </div>
       </div>

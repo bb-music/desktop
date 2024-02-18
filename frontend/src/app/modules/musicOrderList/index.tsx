@@ -12,6 +12,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { MusicOrderItem } from '@/app/api/music';
 import { useSettingStore } from '../setting/store';
 import { PageView, openPage } from '../container/store';
+import { ContextMenu } from '@/app/components/ui/contextMenu';
 
 export * from './origin';
 
@@ -155,7 +156,30 @@ export function MusicOrderList({ list }: { list: MusicOrderItem[] }) {
     <ul className='item-list'>
       {list.map((item) => {
         return (
-          <li
+          <ContextMenu
+            items={[
+              {
+                label: '播放全部',
+                key: '1',
+                onClick: () => {},
+              },
+              {
+                label: '编辑',
+                key: '2',
+                onClick: () => {},
+              },
+              {
+                label: '下载全部',
+                key: '3',
+                onClick: () => {},
+              },
+              {
+                label: '删除',
+                key: '4',
+                onClick: () => {},
+              },
+            ]}
+            tag='li'
             className='item'
             key={item.id}
             onClick={() => {
@@ -167,7 +191,7 @@ export function MusicOrderList({ list }: { list: MusicOrderItem[] }) {
               strokeWidth={3}
             />
             <span className='name'>{item.name}</span>
-          </li>
+          </ContextMenu>
         );
       })}
     </ul>

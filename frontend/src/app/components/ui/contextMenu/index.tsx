@@ -1,15 +1,54 @@
-import React, { createRef, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import styles from './index.module.scss';
+import { useGlobalStore } from '@/app/store/global';
+import { cls } from '@/app/utils';
+interface MenuItemLabel {
+  label: string;
+  key: string;
+  arrow?: boolean;
+  type?: 'label';
+  onClick?: () => void;
+}
+interface MenuItemDivider {
+  key: string;
+  type: 'divider';
+}
 
-export interface ContextMenuProps {
+type MenuItem = MenuItemLabel | MenuItemDivider;
+
+interface Position {
+  x: number;
+  y: number;
+}
+
+interface MenuProps {
+  items: MenuItem[];
+  open?: boolean;
+  position?: Position;
+}
+
+interface DomPos {
+  left?: number;
+  right?: number;
+  bottom?: number;
+  top?: number;
+}
+
+export interface ContextMenuProps extends React.HTMLAttributes<HTMLDivElement> {
   tag?: string;
   className?: string;
   style?: React.CSSProperties;
+  items: MenuItem[];
 }
+
+type ShowContextMenuFn = (pos: Position, items: MenuItem[]) => void;
+
+export let showContextMenu: ShowContextMenuFn;
 
 export function ContextMenu({
   tag = 'div',
   children,
+  items = [],
   ...props
 }: React.PropsWithChildren<ContextMenuProps>) {
   const CustomTag = `${tag}` as keyof JSX.IntrinsicElements;
@@ -19,69 +58,39 @@ export function ContextMenu({
   });
   useEffect(() => {
     const handler = () => {
-      setMenu({
-        open: false,
-        position: { x: 0, y: 0 },
-      });
+      if (menu.open) {
+        setMenu({
+          open: false,
+          position: { x: 0, y: 0 },
+        });
+      }
     };
+    document.addEventListener('contextmenu', handler);
     document.addEventListener('click', handler);
     return () => {
       document.removeEventListener('click', handler);
+      document.addEventListener('contextmenu', handler);
     };
   }, []);
   return (
-    <>
-      <CustomTag
-        {...props}
-        onContextMenu={(e) => {
-          console.dir(e);
-          const x = e.clientX;
-          const y = e.clientY;
-          console.log(x, y);
-          e.preventDefault();
-          setMenu({
-            open: true,
-            position: { x, y },
-          });
-        }}
-      >
-        {children}
-      </CustomTag>
-      <Menu
-        {...menu}
-        items={Array.from({ length: 10 }).map((_, ind) => {
-          return {
-            label: `菜单${ind}`,
-            key: ind + '',
-          };
-        })}
-      />
-    </>
+    <CustomTag
+      {...(props as any)}
+      onContextMenu={(e) => {
+        e.preventDefault();
+        const x = e.clientX;
+        const y = e.clientY;
+        showContextMenu({ x, y }, items);
+      }}
+    >
+      {children}
+    </CustomTag>
   );
 }
 
-interface MenuItem {
-  label?: string;
-  key: string;
-  type?: 'divider';
-  onClick?: () => void;
-}
-
-interface MenuProps {
-  items: MenuItem[];
-  open?: boolean;
-  position?: { x: number; y: number };
-}
-
-interface DomPos {
-  left?: number;
-  right?: number;
-  bottom?: number;
-  top?: number;
-}
-export function Menu({ open, position = { x: 0, y: 0 }, items }: MenuProps) {
+function Menu({ open, position = { x: 0, y: 0 }, items }: MenuProps) {
   const [pos, setPos] = useState<DomPos>();
   const targetRef = useRef<HTMLUListElement>(null);
+  const global = useGlobalStore();
   useLayoutEffect(() => {
     const target = targetRef.current;
     if (target) {
@@ -108,7 +117,7 @@ export function Menu({ open, position = { x: 0, y: 0 }, items }: MenuProps) {
   return (
     <ul
       ref={targetRef}
-      className={styles.menu}
+      className={cls(styles.menu, global.theme)}
       style={pos}
       onClick={(e) => {
         e.stopPropagation();
@@ -131,10 +140,39 @@ export function Menu({ open, position = { x: 0, y: 0 }, items }: MenuProps) {
             <div className={styles.left}>
               <span className={styles.label}>{item.label}</span>
             </div>
-            <span className={styles.arrow}></span>
+            {item.arrow && <span className={styles.arrow}></span>}
           </li>
         );
       })}
     </ul>
+  );
+}
+
+export function ContextMenuRoot() {
+  const [open, setOpen] = useState(false);
+  const [pos, setPos] = useState<Position>({ x: 0, y: 0 });
+  const [items, setItems] = useState<MenuItem[]>([]);
+
+  useEffect(() => {
+    showContextMenu = (pos, items) => {
+      setItems(items);
+      setPos(pos);
+      setOpen(!!items?.length);
+    };
+    const handler = () => {
+      setOpen(false);
+    };
+    document.addEventListener('click', handler);
+    return () => {
+      document.removeEventListener('click', handler);
+    };
+  }, []);
+
+  return (
+    <Menu
+      position={pos}
+      open={open}
+      items={items}
+    />
   );
 }

@@ -17,7 +17,7 @@ export const userLocalMusicOrderStore = create<UserLocalMusicOrderStore>()((set,
     list: [],
     load: async () => {
       const res = await api.userLocalMusicOrder.getList();
-      set({ list: res.list || [] });
+      set({ list: res || [] });
     },
   };
 });
@@ -65,3 +65,78 @@ export const userRemoteMusicOrderStore = create<UserRemoteMusicOrderStore>()((se
 });
 
 export const useUserRemoteMusicOrderStore = userRemoteMusicOrderStore;
+
+interface MusicOrderFormModalState {
+  form: {
+    name: string;
+    desc: string;
+    cover: string;
+    id?: string;
+  };
+  type: 'create' | 'update';
+  open: boolean;
+}
+interface MusicOrderFormModalHandler {
+  openHandler: (
+    item?: MusicOrderItem | null,
+    onOk?: (value: MusicOrderFormModalState['form']) => Promise<void>
+  ) => void;
+  closeHandler: () => void;
+  onOk?: (value: MusicOrderFormModalState['form']) => Promise<void>;
+  setFormValue: (value: Partial<MusicOrderFormModalState['form']>) => void;
+}
+
+type MusicOrderFormModalStore = MusicOrderFormModalState & MusicOrderFormModalHandler;
+
+export const musicOrderFormModalStore = create<MusicOrderFormModalStore>()((set, get) => {
+  return {
+    open: false,
+    type: 'create',
+    form: {
+      name: '',
+      desc: '',
+      cover: '',
+    },
+    openHandler: (item, onOk) => {
+      if (item?.id) {
+        set({
+          open: true,
+          type: 'update',
+          form: {
+            name: item.name,
+            desc: item.desc || '',
+            cover: item.cover || '',
+            id: item.id,
+          },
+          onOk,
+        });
+      } else {
+        set({
+          open: true,
+          type: 'update',
+          form: {
+            name: '',
+            desc: '',
+            cover: '',
+          },
+          onOk,
+        });
+      }
+    },
+    closeHandler: () => {
+      set({
+        open: false,
+      });
+    },
+    setFormValue: (value) => {
+      set({
+        form: {
+          ...get().form,
+          ...value,
+        },
+      });
+    },
+  };
+});
+
+export const useMusicOrderFormModalStore = musicOrderFormModalStore;

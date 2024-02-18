@@ -71,6 +71,7 @@ export class MusicInstance implements Music {
           name: p.part,
           duration: p.duration,
           author: '',
+          origin: 'bili',
           extraData: {
             aid: info.aid,
             bvid: info.bvid,

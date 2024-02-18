@@ -1,38 +1,34 @@
 /**
  * 歌单列表
  */
-import { MusicMenu, Plus } from '@icon-park/react';
+import { MusicMenu, Plus, Sync } from '@icon-park/react';
 import { useEffect, useState } from 'react';
 import { api } from '@/app/api';
 import { Modal } from '@/app/components/ui/modal';
 import { FormItem } from '@/app/components/ui/form';
 import { Input } from '@/app/components/ui/input';
-import { useUserLocalMusicOrderStore, useUserRemoteMusicOrderStore } from './store';
+import {
+  useMusicOrderFormModalStore,
+  useUserLocalMusicOrderStore,
+  useUserRemoteMusicOrderStore,
+} from './store';
 import { useShallow } from 'zustand/react/shallow';
 import { MusicOrderItem } from '@/app/api/music';
 import { useSettingStore } from '../setting/store';
 import { PageView, openPage } from '../container/store';
 import { ContextMenu } from '@/app/components/ui/contextMenu';
+import { usePlayerStore } from '../player/store';
 
 export * from './origin';
 
 export interface MusicOrderListProps {}
-
-class MusicOrderModal {
-  open = false;
-  form = {
-    name: '',
-    desc: '',
-    cover: '',
-  };
-}
 
 // 本地歌单
 export function LocalMusicOrder() {
   const store = useUserLocalMusicOrderStore(
     useShallow((state) => ({ load: state.load, list: state.list }))
   );
-  const [modal, setModal] = useState(new MusicOrderModal());
+  const modalStore = useMusicOrderFormModalStore();
   useEffect(() => {
     store.load();
   }, []);
@@ -44,9 +40,11 @@ export function LocalMusicOrder() {
             className='ui-icon'
             title='创建歌单'
             onClick={() => {
-              setModal({
-                ...new MusicOrderModal(),
-                open: true,
+              modalStore.openHandler(null, (value) => {
+                return api.userLocalMusicOrder.create(value).then((res) => {
+                  console.log('res: ', res);
+                  store.load();
+                });
               });
             }}
           />
@@ -54,55 +52,16 @@ export function LocalMusicOrder() {
       >
         本地歌单
       </SubTitle>
-      <MusicOrderList list={store.list} />
-      <Modal
-        title='创建歌单'
-        open={modal.open}
-        onOk={() => {
-          api.userLocalMusicOrder.create(modal.form).then((res) => {
-            console.log('res: ', res);
-            store.load();
-          });
-        }}
-        onClose={() => {
-          setModal({
-            ...new MusicOrderModal(),
-          });
-        }}
-      >
-        <FormItem label='名称'>
-          <Input
-            value={modal.form.name}
-            onChange={(e) => {
-              setModal((s) => ({
-                ...s,
-                form: {
-                  ...s.form,
-                  name: e.target.value.trim(),
-                },
-              }));
-            }}
-          />
-        </FormItem>
-        <FormItem label='描述'>
-          <Input
-            value={modal.form.desc}
-            onChange={(e) => {
-              setModal((s) => ({
-                ...s,
-                form: {
-                  ...s.form,
-                  desc: e.target.value.trim(),
-                },
-              }));
-            }}
-          />
-        </FormItem>
-      </Modal>
+      <MusicOrderList
+        list={store.list}
+        type='local'
+      />
+      <MusicOrderFormModal />
     </>
   );
 }
 
+// 远程歌单
 export function RemoteMusicOrder() {
   const setting = useSettingStore(
     useShallow((s) => ({ userMusicOrderOrigin: s.userMusicOrderOrigin }))
@@ -115,6 +74,7 @@ export function RemoteMusicOrder() {
       store.load();
     }
   }, [setting.userMusicOrderOrigin]);
+
   return (
     <>
       {store.list.map((m) => {
@@ -122,16 +82,20 @@ export function RemoteMusicOrder() {
           <div key={m.name}>
             <SubTitle
               extra={
-                <Plus
+                <Sync
                   className='ui-icon'
-                  title='创建歌单'
+                  title='同步至本地'
                   onClick={() => {}}
                 />
               }
             >
-              {m.name}
+              远程-{m.name}
             </SubTitle>
-            <MusicOrderList list={m.list} />
+            <MusicOrderList
+              list={m.list}
+              type='remote'
+              remoteName={m.name}
+            />
           </div>
         );
       })}
@@ -151,7 +115,22 @@ export function SubTitle({
   );
 }
 
-export function MusicOrderList({ list }: { list: MusicOrderItem[] }) {
+export function MusicOrderList({
+  list,
+  type,
+  remoteName,
+}: {
+  list: MusicOrderItem[];
+  type: 'local' | 'remote';
+  remoteName?: string;
+}) {
+  const player = usePlayerStore();
+  const userLocalMusicOrderStore = useUserLocalMusicOrderStore();
+  const userRemoteMusicOrderStore = useUserRemoteMusicOrderStore();
+  const modalStore = useMusicOrderFormModalStore();
+  const setting = useSettingStore();
+  const origin = api.userRemoteMusicOrder.find((u) => u.name === remoteName);
+  const config = setting.userMusicOrderOrigin.find((u) => u.name === remoteName);
   return (
     <ul className='item-list'>
       {list.map((item) => {
@@ -160,23 +139,70 @@ export function MusicOrderList({ list }: { list: MusicOrderItem[] }) {
             items={[
               {
                 label: '播放全部',
-                key: '1',
+                key: '播放全部',
+                onClick: () => {},
+              },
+              {
+                label: '追加到播放列表',
+                key: '追加到播放列表',
+                onClick: () => {
+                  player.addPlayerList(item.musicList || []);
+                },
+              },
+              {
+                label: '同步到远端',
+                key: '同步到远端',
                 onClick: () => {},
               },
               {
                 label: '编辑',
                 key: '2',
-                onClick: () => {},
-              },
-              {
-                label: '下载全部',
-                key: '3',
-                onClick: () => {},
+                onClick: () => {
+                  if (type === 'local') {
+                    modalStore.openHandler(item, (value) => {
+                      const id = value.id;
+                      if (id) {
+                        return api.userLocalMusicOrder.update({ ...value, id }).then((res) => {
+                          userLocalMusicOrderStore.load();
+                        });
+                      } else {
+                        console.error('id为空');
+                        return Promise.reject('id为空');
+                      }
+                    });
+                  }
+                  if (type === 'remote') {
+                    modalStore.openHandler(item, (value) => {
+                      const id = value.id;
+
+                      if (id && origin) {
+                        return origin.action.update({ ...value, id }, config).then((res) => {
+                          userRemoteMusicOrderStore.load();
+                        });
+                      } else {
+                        console.error('id为空');
+                        return Promise.reject('id为空');
+                      }
+                    });
+                  }
+                },
               },
               {
                 label: '删除',
-                key: '4',
-                onClick: () => {},
+                key: '删除',
+                onClick: () => {
+                  console.log(type);
+                  if (type === 'local') {
+                    api.userLocalMusicOrder.delete(item).then((res) => {
+                      userLocalMusicOrderStore.load();
+                    });
+                  }
+                  if (type === 'remote') {
+                    origin?.action.delete({ ...item }, config).then((res) => {
+                      userRemoteMusicOrderStore.load();
+                    });
+                  }
+                },
               },
             ]}
             tag='li'
@@ -195,5 +221,43 @@ export function MusicOrderList({ list }: { list: MusicOrderItem[] }) {
         );
       })}
     </ul>
+  );
+}
+
+export function MusicOrderFormModal() {
+  const store = useMusicOrderFormModalStore();
+
+  return (
+    <Modal
+      title='创建歌单'
+      open={store.open}
+      onOk={() => {
+        store.onOk?.(store.form);
+      }}
+      onClose={() => {
+        store.closeHandler();
+      }}
+    >
+      <FormItem label='名称'>
+        <Input
+          value={store.form.name}
+          onChange={(e) => {
+            store.setFormValue({
+              name: e.target.value.trim(),
+            });
+          }}
+        />
+      </FormItem>
+      <FormItem label='描述'>
+        <Input
+          value={store.form.desc}
+          onChange={(e) => {
+            store.setFormValue({
+              desc: e.target.value.trim(),
+            });
+          }}
+        />
+      </FormItem>
+    </Modal>
   );
 }

@@ -57,9 +57,12 @@ export class SearchInstance implements BBSearch {
             name: p.part,
             duration: p.duration,
             author: item.author,
+            origin: 'bili',
             extraData: {
               ...f,
-              ...p,
+              aid: f.aid,
+              bvid: f.bvid,
+              cid: p.cid,
             },
           };
         }),
@@ -71,7 +74,9 @@ export class SearchInstance implements BBSearch {
         ...item,
         type: SearchType.Music,
         extraData: {
-          ...info,
+          aid: info.aid,
+          bvid: info.bvid,
+          cid: info.cid,
         },
       };
     }

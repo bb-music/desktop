@@ -30,7 +30,6 @@ export const searchStore = create<SearchStore>()((set, get) => {
       });
       try {
         const res = await api.search.getList(params);
-        console.log('res: ', res);
         set({
           data: res.list,
           loading: false,

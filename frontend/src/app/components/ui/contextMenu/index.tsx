@@ -7,7 +7,7 @@ interface MenuItemLabel {
   key: string;
   arrow?: boolean;
   type?: 'label';
-  onClick?: () => void;
+  onClick?: () => void | Promise<void>;
 }
 interface MenuItemDivider {
   key: string;
@@ -25,6 +25,7 @@ interface MenuProps {
   items: MenuItem[];
   open?: boolean;
   position?: Position;
+  onClose?: () => void;
 }
 
 interface DomPos {
@@ -87,7 +88,7 @@ export function ContextMenu({
   );
 }
 
-function Menu({ open, position = { x: 0, y: 0 }, items }: MenuProps) {
+function Menu({ open, position = { x: 0, y: 0 }, items, onClose }: MenuProps) {
   const [pos, setPos] = useState<DomPos>();
   const targetRef = useRef<HTMLUListElement>(null);
   const global = useGlobalStore();
@@ -136,6 +137,12 @@ function Menu({ open, position = { x: 0, y: 0 }, items }: MenuProps) {
           <li
             className={styles.item}
             key={item.key}
+            onClick={async () => {
+              try {
+                await item.onClick?.();
+                onClose?.();
+              } catch (e) {}
+            }}
           >
             <div className={styles.left}>
               <span className={styles.label}>{item.label}</span>
@@ -173,6 +180,9 @@ export function ContextMenuRoot() {
       position={pos}
       open={open}
       items={items}
+      onClose={() => {
+        setOpen(false);
+      }}
     />
   );
 }

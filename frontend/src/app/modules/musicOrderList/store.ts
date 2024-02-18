@@ -17,7 +17,7 @@ export const userLocalMusicOrderStore = create<UserLocalMusicOrderStore>()((set,
     list: [],
     run: async () => {
       const res = await api.userLocalMusicOrder.getList();
-      set({ list: res.list });
+      set({ list: res.list || [] });
     },
   };
 });

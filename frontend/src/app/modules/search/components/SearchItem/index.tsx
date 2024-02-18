@@ -6,6 +6,7 @@ import { SearchItem as SearchItemInter, SearchType } from '@/app/api/search';
 import { Image } from '@/app/components/ui/image';
 import { usePlayerStore } from '@/app/modules/player/store';
 import { seconds2mmss } from '@/app/modules/player/utils';
+import { PageView, openPage } from '@/app/modules/container/store';
 
 export default function SearchItem({ data }: { data: SearchItemInter }) {
   const player = usePlayerStore();
@@ -19,8 +20,7 @@ export default function SearchItem({ data }: { data: SearchItemInter }) {
       setMusic(info);
       console.log('info: ', info);
       if (info.type === SearchType.Order) {
-        // videoStore.setData(info);
-        // router.push(`/parts`);
+        openPage(PageView.MusicOrderDetail, { data: info });
       } else {
         setShow(true);
       }

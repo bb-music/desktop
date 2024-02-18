@@ -20,8 +20,8 @@ export const settingStore = create<SettingStore>()((set, get) => {
         spiData: res.spiData,
         videoProxyPort: res.videoProxyPort,
         downloadDir: res.downloadDir,
-        openMusicOrderOrigin: res.openMusicOrderOrigin,
-        userMusicOrderOrigin: res.userMusicOrderOrigin,
+        openMusicOrderOrigin: res.openMusicOrderOrigin || [],
+        userMusicOrderOrigin: res.userMusicOrderOrigin || [],
       });
     },
   };

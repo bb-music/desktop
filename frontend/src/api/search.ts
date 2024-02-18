@@ -29,7 +29,10 @@ export class SearchInstance implements BBSearch {
           duration: mmss2seconds(item.duration),
           author: item.author,
           type: SearchType.Order,
-          extraData: item,
+          extraData: {
+            aid: item.aid,
+            bvid: item.bvid,
+          },
         })),
     };
   };

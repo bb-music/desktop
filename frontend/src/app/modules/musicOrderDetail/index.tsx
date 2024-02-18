@@ -13,6 +13,8 @@ import { usePlayerStore } from '../player/store';
 import { useShallow } from 'zustand/react/shallow';
 import { useMusicOrderDetailStore } from './store';
 import { seconds2mmss } from '../player/utils';
+import { useUserLocalMusicOrderStore } from '../musicOrderList/store';
+import { api } from '@/app/api';
 
 export interface MusicOrderDetailProps {
   data?: MusicOrderItem;
@@ -20,6 +22,7 @@ export interface MusicOrderDetailProps {
 
 export function MusicOrderDetail({}: MusicOrderDetailProps) {
   const player = usePlayerStore(useShallow((s) => ({ addPlayerList: s.addPlayerList })));
+  const musicOrder = useUserLocalMusicOrderStore();
   const data = useMusicOrderDetailStore(useShallow((state) => state.data));
   const [searchKeyword, setSearchKeyword] = useState('');
   return (
@@ -42,7 +45,30 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
             <span>{data?.desc || '-'}</span>
           </div>
           <div className={styles.operateList}>
-            <Button type='primary'>播放全部</Button>
+            <Button
+              type='primary'
+              title='替换当前播放列表'
+            >
+              播放全部
+            </Button>
+            <Button
+              onClick={() => {
+                if (!data) return;
+                api.userLocalMusicOrder
+                  .create({
+                    name: data.name,
+                    cover: data.cover,
+                    desc: data.desc,
+                    musicList: data.musicList,
+                    extraData: data.extraData,
+                  })
+                  .then(() => {
+                    musicOrder.run();
+                  });
+              }}
+            >
+              收藏歌单
+            </Button>
             <Button
               onClick={() => {
                 player.addPlayerList(data?.musicList || []);
@@ -50,7 +76,6 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
             >
               追加到播放列表
             </Button>
-            <Button>收藏歌单</Button>
             <Button>下载全部</Button>
           </div>
         </div>

@@ -29,11 +29,11 @@ class MusicOrderModal {
 // 本地歌单
 export function LocalMusicOrder() {
   const store = useUserLocalMusicOrderStore(
-    useShallow((state) => ({ run: state.run, list: state.list }))
+    useShallow((state) => ({ load: state.load, list: state.list }))
   );
   const [modal, setModal] = useState(new MusicOrderModal());
   useEffect(() => {
-    store.run();
+    store.load();
   }, []);
   return (
     <>
@@ -60,7 +60,7 @@ export function LocalMusicOrder() {
         onOk={() => {
           api.userLocalMusicOrder.create(modal.form).then((res) => {
             console.log('res: ', res);
-            store.run();
+            store.load();
           });
         }}
         onClose={() => {
@@ -107,11 +107,11 @@ export function RemoteMusicOrder() {
     useShallow((s) => ({ userMusicOrderOrigin: s.userMusicOrderOrigin }))
   );
   const store = useUserRemoteMusicOrderStore(
-    useShallow((state) => ({ run: state.run, list: state.list }))
+    useShallow((state) => ({ load: state.load, list: state.list }))
   );
   useEffect(() => {
     if (setting.userMusicOrderOrigin.length) {
-      store.run();
+      store.load();
     }
   }, [setting.userMusicOrderOrigin]);
   return (

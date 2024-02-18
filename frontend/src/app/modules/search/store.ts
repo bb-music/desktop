@@ -10,7 +10,7 @@ interface SearchStoreState {
 }
 interface SearchStoreHandler {
   setParams: (params: Partial<SearchParams>) => void;
-  run: () => Promise<void>;
+  load: () => Promise<void>;
 }
 
 type SearchStore = SearchStoreState & SearchStoreHandler;
@@ -23,7 +23,7 @@ export const searchStore = create<SearchStore>()((set, get) => {
     },
     data: [],
     loading: false,
-    run: async () => {
+    load: async () => {
       const params = get().params;
       set({
         loading: true,

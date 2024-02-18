@@ -8,7 +8,7 @@ interface OpenMusicOrderStoreState {
 }
 
 interface OpenMusicOrderStoreHandler {
-  run: () => Promise<void>;
+  load: () => Promise<void>;
 }
 
 type OpenMusicOrderStore = OpenMusicOrderStoreState & OpenMusicOrderStoreHandler;
@@ -16,7 +16,7 @@ type OpenMusicOrderStore = OpenMusicOrderStoreState & OpenMusicOrderStoreHandler
 export const useOpenMusicOrderStore = create<OpenMusicOrderStore>()((set, get) => {
   return {
     list: [],
-    run: async () => {
+    load: async () => {
       const origins = settingStore.getState().openMusicOrderOrigin;
       const urls = origins.map((u) => u.trim()).filter((u) => !!u);
       const res = await Promise.all(

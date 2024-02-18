@@ -19,7 +19,7 @@ export function OpenMusicOrder() {
   const origins = useSettingStore(useShallow((state) => state.openMusicOrderOrigin));
 
   useEffect(() => {
-    store.run();
+    store.load();
   }, [origins]);
 
   return (

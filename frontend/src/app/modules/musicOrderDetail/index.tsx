@@ -63,7 +63,7 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
                     extraData: data.extraData,
                   })
                   .then(() => {
-                    musicOrder.run();
+                    musicOrder.load();
                   });
               }}
             >

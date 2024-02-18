@@ -7,7 +7,7 @@ export default function SearchForm() {
   const searchStore = useSearchStore();
   const searchHandler = () => {
     if (!searchStore.params.keyword) return;
-    searchStore.run();
+    searchStore.load();
   };
   return (
     <div className={styles.searchForm}>

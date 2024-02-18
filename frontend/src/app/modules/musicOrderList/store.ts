@@ -7,7 +7,7 @@ interface UserLocalMusicOrderState {
   list: MusicOrderItem[];
 }
 interface UserLocalMusicOrderHandler {
-  run: () => Promise<void>;
+  load: () => Promise<void>;
 }
 
 type UserLocalMusicOrderStore = UserLocalMusicOrderState & UserLocalMusicOrderHandler;
@@ -15,7 +15,7 @@ type UserLocalMusicOrderStore = UserLocalMusicOrderState & UserLocalMusicOrderHa
 export const userLocalMusicOrderStore = create<UserLocalMusicOrderStore>()((set, get) => {
   return {
     list: [],
-    run: async () => {
+    load: async () => {
       const res = await api.userLocalMusicOrder.getList();
       set({ list: res.list || [] });
     },
@@ -32,7 +32,7 @@ interface UserRemoteMusicOrderState {
   list: RemoteMusicOrderItem[];
 }
 interface UserRemoteMusicOrderHandler {
-  run: () => Promise<void>;
+  load: () => Promise<void>;
 }
 
 type UserRemoteMusicOrderStore = UserRemoteMusicOrderState & UserRemoteMusicOrderHandler;
@@ -40,7 +40,7 @@ type UserRemoteMusicOrderStore = UserRemoteMusicOrderState & UserRemoteMusicOrde
 export const userRemoteMusicOrderStore = create<UserRemoteMusicOrderStore>()((set, get) => {
   return {
     list: [],
-    run: async () => {
+    load: async () => {
       const setting = settingStore.getState();
       console.log('setting: ', setting);
 

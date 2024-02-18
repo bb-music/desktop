@@ -8,10 +8,13 @@ interface MenuItemLabel {
   arrow?: boolean;
   type?: 'label';
   onClick?: () => void | Promise<void>;
+  disabled?: boolean;
+  hide?: boolean;
 }
 interface MenuItemDivider {
   key: string;
   type: 'divider';
+  hide?: boolean;
 }
 
 type MenuItem = MenuItemLabel | MenuItemDivider;
@@ -125,6 +128,7 @@ function Menu({ open, position = { x: 0, y: 0 }, items, onClose }: MenuProps) {
       }}
     >
       {items.map((item, index) => {
+        if (item.hide) return null;
         if (item.type === 'divider') {
           return (
             <div
@@ -135,9 +139,10 @@ function Menu({ open, position = { x: 0, y: 0 }, items, onClose }: MenuProps) {
         }
         return (
           <li
-            className={styles.item}
+            className={cls(styles.item, item.disabled && styles.disabled)}
             key={item.key}
             onClick={async () => {
+              if (item.disabled) return;
               try {
                 await item.onClick?.();
                 onClose?.();

@@ -1,7 +1,7 @@
 /**
  * 歌单列表
  */
-import { MusicMenu, Plus, Sync } from '@icon-park/react';
+import { MusicMenu, Plus, UpdateRotation } from '@icon-park/react';
 import { useEffect, useState } from 'react';
 import { api } from '@/app/api';
 import { Modal } from '@/app/components/ui/modal';
@@ -82,7 +82,7 @@ export function RemoteMusicOrder() {
           <div key={m.name}>
             <SubTitle
               extra={
-                <Sync
+                <UpdateRotation
                   className='ui-icon'
                   title='同步至本地'
                   onClick={() => {}}
@@ -130,7 +130,7 @@ export function MusicOrderList({
   const modalStore = useMusicOrderFormModalStore();
   const setting = useSettingStore();
   const origin = api.userRemoteMusicOrder.find((u) => u.name === remoteName);
-  const config = setting.userMusicOrderOrigin.find((u) => u.name === remoteName);
+  const config = setting.userMusicOrderOrigin.find((u) => u.name === remoteName)?.config;
   return (
     <ul className='item-list'>
       {list.map((item) => {
@@ -150,9 +150,8 @@ export function MusicOrderList({
                 },
               },
               {
-                label: '同步到远端',
-                key: '同步到远端',
-                onClick: () => {},
+                type: 'divider',
+                key: 'divider1',
               },
               {
                 label: '编辑',
@@ -202,6 +201,19 @@ export function MusicOrderList({
                       userRemoteMusicOrderStore.load();
                     });
                   }
+                },
+              },
+              {
+                type: 'divider',
+                key: 'divider1',
+                hide: type === 'remote',
+              },
+              {
+                label: '同步到远端',
+                key: '同步到远端',
+                hide: type === 'remote',
+                onClick: () => {
+                  // 看远端有没有这个歌单，只匹配歌单名称，宁多勿少
                 },
               },
             ]}

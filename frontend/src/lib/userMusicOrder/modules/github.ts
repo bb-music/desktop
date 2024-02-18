@@ -24,19 +24,43 @@ export class GithubUserMusicOrderAction implements Action {
   public async getList(config: UserMusicOrderOrigin.GithubConfig) {
     let list: MusicOrderItem[] = [];
     try {
-      list = await this.getData(config);
+      const res = await this.getData(config);
+      list = res.data;
     } catch (e: any) {
       if (e.response.status === 404) {
         // 没有同步文件, 创建
         await this.createMyJson(config);
-        list = await this.getData(config);
+        const res = await this.getData(config);
+        list = res.data;
       }
     }
     return list;
   }
+  public async create(data: Omit<MusicOrderItem, 'id'>, config: UserMusicOrderOrigin.GithubConfig) {
+    const { request, filePath } = this.createConfig(config);
+    const res = await this.getDataAndRsa(config);
+    let list = res.data;
+    if (list.find((l) => l.name === data.name)) {
+      return Promise.reject(new Error('歌单已存在'));
+    }
+    const id = nanoid();
+    list.push({
+      ...data,
+      id,
+      created_at: dayjs().format(),
+      updated_at: '',
+    });
+    const content = btoa(JSON.stringify(list));
+    await request.put(filePath, {
+      message: `创建歌单${data.name}(${id})`,
+      content,
+      sha: res.sha,
+    });
+  }
   public async update(data: MusicOrderItem, config: UserMusicOrderOrigin.GithubConfig) {
     const { request, filePath } = this.createConfig(config);
-    let list = await this.getList(config);
+    const res = await this.getDataAndRsa(config);
+    let list = res.data;
     const current = list.find((l) => l.id === data.id);
     if (!current) {
       return Promise.reject(new Error('歌单不存在'));
@@ -56,30 +80,13 @@ export class GithubUserMusicOrderAction implements Action {
     await request.put(filePath, {
       message: `更新歌单${current.name}(${current.id})`,
       content,
-    });
-  }
-  public async create(data: Omit<MusicOrderItem, 'id'>, config: UserMusicOrderOrigin.GithubConfig) {
-    const { request, filePath } = this.createConfig(config);
-    let list = await this.getList(config);
-    if (list.find((l) => l.name === data.name)) {
-      return Promise.reject(new Error('歌单已存在'));
-    }
-    const id = nanoid();
-    list.push({
-      ...data,
-      id,
-      created_at: dayjs().format(),
-      updated_at: '',
-    });
-    const content = btoa(JSON.stringify(list));
-    await request.put(filePath, {
-      message: `创建歌单${data.name}(${id})`,
-      content,
+      sha: res.sha,
     });
   }
   public async delete(data: Pick<MusicOrderItem, 'id'>, config: UserMusicOrderOrigin.GithubConfig) {
     const { request, filePath } = this.createConfig(config);
-    let list = await this.getList(config);
+    const res = await this.getDataAndRsa(config);
+    let list = res.data;
     const current = list.find((l) => l.id === data.id);
     if (!current) {
       return Promise.reject(new Error('歌单不存在'));
@@ -89,7 +96,22 @@ export class GithubUserMusicOrderAction implements Action {
     await request.put(filePath, {
       message: `删除歌单${current.name}(${current.id})`,
       content,
+      sha: res.sha,
     });
+  }
+  private async getDataAndRsa(config: UserMusicOrderOrigin.GithubConfig) {
+    try {
+      const res = await this.getData(config);
+      return res;
+    } catch (e: any) {
+      if (e.response.status === 404) {
+        // 没有同步文件, 创建
+        await this.createMyJson(config);
+        const res = await this.getData(config);
+        return res;
+      }
+      return Promise.reject(e);
+    }
   }
   private createConfig(config: UserMusicOrderOrigin.GithubConfig) {
     const { owner, repo } = transformRepoUrl(config.repo);
@@ -111,7 +133,10 @@ export class GithubUserMusicOrderAction implements Action {
     const { request, filePath } = this.createConfig(config);
     const res = await request.get<ListResponse>(filePath);
     const data = isJson<MusicOrderItem[]>(decode(res.data.content));
-    return data || [];
+    return {
+      data: data || [],
+      sha: res.data.sha,
+    };
   }
   private async createMyJson(config: UserMusicOrderOrigin.GithubConfig) {
     const { request, filePath } = this.createConfig(config);

@@ -120,6 +120,8 @@
   width: 420px;
   background-color: var(--player-list-bg);
   z-index: 80;
+  display: flex;
+  flex-direction: column;
   .headerInfo {
     padding: 16px 0;
     margin: 0 16px;
@@ -145,6 +147,10 @@
     }
   }
   .list {
+    flex: 1;
+    overflow-y: auto;
+    height: 100%;
+    padding-bottom: 100px;
     .name {
       display: flex;
       align-items: center;

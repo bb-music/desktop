@@ -19,6 +19,7 @@ import { useEffect, useRef, useState } from 'react';
 import { seconds2mmss } from './utils';
 import { Table } from '@/app/components/ui/table';
 import { useShallow } from 'zustand/react/shallow';
+import { api } from '@/app/api';
 
 export function Player() {
   const player = usePlayerStore();
@@ -50,7 +51,7 @@ export function Player() {
       <PlayerProgress progress={progress} />
       <div className={styles.info}>
         <Image
-          src={player.current?.cover}
+          src={api.utils.imgUrlTransform(player.current?.cover || '')}
           className={styles.cover}
         />
         <div>
@@ -73,6 +74,7 @@ export function Player() {
         />
         {player.playerStatus === PlayerStatus.Play ? (
           <PauseOne
+            theme='filled'
             strokeWidth={2}
             className={cls(styles.icon, styles.play)}
             title='暂停'
@@ -153,38 +155,40 @@ function PlayerList({ open }: { open: boolean }) {
           </div>
         </div>
       </div>
-      <Table className={styles.list}>
-        <thead style={{ display: 'none' }}>
-          <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {player.playerList.map((item, index) => {
-            return (
-              <tr
-                onDoubleClick={() => {
-                  player.play(item);
-                }}
-                key={item.id}
-              >
-                <td className={cls(styles.name, player.current?.id === item.id && styles.active)}>
-                  <div className={styles.icon}>
-                    <RightOne
-                      theme='filled'
-                      strokeWidth={2}
-                    />
-                  </div>
-                  <span className={styles.nameText}>{item.name}</span>
-                </td>
-                <td>{seconds2mmss(item.duration)}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
+      <div className={styles.list}>
+        <Table>
+          <thead style={{ display: 'none' }}>
+            <tr>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {player.playerList.map((item, index) => {
+              return (
+                <tr
+                  onDoubleClick={() => {
+                    player.play(item);
+                  }}
+                  key={item.id}
+                >
+                  <td className={cls(styles.name, player.current?.id === item.id && styles.active)}>
+                    <div className={styles.icon}>
+                      <RightOne
+                        theme='filled'
+                        strokeWidth={2}
+                      />
+                    </div>
+                    <span className={styles.nameText}>{item.name}</span>
+                  </td>
+                  <td>{seconds2mmss(item.duration)}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+      </div>
     </div>
   );
 }

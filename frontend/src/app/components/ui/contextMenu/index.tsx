@@ -103,9 +103,7 @@ export function MenuItem({ item }: { item: MenuItem }) {
     <RadixContextMenu.Item
       className={styles.item}
       key={item.key}
-      onClick={() => {
-        item.onClick?.();
-      }}
+      onClick={item.onClick}
     >
       {item.label}
     </RadixContextMenu.Item>

@@ -5,6 +5,7 @@ import { MusicOrderItem } from '@/app/api/music';
 import { Action } from '@/app/api/userMusicOrder';
 import dayjs from 'dayjs';
 import { nanoid } from 'nanoid';
+import { Base64 } from 'js-base64';
 
 interface ListResponse {
   name: string;
@@ -45,12 +46,15 @@ export class GithubUserMusicOrderAction implements Action {
     }
     const id = nanoid();
     list.push({
-      ...data,
       id,
+      name: data.name,
+      desc: data.desc,
+      cover: data.cover,
+      musicList: [],
       created_at: dayjs().format(),
       updated_at: '',
     });
-    const content = btoa(JSON.stringify(list));
+    const content = Base64.encode(JSON.stringify(list));
     await request.put(filePath, {
       message: `创建歌单${data.name}(${id})`,
       content,
@@ -76,7 +80,7 @@ export class GithubUserMusicOrderAction implements Action {
           }
         : l
     );
-    const content = btoa(JSON.stringify(list));
+    const content = Base64.encode(JSON.stringify(list));
     await request.put(filePath, {
       message: `更新歌单${current.name}(${current.id})`,
       content,
@@ -92,7 +96,7 @@ export class GithubUserMusicOrderAction implements Action {
       return Promise.reject(new Error('歌单不存在'));
     }
     list = list.filter((l) => l.id !== data.id);
-    const content = btoa(JSON.stringify(list));
+    const content = Base64.encode(JSON.stringify(list));
     await request.put(filePath, {
       message: `删除歌单${current.name}(${current.id})`,
       content,
@@ -132,7 +136,7 @@ export class GithubUserMusicOrderAction implements Action {
   private async getData(config: UserMusicOrderOrigin.GithubConfig) {
     const { request, filePath } = this.createConfig(config);
     const res = await request.get<ListResponse>(filePath);
-    const data = isJson<MusicOrderItem[]>(decode(res.data.content));
+    const data = isJson<MusicOrderItem[]>(Base64.decode(res.data.content));
     return {
       data: data || [],
       sha: res.data.sha,
@@ -155,11 +159,4 @@ function transformRepoUrl(url: string) {
     owner,
     repo: url.endsWith('.git') ? repo.replace(/\.git/gi, '') : repo,
   };
-}
-
-// 对 gbk 编码的 base64 解码
-function decode(value: string) {
-  const bytes = Uint8Array.from(atob(value), (c) => c.charCodeAt(0));
-  const decodedString = new TextDecoder().decode(bytes);
-  return decodedString;
 }

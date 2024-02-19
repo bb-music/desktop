@@ -205,16 +205,22 @@ export function MusicOrderList({
               },
               {
                 type: 'divider',
-                key: 'divider1',
+                key: 'divider2',
                 hide: type === 'remote',
               },
               {
                 label: '同步到远端',
                 key: '同步到远端',
                 hide: type === 'remote',
-                onClick: () => {
-                  // 看远端有没有这个歌单，只匹配歌单名称，宁多勿少
-                },
+                children: api.userRemoteMusicOrder.map((item) => {
+                  return {
+                    label: item.name,
+                    key: item.name,
+                    onClick: () => {
+                      // 看远端有没有这个歌单，只匹配歌单名称，宁多勿少
+                    },
+                  };
+                }),
               },
             ]}
             tag='li'

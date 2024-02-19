@@ -59,7 +59,6 @@ export class SearchInstance implements BBSearch {
             author: item.author,
             origin: 'bili',
             extraData: {
-              ...f,
               aid: f.aid,
               bvid: f.bvid,
               cid: p.cid,
@@ -67,7 +66,11 @@ export class SearchInstance implements BBSearch {
           };
         }),
         type: SearchType.Order,
-        extraData: info,
+        extraData: {
+          aid: info.aid,
+          bvid: info.bvid,
+          cid: info.cid,
+        },
       };
     } else {
       return {

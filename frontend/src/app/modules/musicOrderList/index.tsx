@@ -140,7 +140,11 @@ export function MusicOrderList({
               {
                 label: '播放全部',
                 key: '播放全部',
-                onClick: () => {},
+                onClick: () => {
+                  player.clearPlayerList();
+                  player.addPlayerList(item.musicList || []);
+                  player.play();
+                },
               },
               {
                 label: '追加到播放列表',
@@ -212,12 +216,21 @@ export function MusicOrderList({
                 label: '同步到远端',
                 key: '同步到远端',
                 hide: type === 'remote',
-                children: api.userRemoteMusicOrder.map((item) => {
+                children: api.userRemoteMusicOrder.map((r) => {
                   return {
-                    label: item.name,
-                    key: item.name,
+                    label: r.name,
+                    key: r.name,
                     onClick: () => {
                       // 看远端有没有这个歌单，只匹配歌单名称，宁多勿少
+                      const remote = userRemoteMusicOrderStore.list.find((l) => l.name === r.name);
+                      const { config } =
+                        setting.userMusicOrderOrigin.find((u) => u.name === r.name) || {};
+                      const server = api.userRemoteMusicOrder.find((r) => r.name === r.name);
+                      if (!remote || !config || !server) return;
+                      if (!remote.list.find((l) => l.name === item.name)) {
+                        console.log('item: ', item);
+                        server.action.create(item, config);
+                      }
                     },
                   };
                 }),

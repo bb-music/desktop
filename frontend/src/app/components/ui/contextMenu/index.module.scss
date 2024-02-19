@@ -1,6 +1,4 @@
 .menu {
-  position: fixed;
-  z-index: 100;
   background-color: var(--menu-bg);
   border-radius: 4px;
   // box-shadow: 0 0 4px var(--menu-shadow);
@@ -10,7 +8,7 @@
   cursor: auto;
   margin: 0;
   padding: 8px 0px;
-  border-radius: 4px;
+  border-radius: 2px;
 
   .item {
     list-style: none;
@@ -21,8 +19,12 @@
     justify-content: space-between;
     align-items: center;
     color: rgb(var(--font-color));
-    &:hover {
+    // &:hover {
+    //   background: rgb(var(--main-color));
+    // }
+    &[data-highlighted] {
       background: rgb(var(--main-color));
+      outline: none;
     }
     .arrow {
       width: 7px;

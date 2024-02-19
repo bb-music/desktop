@@ -11,7 +11,6 @@ import { useEffect, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useSettingStore } from '../../setting/store';
 import { Player } from '../../player';
-import { ContextMenuRoot } from '@/app/components/ui/contextMenu';
 
 export interface PcContainerProps extends BaseElementProps {
   header?: React.ReactNode;
@@ -36,7 +35,6 @@ export function PcContainer({ className, style, header, player }: PcContainerPro
         <ContainerContent />
       </main>
       {!player && <Player />}
-      <ContextMenuRoot />
     </div>
   );
 }

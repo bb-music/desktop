@@ -23,12 +23,13 @@ export class SearchInstance implements BBSearch {
       list: res.result
         .filter((r) => !['ketang'].includes(r.type))
         .map((item) => ({
-          id: item.id,
+          id: item.id + '',
           name: html2text(item.title),
           cover: transformImgUrl(item.pic),
           duration: mmss2seconds(item.duration),
           author: item.author,
           type: SearchType.Order,
+          origin: 'bili',
           extraData: {
             aid: item.aid,
             bvid: item.bvid,

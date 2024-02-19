@@ -14,6 +14,7 @@ export class OpenMusicOrderInstance implements OpenMusicOrder {
           name: m.name,
           duration: m.duration,
           extraData: m,
+          origin: 'bili',
         })),
       };
       newList.push(item);

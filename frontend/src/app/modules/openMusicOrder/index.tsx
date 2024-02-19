@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import { MusicOrderItem } from '@/app/api/music';
 import { useShallow } from 'zustand/react/shallow';
 import { useOpenMusicOrderStore } from './store';
-import { ContextMenu, Menu } from '@/app/components/ui/contextMenu';
+import { ContextMenu } from '@/app/components/ui/contextMenu';
 
 export interface OpenMusicOrderProps {}
 
@@ -27,7 +27,10 @@ export function OpenMusicOrder() {
       <div className={styles.musicOrderList}>
         {store.list.map((i) => {
           return (
-            <ContextMenu key={i.id + i.name}>
+            <ContextMenu
+              key={i.id + i.name}
+              items={[]}
+            >
               <MusicOrderItemComp data={i} />
             </ContextMenu>
           );

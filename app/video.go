@@ -34,6 +34,8 @@ type MusicOrderItem struct {
 	Desc      string      `json:"desc"`
 	Author    string      `json:"author"`
 	MusicList []MusicItem `json:"musicList"`
+	CreatedAt string      `json:"created_at"`
+	UpdatedAt string      `json:"updated_at"`
 }
 
 type MusicItem struct {
@@ -43,6 +45,7 @@ type MusicItem struct {
 	Name     string `json:"name"`
 	Duration int    `json:"duration"`
 	ID       string `json:"id"`
+	Origin   string `json:"origin"`
 }
 
 // 获取歌单源数据

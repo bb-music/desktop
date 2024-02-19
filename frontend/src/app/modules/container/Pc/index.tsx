@@ -11,6 +11,7 @@ import { useEffect, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useSettingStore } from '../../setting/store';
 import { Player } from '../../player';
+import { MessageRoot } from '@/app/components/ui/message';
 
 export interface PcContainerProps extends BaseElementProps {
   header?: React.ReactNode;
@@ -29,6 +30,7 @@ export function PcContainer({ className, style, header, player }: PcContainerPro
       className={cls(styles.container, `${UIPrefix}-container`, className, theme)}
       style={style}
     >
+      <MessageRoot />
       {!header && <Header />}
       <main className={styles.main}>
         <Sidebar />

@@ -73,6 +73,7 @@ export namespace app {
 	    name: string;
 	    duration: number;
 	    id: string;
+	    origin: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new MusicItem(source);
@@ -86,6 +87,7 @@ export namespace app {
 	        this.name = source["name"];
 	        this.duration = source["duration"];
 	        this.id = source["id"];
+	        this.origin = source["origin"];
 	    }
 	}
 	export class MusicOrderItem {
@@ -95,6 +97,8 @@ export namespace app {
 	    desc: string;
 	    author: string;
 	    musicList: MusicItem[];
+	    created_at: string;
+	    updated_at: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new MusicOrderItem(source);
@@ -108,6 +112,8 @@ export namespace app {
 	        this.desc = source["desc"];
 	        this.author = source["author"];
 	        this.musicList = this.convertValues(source["musicList"], MusicItem);
+	        this.created_at = source["created_at"];
+	        this.updated_at = source["updated_at"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
@@ -358,6 +364,7 @@ export namespace bb_client {
 	    episode_count_text: string;
 	    release_status: number;
 	    is_intervene: number;
+	    origin: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new SearchResultItem(source);
@@ -411,6 +418,7 @@ export namespace bb_client {
 	        this.episode_count_text = source["episode_count_text"];
 	        this.release_status = source["release_status"];
 	        this.is_intervene = source["is_intervene"];
+	        this.origin = source["origin"];
 	    }
 	}
 	export class SearchResponse {

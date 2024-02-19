@@ -27,9 +27,11 @@ export function Player() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    player.audio.addEventListener('timeupdate', (e) => {
-      setProgress(player.audio.getCurrentTime());
-    });
+    if (player.audio.addEventListener) {
+      player.audio.addEventListener('timeupdate', (e) => {
+        setProgress(player.audio.getCurrentTime());
+      });
+    }
   }, [player.audio]);
 
   useEffect(() => {

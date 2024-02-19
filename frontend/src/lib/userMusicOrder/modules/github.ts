@@ -1,7 +1,7 @@
 import { isJson } from '@/utils';
 import { UserMusicOrderOrigin } from '../common';
 import axios from 'axios';
-import { MusicOrderItem } from '@/app/api/music';
+import { MusicItem, MusicOrderItem } from '@/app/api/music';
 import { Action } from '@/app/api/userMusicOrder';
 import dayjs from 'dayjs';
 import { nanoid } from 'nanoid';
@@ -50,7 +50,7 @@ export class GithubUserMusicOrderAction implements Action {
       name: data.name,
       desc: data.desc,
       cover: data.cover,
-      musicList: [],
+      musicList: data.musicList,
       created_at: dayjs().format(),
       updated_at: '',
     });
@@ -62,30 +62,18 @@ export class GithubUserMusicOrderAction implements Action {
     });
   }
   public async update(data: MusicOrderItem, config: UserMusicOrderOrigin.GithubConfig) {
-    const { request, filePath } = this.createConfig(config);
-    const res = await this.getDataAndRsa(config);
-    let list = res.data;
-    const current = list.find((l) => l.id === data.id);
-    if (!current) {
-      return Promise.reject(new Error('歌单不存在'));
-    }
-    list = list.map((l) =>
-      l.id === data.id
-        ? {
-            ...l,
-            name: data.name,
-            desc: data.desc,
-            cover: data.cover,
-            updated_at: dayjs().format(),
-          }
-        : l
+    await this.updateItem(
+      data.id,
+      config,
+      () => {
+        return {
+          name: data.name,
+          desc: data.desc,
+          cover: data.cover,
+        };
+      },
+      (c) => `更新歌单${c.name}(${c.id})`
     );
-    const content = Base64.encode(JSON.stringify(list));
-    await request.put(filePath, {
-      message: `更新歌单${current.name}(${current.id})`,
-      content,
-      sha: res.sha,
-    });
   }
   public async delete(data: Pick<MusicOrderItem, 'id'>, config: UserMusicOrderOrigin.GithubConfig) {
     const { request, filePath } = this.createConfig(config);
@@ -102,6 +90,64 @@ export class GithubUserMusicOrderAction implements Action {
       content,
       sha: res.sha,
     });
+  }
+  public async getDetail(id: string, config: any) {
+    const res = await this.getList(config);
+    const info = res.find((r) => r.id === id);
+    if (!info) {
+      return Promise.reject(new Error('歌单不存在'));
+    }
+    return info;
+  }
+  public async appendMusic(id: string, musics: MusicItem<any>[], config: any) {
+    await this.updateItem(
+      id,
+      config,
+      (l) => {
+        const newList = l.musicList?.filter((i) => !musics.find((m) => m.id === i.id));
+        return {
+          musicList: [...(newList || []), ...musics],
+        };
+      },
+      () => `新增歌曲`
+    );
+  }
+  public async updateMusic(id: string, music: MusicItem<any>, config: any) {
+    await this.updateItem(
+      id,
+      config,
+      (l) => {
+        const newList = l.musicList?.map((i) => {
+          if (i.id === music.id) {
+            return {
+              ...i,
+              name: music.name,
+              cover: music.cover,
+            };
+          }
+          return i;
+        });
+        return {
+          musicList: newList || [],
+        };
+      },
+      () => `修改歌曲信息`
+    );
+  }
+  public async deleteMusic(id: string, musics: MusicItem<any>[], config: any) {
+    await this.updateItem(
+      id,
+      config,
+      (l) => {
+        const newList = l.musicList?.filter((i) => {
+          return !musics.map((m) => m.id).includes(i.id);
+        });
+        return {
+          musicList: newList || [],
+        };
+      },
+      () => `移除歌曲`
+    );
   }
   private async getDataAndRsa(config: UserMusicOrderOrigin.GithubConfig) {
     try {
@@ -151,6 +197,37 @@ export class GithubUserMusicOrderAction implements Action {
       content,
     });
   }
+  private updateItem = async (
+    id: string,
+    config: UserMusicOrderOrigin.GithubConfig,
+    cb: (l: MusicOrderItem) => Partial<MusicOrderItem>,
+    message: (l: MusicOrderItem) => string
+  ) => {
+    const { request, filePath } = this.createConfig(config);
+    const res = await this.getDataAndRsa(config);
+    let list = res.data;
+    const current = list.find((l) => l.id === id);
+    if (!current) {
+      return Promise.reject(new Error('歌单不存在'));
+    }
+    list = list.map((l) => {
+      if (l.id === id) {
+        return {
+          ...l,
+          ...cb(l),
+          updated_at: dayjs().format(),
+        };
+      }
+      return l;
+    });
+
+    const content = Base64.encode(JSON.stringify(list));
+    await request.put(filePath, {
+      message: message(current),
+      content,
+      sha: res.sha,
+    });
+  };
 }
 
 function transformRepoUrl(url: string) {

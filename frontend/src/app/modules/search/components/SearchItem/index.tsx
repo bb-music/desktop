@@ -17,8 +17,10 @@ export default function SearchItem({ data }: { data: SearchItemInter }) {
     setLoading(true);
     try {
       const info = await api.search.getItemInfo(data);
-      setMusic(info);
-      console.log('info: ', info);
+      setMusic({
+        ...info,
+        id: info.id.toString(),
+      });
       if (info.type === SearchType.Order) {
         openPage(PageView.MusicOrderDetail, { data: info });
       } else {

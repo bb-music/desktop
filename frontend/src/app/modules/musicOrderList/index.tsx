@@ -18,6 +18,7 @@ import { useSettingStore } from '../setting/store';
 import { PageView, openPage } from '../container/store';
 import { ContextMenu } from '@/app/components/ui/contextMenu';
 import { usePlayerStore } from '../player/store';
+import { message } from '@/app/components/ui/message';
 
 export * from './origin';
 
@@ -131,6 +132,7 @@ export function MusicOrderList({
   const setting = useSettingStore();
   const origin = api.userRemoteMusicOrder.find((u) => u.name === remoteName);
   const config = setting.userMusicOrderOrigin.find((u) => u.name === remoteName)?.config;
+
   return (
     <ul className='item-list'>
       {list.map((item) => {
@@ -151,6 +153,13 @@ export function MusicOrderList({
                 key: '追加到播放列表',
                 onClick: () => {
                   player.addPlayerList(item.musicList || []);
+                },
+              },
+              {
+                label: '显示',
+                key: '显示',
+                onClick() {
+                  message.loading('加载中');
                 },
               },
               {
@@ -227,9 +236,11 @@ export function MusicOrderList({
                         setting.userMusicOrderOrigin.find((u) => u.name === r.name) || {};
                       const server = api.userRemoteMusicOrder.find((r) => r.name === r.name);
                       if (!remote || !config || !server) return;
+                      // 没有则创建
                       if (!remote.list.find((l) => l.name === item.name)) {
-                        console.log('item: ', item);
-                        server.action.create(item, config);
+                        server.action.create(item, config).then(() => {
+                          userRemoteMusicOrderStore.load();
+                        });
                       }
                     },
                   };

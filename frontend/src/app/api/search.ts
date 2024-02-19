@@ -6,7 +6,7 @@ export const enum SearchType {
 }
 
 export interface SearchItem<T = any> {
-  id: string | number; // ID
+  id: string; // ID
   cover: string; // 封面
   name: string; // 名称
   duration: number; // 时长
@@ -14,6 +14,7 @@ export interface SearchItem<T = any> {
   type?: SearchType; // 类型
   musicList?: MusicItem[]; // 歌单中的歌曲列表
   extraData?: T; // 扩展数据
+  origin: string;
 }
 export interface SearchParams {
   keyword: string;

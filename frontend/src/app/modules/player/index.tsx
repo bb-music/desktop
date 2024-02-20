@@ -21,15 +21,31 @@ import { Table } from '@/app/components/ui/table';
 import { useShallow } from 'zustand/react/shallow';
 import { api } from '@/app/api';
 
+const ProgressCacheKey = 'BBPlayerProgress';
+
 export function Player() {
   const player = usePlayerStore();
   const [listShow, setListShow] = useState(false);
   const [progress, setProgress] = useState(0);
+  const progressTimer = useRef<number>(0);
+  useEffect(() => {}, []);
 
   useEffect(() => {
     if (!player.audio || !player.audio.addEventListener) return;
-    player.audio.addEventListener('timeupdate', (e) => {
-      setProgress(player.audio?.getCurrentTime() || 0);
+    (async () => {
+      const d = Number(await api.cacheStorage.getItem(ProgressCacheKey));
+      const t = isNaN(d) ? 0 : d;
+      setProgress(t);
+      player.audio?.setCurrentTime(t);
+    })();
+    player.audio.addEventListener('timeupdate', async (e) => {
+      const d = player.audio?.getCurrentTime() || 0;
+      setProgress(d);
+      if (progressTimer.current + 3000 < Date.now()) {
+        // 3s 缓存一次进度
+        await api.cacheStorage.setItem(ProgressCacheKey, d.toString());
+        progressTimer.current = Date.now();
+      }
     });
     player.audio?.addEventListener('ended', () => {
       player.endNext();

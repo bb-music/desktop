@@ -31,6 +31,11 @@ jobs:
         with:
           submodules: recursive
 
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
+          cache: 'pnpm'
+
       - name: Build wails
         uses: dAppServer/wails-build-action@v2.2
         id: build

@@ -13,7 +13,7 @@ import { usePlayerStore } from '../player/store';
 import { useShallow } from 'zustand/react/shallow';
 import { useMusicOrderDetailStore } from './store';
 import { seconds2mmss } from '../player/utils';
-import { useUserLocalMusicOrderStore } from '../musicOrderList/store';
+import { musicCollect, useUserLocalMusicOrderStore } from '../musicOrderList';
 import { api } from '@/app/api';
 import { ContextMenu } from '@/app/components/ui/contextMenu';
 
@@ -142,6 +142,9 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
                     {
                       label: '收藏到歌单',
                       key: '收藏到歌单',
+                      onClick: () => {
+                        musicCollect(m);
+                      },
                     },
                     {
                       label: '从歌单中删除',

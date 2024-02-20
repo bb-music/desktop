@@ -13,6 +13,7 @@ import { useSettingStore } from '../../setting/store';
 import { Player } from '../../player';
 import { MessageRoot } from '@/app/components/ui/message';
 import { usePlayerStore } from '../../player/store';
+import { MusicOrderModal } from '../../musicOrderList';
 
 export interface PcContainerProps extends BaseElementProps {
   header?: React.ReactNode;
@@ -41,6 +42,7 @@ export function PcContainer({ className, style, header, headerProps, player }: P
         <ContainerContent />
       </main>
       {!player && playerStore.audio && <Player />}
+      <MusicOrderModal />
     </div>
   );
 }

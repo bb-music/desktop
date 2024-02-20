@@ -8,6 +8,7 @@ import { usePlayerStore } from '@/app/modules/player/store';
 import { seconds2mmss } from '@/app/modules/player/utils';
 import { PageView, openPage } from '@/app/modules/container/store';
 import { Button } from '@/app/components/ui/button';
+import { musicCollect } from '@/app/modules/musicOrderList';
 
 export default function SearchItem({ data }: { data: SearchItemInter }) {
   const player = usePlayerStore();
@@ -69,7 +70,14 @@ export default function SearchItem({ data }: { data: SearchItemInter }) {
         >
           立即播放
         </Button>
-        <Button type='primary'>加入歌单</Button>
+        <Button
+          type='primary'
+          onClick={() => {
+            musicCollect(music!);
+          }}
+        >
+          加入歌单
+        </Button>
         <Button
           type='primary'
           onClick={() => {

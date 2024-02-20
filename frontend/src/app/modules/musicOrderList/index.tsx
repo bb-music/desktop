@@ -8,6 +8,7 @@ import { Modal } from '@/app/components/ui/modal';
 import { FormItem } from '@/app/components/ui/form';
 import { Input } from '@/app/components/ui/input';
 import {
+  useMusicOrderCollectModalStore,
   useMusicOrderFormModalStore,
   useUserLocalMusicOrderStore,
   useUserRemoteMusicOrderStore,
@@ -19,8 +20,11 @@ import { PageView, openPage } from '../container/store';
 import { ContextMenu } from '@/app/components/ui/contextMenu';
 import { usePlayerStore } from '../player/store';
 import { message } from '@/app/components/ui/message';
+import styles from './index.module.scss';
+import { Image } from '@/app/components/ui/image';
 
 export * from './origin';
+export * from './store';
 
 export interface MusicOrderListProps {}
 
@@ -81,13 +85,13 @@ export function RemoteMusicOrder() {
         return (
           <div key={m.name}>
             <SubTitle
-              extra={
-                <UpdateRotation
-                  className='ui-icon'
-                  title='同步至本地'
-                  onClick={() => {}}
-                />
-              }
+            // extra={
+            //   <UpdateRotation
+            //     className='ui-icon'
+            //     title='同步至本地'
+            //     onClick={() => {}}
+            //   />
+            // }
             >
               远程-{m.name}
             </SubTitle>
@@ -300,5 +304,104 @@ export function MusicOrderFormModal() {
         />
       </FormItem>
     </Modal>
+  );
+}
+
+export function MusicOrderModal() {
+  const localStore = useUserLocalMusicOrderStore(
+    useShallow((state) => ({ load: state.load, list: state.list }))
+  );
+  const remoteStore = useUserRemoteMusicOrderStore(
+    useShallow((state) => ({ load: state.load, list: state.list }))
+  );
+  const store = useMusicOrderCollectModalStore();
+
+  return (
+    <Modal
+      title='收藏到歌单'
+      open={store.open}
+      onClose={() => {
+        store.close();
+      }}
+      footer={<></>}
+    >
+      <div className={styles.MusicOrderList}>
+        <div className={styles.MusicOrderSubTitle}>本地歌单</div>
+        <div>
+          {localStore.list.map((item) => {
+            return (
+              <CollectItem
+                key={item.id}
+                data={item}
+              />
+            );
+          })}
+        </div>
+        <br />
+        <div className={styles.MusicOrderSubTitle}>远程歌单</div>
+        <div>
+          {remoteStore.list.map((r) => {
+            return (
+              <div key={r.name}>
+                {r.list.map((item) => {
+                  return (
+                    <CollectItem
+                      key={item.id}
+                      data={item}
+                      remoteName={r.name}
+                    />
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </Modal>
+  );
+}
+
+function CollectItem({ data, remoteName }: { data: MusicOrderItem; remoteName?: string }) {
+  const store = useMusicOrderCollectModalStore();
+  const setting = useSettingStore();
+  const localStore = useUserLocalMusicOrderStore(
+    useShallow((state) => ({ load: state.load, list: state.list }))
+  );
+  const remoteStore = useUserRemoteMusicOrderStore(
+    useShallow((state) => ({ load: state.load, list: state.list }))
+  );
+  const origin = api.userRemoteMusicOrder.find((u) => u.name === remoteName);
+  const config = setting.userMusicOrderOrigin.find((u) => u.name === remoteName)?.config;
+
+  return (
+    <div
+      className={styles.MusicOrderItem}
+      onClick={() => {
+        store.close();
+        if (!remoteName) {
+          // 本地歌单
+          api.userLocalMusicOrder.appendMusic(data.id, store.musicList).then(() => {
+            localStore.load();
+            message.success('已添加');
+          });
+        } else {
+          // 远程歌单
+          origin?.action.appendMusic(data.id, store.musicList, config).then(() => {
+            remoteStore.load();
+            message.success('已添加');
+          });
+        }
+      }}
+    >
+      <Image
+        src={data.cover}
+        className={styles.cover}
+        mode='cover'
+      />
+      <div className={styles.info}>
+        <div className={styles.name}>{data.name}</div>
+        <div className={styles.total}>{data.musicList?.length}首音乐</div>
+      </div>
+    </div>
   );
 }

@@ -3,7 +3,7 @@ import { cls } from '@/app/utils';
 import styles from './index.module.scss';
 import { UIPrefix } from '@/app/consts';
 import { BaseElementProps } from '@/app/interface';
-import { Header } from './components/Header';
+import { Header, HeaderProps } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { useGlobalStore } from '@/app/store/global';
 import { PageViewMap, useContainerStore } from '../store';
@@ -17,9 +17,10 @@ import { usePlayerStore } from '../../player/store';
 export interface PcContainerProps extends BaseElementProps {
   header?: React.ReactNode;
   player?: React.ReactNode;
+  headerProps?: HeaderProps;
 }
 
-export function PcContainer({ className, style, header, player }: PcContainerProps) {
+export function PcContainer({ className, style, header, headerProps, player }: PcContainerProps) {
   const { theme } = useGlobalStore();
   const playerStore = usePlayerStore();
   const settingLoad = useSettingStore(useShallow((state) => state.load));
@@ -34,7 +35,7 @@ export function PcContainer({ className, style, header, player }: PcContainerPro
       style={style}
     >
       <MessageRoot />
-      {!header && <Header />}
+      {!header && <Header {...headerProps} />}
       <main className={styles.main}>
         <Sidebar />
         <ContainerContent />

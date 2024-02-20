@@ -1,15 +1,19 @@
-import { Page, Setting } from '@icon-park/react';
+import { SettingTwo } from '@icon-park/react';
 import styles from '../index.module.scss';
 import { PageView, openPage } from '../../store';
 
-export function Header() {
+export interface HeaderProps {
+  operateRender?: React.ReactNode;
+}
+
+export function Header({ operateRender }: HeaderProps) {
   return (
     <div
       className={styles.header}
       style={{ '--wails-draggable': 'drag' } as any}
     >
-      <div className={`logo`}>哔哔音乐</div>
-      <div className='menu'>
+      <div className={styles.logo}>哔哔音乐</div>
+      <div className={styles.menu}>
         <a
           onClick={() => {
             openPage(PageView.OpenMusicOrder);
@@ -25,13 +29,15 @@ export function Header() {
           搜索
         </a>
       </div>
-      <div className='operate'>
-        <Setting
-          className='bb-icon'
+      <div className={styles.operate}>
+        <SettingTwo
+          title='系统配置'
+          className={styles.btnIcon}
           onClick={() => {
             openPage(PageView.Setting);
           }}
         />
+        {operateRender}
       </div>
     </div>
   );

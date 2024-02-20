@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { settingCache } from './api/setting';
 import './style.scss';
+import { Close, Minus } from '@icon-park/react';
+import { Quit, Hide, WindowMinimise } from '@wails/runtime';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -39,7 +41,28 @@ function Root() {
     >
       {!initLoading && (
         <BBMusicApp apiInstance={apiInstance}>
-          <PcContainer />
+          <PcContainer
+            headerProps={{
+              operateRender: (
+                <>
+                  <Minus
+                    title='最小化'
+                    onClick={() => {
+                      WindowMinimise();
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  />
+                  <Close
+                    title='退出'
+                    onClick={() => {
+                      Quit();
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  />
+                </>
+              ),
+            }}
+          />
         </BBMusicApp>
       )}
     </div>

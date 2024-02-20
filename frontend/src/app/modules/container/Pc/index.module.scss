@@ -76,27 +76,29 @@
       rgba(var(--main-color), 0.7)
     )
     1;
-  :global {
-    .logo {
-      color: rgb(var(--font-active-color));
-      font-size: 20px;
-      flex: 0 0 200px;
-    }
-    .menu {
-      flex: 1;
-      display: flex;
-      align-content: center;
-      justify-content: center;
-      gap: 20px;
-      font-size: 16px;
-    }
-    .operate {
-      flex: 0 0 200px;
-      display: flex;
-      align-content: center;
-      justify-content: flex-end;
-      font-size: 18px;
-    }
+  .logo {
+    color: rgb(var(--font-active-color));
+    font-size: 20px;
+    flex: 0 0 300px;
+  }
+  .menu {
+    flex: 1;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    gap: 20px;
+    font-size: 16px;
+  }
+  .operate {
+    flex: 0 0 300px;
+    display: flex;
+    align-content: center;
+    justify-content: flex-end;
+    font-size: 18px;
+    gap: 16px;
+  }
+  .btnIcon {
+    cursor: pointer;
   }
 }
 

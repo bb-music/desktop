@@ -2,8 +2,6 @@ export namespace app {
 	
 	export class AppConfig {
 	    video_proxy_port: number;
-	    sign_data: bb_client.SignData;
-	    download_dir: string;
 	    config_dir: string;
 	
 	    static createFrom(source: any = {}) {
@@ -13,9 +11,21 @@ export namespace app {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.video_proxy_port = source["video_proxy_port"];
-	        this.sign_data = this.convertValues(source["sign_data"], bb_client.SignData);
-	        this.download_dir = source["download_dir"];
 	        this.config_dir = source["config_dir"];
+	    }
+	}
+	export class AuthParams {
+	    sign_data: bb_client.SignData;
+	    spi_data: bb_client.SpiData;
+	
+	    static createFrom(source: any = {}) {
+	        return new AuthParams(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.sign_data = this.convertValues(source["sign_data"], bb_client.SignData);
+	        this.spi_data = this.convertValues(source["spi_data"], bb_client.SpiData);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
@@ -41,6 +51,7 @@ export namespace app {
 	    bvid: string;
 	    cid: string;
 	    name: string;
+	    download_dir: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new DownloadMusicParams(source);
@@ -52,6 +63,23 @@ export namespace app {
 	        this.bvid = source["bvid"];
 	        this.cid = source["cid"];
 	        this.name = source["name"];
+	        this.download_dir = source["download_dir"];
+	    }
+	}
+	export class MusicItemExtraData {
+	    aid: number;
+	    bvid: string;
+	    cid: number;
+	
+	    static createFrom(source: any = {}) {
+	        return new MusicItemExtraData(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.aid = source["aid"];
+	        this.bvid = source["bvid"];
+	        this.cid = source["cid"];
 	    }
 	}
 	export class MusicItem {
@@ -61,6 +89,8 @@ export namespace app {
 	    name: string;
 	    duration: number;
 	    id: string;
+	    origin: string;
+	    extraData: MusicItemExtraData;
 	
 	    static createFrom(source: any = {}) {
 	        return new MusicItem(source);
@@ -74,14 +104,38 @@ export namespace app {
 	        this.name = source["name"];
 	        this.duration = source["duration"];
 	        this.id = source["id"];
+	        this.origin = source["origin"];
+	        this.extraData = this.convertValues(source["extraData"], MusicItemExtraData);
 	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
 	}
+	
 	export class MusicOrderItem {
 	    id: string;
 	    name: string;
+	    cover: string;
 	    desc: string;
 	    author: string;
-	    list: MusicItem[];
+	    musicList: MusicItem[];
+	    created_at: string;
+	    updated_at: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new MusicOrderItem(source);
@@ -91,9 +145,12 @@ export namespace app {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.id = source["id"];
 	        this.name = source["name"];
+	        this.cover = source["cover"];
 	        this.desc = source["desc"];
 	        this.author = source["author"];
-	        this.list = this.convertValues(source["list"], MusicItem);
+	        this.musicList = this.convertValues(source["musicList"], MusicItem);
+	        this.created_at = source["created_at"];
+	        this.updated_at = source["updated_at"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
@@ -344,6 +401,7 @@ export namespace bb_client {
 	    episode_count_text: string;
 	    release_status: number;
 	    is_intervene: number;
+	    origin: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new SearchResultItem(source);
@@ -397,6 +455,7 @@ export namespace bb_client {
 	        this.episode_count_text = source["episode_count_text"];
 	        this.release_status = source["release_status"];
 	        this.is_intervene = source["is_intervene"];
+	        this.origin = source["origin"];
 	    }
 	}
 	export class SearchResponse {
@@ -450,6 +509,20 @@ export namespace bb_client {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.img_key = source["img_key"];
 	        this.sub_key = source["sub_key"];
+	    }
+	}
+	export class SpiData {
+	    b_3: string;
+	    b_4: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new SpiData(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.b_3 = source["b_3"];
+	        this.b_4 = source["b_4"];
 	    }
 	}
 	export class Supportformat {

@@ -14,15 +14,15 @@ type SearchResponse struct {
 
 // 搜索
 func (c *Client) Search(params SearchParams) (SearchResponse, error) {
-	query := c.Sign(map[string]string{
+	query := c.sign(map[string]string{
 		"search_type": "video",
 		"keyword":     params.Keyword,
 		"page":        params.Page,
 	})
+	fmt.Printf("query: %+v\n", query)
 	url := "https://api.bilibili.com/x/web-interface/wbi/search/type"
 	result := BiliResponse[SearchResponse]{}
 	_, err := c.Request().SetQueryParams(query).SetResult(&result).Get(url)
-	fmt.Printf("Search: %+vs\n", result)
 	if err != nil {
 		return SearchResponse{}, err
 	}

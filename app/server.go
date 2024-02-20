@@ -8,14 +8,7 @@ import (
 	"net/url"
 )
 
-func proxyHandler(target *url.URL) http.HandlerFunc {
-	proxy := httputil.NewSingleHostReverseProxy(target)
-	return func(w http.ResponseWriter, r *http.Request) {
-		proxy.ServeHTTP(w, r)
-	}
-}
-
-func ProxyServer(app *App, port int) {
+func ProxyServer(port int) {
 	// 视频代理服务
 	http.HandleFunc("/videofile/", func(w http.ResponseWriter, r *http.Request) {
 		query := r.URL.Query()
@@ -23,15 +16,34 @@ func ProxyServer(app *App, port int) {
 		bvid := query.Get("bvid")
 		cid := query.Get("cid")
 
+		uuid_v3 := query.Get("uuid_v3")
+		uuid_v4 := query.Get("uuid_v4")
+		img_key := query.Get("img_key")
+		sub_key := query.Get("sub_key")
+
+		client := bb_client.Client{
+			SpiData: bb_client.SpiData{
+				UUID_V3: uuid_v3,
+				UUID_V4: uuid_v4,
+			},
+			SignData: bb_client.SignData{
+				ImgKey: img_key,
+				SubKey: sub_key,
+			},
+		}
+		fmt.Printf("client: %+v\n", client)
 		// 取出播放地址
-		resp, _ := app.client.GetVideoUrl(bb_client.GetVideoUrlParams{
+		resp, err := client.GetVideoUrl(bb_client.GetVideoUrlParams{
 			GetVideoDetailParams: bb_client.GetVideoDetailParams{
 				Aid:  aid,
 				Bvid: bvid,
 			},
 			Cid: cid,
 		})
-
+		if err != nil {
+			fmt.Printf("err: %+v\n", err)
+		}
+		fmt.Printf("resp: %+v\n", resp)
 		// FLV / MP4 格式 直接代理请求
 		if len(resp.Durl) > 0 {
 			originURL := resp.Durl[0].Url

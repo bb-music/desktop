@@ -1,37 +1,72 @@
-import { BrowserRouter } from 'react-router-dom';
-import { createRoot } from 'react-dom/client';
-import './style.scss';
-import { AppRoutes } from './router';
-import { SideBar } from './components/SideBar';
+import { BBMusicApp } from '@/app';
+import { PcContainer } from './app/modules/container';
+import { apiInstance } from './api';
 import { useEffect, useState } from 'react';
-import { LoadSignData, UpdateClientSignData, GetSignData } from '@wails/go/app/App';
-import { Player } from './player';
-import { useConfigStore } from './store/config';
+import { createRoot } from 'react-dom/client';
+import { settingCache } from './api/setting';
+import './style.scss';
+import { Close, Minus } from '@icon-park/react';
+import { Quit, Hide, WindowMinimise } from '@wails/runtime';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
-root.render(<Root />);
-
-const IMG_KEY = 'imgKey';
-const SUB_KEY = 'subKey';
 
 function Root() {
-  const configStore = useConfigStore();
-  const [loading, setLoading] = useState(false);
+  const [initLoading, setInitLoading] = useState(true);
+
+  const init = async () => {
+    setInitLoading(true);
+    const res = await settingCache.get();
+    if (!res?.signData?.imgKey || !res?.signData?.subKey) {
+      await apiInstance.setting.updateSignData();
+    }
+    if (!res?.spiData?.uuid_v3 || !res?.spiData?.uuid_v4) {
+      await apiInstance.setting.updateSpiData();
+    }
+    setInitLoading(false);
+  };
 
   useEffect(() => {
-    configStore.init();
+    init();
   }, []);
 
   return (
-    <BrowserRouter>
-      <main className='mainLayout'>
-        <SideBar />
-        <div className='mainContainer'>
-          <AppRoutes />
-        </div>
-        <Player />
-      </main>
-    </BrowserRouter>
+    <div
+      style={{
+        width: '100vw',
+        height: '100vh',
+        borderRadius: 4,
+        overflow: 'hidden',
+      }}
+    >
+      {!initLoading && (
+        <BBMusicApp apiInstance={apiInstance}>
+          <PcContainer
+            headerProps={{
+              operateRender: (
+                <>
+                  <Minus
+                    title='最小化'
+                    onClick={() => {
+                      WindowMinimise();
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  />
+                  <Close
+                    title='退出'
+                    onClick={() => {
+                      Quit();
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  />
+                </>
+              ),
+            }}
+          />
+        </BBMusicApp>
+      )}
+    </div>
   );
 }
+
+root.render(<Root />);

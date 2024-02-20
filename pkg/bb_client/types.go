@@ -72,6 +72,7 @@ type SearchResultItem struct {
 	EpisodeCountText string   `json:"episode_count_text"`
 	ReleaseStatus    int      `json:"release_status"`
 	IsIntervene      int      `json:"is_intervene"`
+	Origin           string   `json:"origin"`
 }
 
 /** 视频详情 */

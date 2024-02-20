@@ -1,33 +1,21 @@
 import { create } from 'zustand';
-import { bb_client } from '@wails/go/models';
-import { GetConfig, LoadSignData, SetDownloadDir, UpdateClientSignData } from '@wails/go/app/App';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import { UserMusicOrderOrigin } from '@/utils/userMusicOrder/common';
+import styles from '../theme/dark.module.scss';
 
-interface GlobalStoreState {
-  theme: string;
+export interface GlobalStoreState {
+  /** 主题 */
+  theme?: string;
 }
 interface GlobalStoreHandler {
-  init: (state: GlobalStoreState) => Promise<void>;
+  setState: (state: Partial<GlobalStoreState>) => void;
 }
 
 type GlobalStore = GlobalStoreState & GlobalStoreHandler;
 
-export const globalStore = create(
-  persist<GlobalStore>(
-    (set, get) => {
-      return {
-        theme: 'dark',
-        init: async (state: GlobalStoreState) => {
-          set(state);
-        },
-      };
-    },
-    {
-      name: 'config-storage',
-      storage: createJSONStorage(() => localStorage),
-    }
-  )
-);
+export const globalStore = create<GlobalStore>()((set, get) => {
+  return {
+    theme: styles.dark,
+    setState: set,
+  };
+});
 
 export const useGlobalStore = globalStore;

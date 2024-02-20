@@ -1,32 +1,27 @@
-import { PcContainer, AppContainer } from './modules/container';
+import { useEffect } from 'react';
 import styles from './theme/dark.module.scss';
+import { GlobalStoreState, useGlobalStore } from './store/global';
+import { Api, registerApiInstance } from './api';
 
-interface BBMusicAppOptions {
-  /** 主题 */
-  theme: string;
-  /** 缓存方式 */
+export interface BBMusicAppConfigProps extends GlobalStoreState {
+  /** api */
+  apiInstance: Api;
 }
 
-export class BBMusicApp {
-  constructor(public options: BBMusicAppOptions) {}
+export function BBMusicApp({
+  children,
+  theme = styles.dark,
+  apiInstance,
+}: React.PropsWithChildren<BBMusicAppConfigProps>) {
+  // 这个在 store 注册之前注册
+  registerApiInstance(apiInstance);
+  const globalStore = useGlobalStore();
 
-  createGlobalStore() {}
+  useEffect(() => {
+    console.log('BBMusicApp Start');
+    globalStore.setState({ theme });
+  }, [theme]);
 
-  createApp() {
-    return (
-      <AppContainer>
-        <PcContainer />
-      </AppContainer>
-    );
-  }
-}
-
-interface BBMusicAppConfigProps {
-  /** 主题 */
-  theme: string;
-  /** 缓存方式 */
-}
-
-export function BBMusicAppConfig({ children }: React.PropsWithChildren<BBMusicAppConfigProps>) {
+  if (!apiInstance) return null;
   return <>{children}</>;
 }

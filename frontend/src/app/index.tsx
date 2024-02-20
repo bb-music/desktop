@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import styles from './theme/dark.module.scss';
 import { GlobalStoreState, useGlobalStore } from './store/global';
 import { Api, registerApiInstance } from './api';
-import { registerPlayerStore } from './modules/player/store';
 
 export interface BBMusicAppConfigProps extends GlobalStoreState {
   /** api */
@@ -16,7 +15,6 @@ export function BBMusicApp({
 }: React.PropsWithChildren<BBMusicAppConfigProps>) {
   // 这个在 store 注册之前注册
   registerApiInstance(apiInstance);
-  registerPlayerStore();
   const globalStore = useGlobalStore();
 
   useEffect(() => {
@@ -24,5 +22,6 @@ export function BBMusicApp({
     globalStore.setState({ theme });
   }, [theme]);
 
+  if (!apiInstance) return null;
   return <>{children}</>;
 }

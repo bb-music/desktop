@@ -2,7 +2,7 @@
  * 歌单列表
  */
 import { MusicMenu, Plus, UpdateRotation } from '@icon-park/react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { api } from '@/app/api';
 import { Modal } from '@/app/components/ui/modal';
 import { FormItem } from '@/app/components/ui/form';
@@ -43,7 +43,6 @@ export function LocalMusicOrder() {
             onClick={() => {
               modalStore.openHandler(null, (value) => {
                 return api.userLocalMusicOrder.create(value).then((res) => {
-                  console.log('res: ', res);
                   store.load();
                 });
               });

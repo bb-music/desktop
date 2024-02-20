@@ -23,7 +23,7 @@ interface MenuItemDivider {
 
 type MenuItem = MenuItemLabel | MenuItemDivider;
 
-export interface ContextMenuProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ContextMenuProps extends React.ComponentProps<typeof RadixContextMenu.Trigger> {
   tag?: string;
   className?: string;
   style?: React.CSSProperties;

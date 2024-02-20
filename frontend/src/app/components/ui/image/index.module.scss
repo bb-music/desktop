@@ -1,7 +1,9 @@
 .img {
-  background-repeat: no-repeat;
-}
-.cover {
-  background-size: cover;
-  background-position: center center;
+  display: inline-flex;
+  overflow: hidden;
+  img {
+    display: block;
+    width: 100%;
+    display: block;
+  }
 }

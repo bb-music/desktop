@@ -66,6 +66,22 @@ export namespace app {
 	        this.download_dir = source["download_dir"];
 	    }
 	}
+	export class MusicItemExtraData {
+	    aid: number;
+	    bvid: string;
+	    cid: number;
+	
+	    static createFrom(source: any = {}) {
+	        return new MusicItemExtraData(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.aid = source["aid"];
+	        this.bvid = source["bvid"];
+	        this.cid = source["cid"];
+	    }
+	}
 	export class MusicItem {
 	    aid: number;
 	    bvid: string;
@@ -74,6 +90,7 @@ export namespace app {
 	    duration: number;
 	    id: string;
 	    origin: string;
+	    extraData: MusicItemExtraData;
 	
 	    static createFrom(source: any = {}) {
 	        return new MusicItem(source);
@@ -88,8 +105,28 @@ export namespace app {
 	        this.duration = source["duration"];
 	        this.id = source["id"];
 	        this.origin = source["origin"];
+	        this.extraData = this.convertValues(source["extraData"], MusicItemExtraData);
 	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
 	}
+	
 	export class MusicOrderItem {
 	    id: string;
 	    name: string;

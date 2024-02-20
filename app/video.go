@@ -39,13 +39,19 @@ type MusicOrderItem struct {
 }
 
 type MusicItem struct {
-	AID      int    `json:"aid"`
-	BVID     string `json:"bvid"`
-	CID      int    `json:"cid"`
-	Name     string `json:"name"`
-	Duration int    `json:"duration"`
-	ID       string `json:"id"`
-	Origin   string `json:"origin"`
+	AID       int                `json:"aid"`
+	BVID      string             `json:"bvid"`
+	CID       int                `json:"cid"`
+	Name      string             `json:"name"`
+	Duration  int                `json:"duration"`
+	ID        string             `json:"id"`
+	Origin    string             `json:"origin"`
+	ExtraData MusicItemExtraData `json:"extraData"`
+}
+type MusicItemExtraData struct {
+	Aid  int    `json:"aid"`
+	Bvid string `json:"bvid"`
+	Cid  int    `json:"cid"`
 }
 
 // 获取歌单源数据

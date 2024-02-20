@@ -27,16 +27,11 @@ export function Player() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    if (player.audio.addEventListener) {
-      player.audio.addEventListener('timeupdate', (e) => {
-        setProgress(player.audio.getCurrentTime());
-      });
-    }
-  }, [player.audio]);
-
-  useEffect(() => {
-    player.init();
-    player.audio.addEventListener('ended', () => {
+    if (!player.audio || !player.audio.addEventListener) return;
+    player.audio.addEventListener('timeupdate', (e) => {
+      setProgress(player.audio?.getCurrentTime() || 0);
+    });
+    player.audio?.addEventListener('ended', () => {
       player.endNext();
     });
     const handler = (e: MouseEvent) => {
@@ -46,7 +41,7 @@ export function Player() {
     return () => {
       document.removeEventListener('click', handler);
     };
-  }, []);
+  }, [player.audio]);
 
   return (
     <div className={styles.player}>

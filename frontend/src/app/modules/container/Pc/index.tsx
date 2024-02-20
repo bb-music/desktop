@@ -12,6 +12,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { useSettingStore } from '../../setting/store';
 import { Player } from '../../player';
 import { MessageRoot } from '@/app/components/ui/message';
+import { usePlayerStore } from '../../player/store';
 
 export interface PcContainerProps extends BaseElementProps {
   header?: React.ReactNode;
@@ -20,9 +21,11 @@ export interface PcContainerProps extends BaseElementProps {
 
 export function PcContainer({ className, style, header, player }: PcContainerProps) {
   const { theme } = useGlobalStore();
+  const playerStore = usePlayerStore();
   const settingLoad = useSettingStore(useShallow((state) => state.load));
 
   useEffect(() => {
+    playerStore.init();
     settingLoad();
   }, []);
   return (
@@ -36,7 +39,7 @@ export function PcContainer({ className, style, header, player }: PcContainerPro
         <Sidebar />
         <ContainerContent />
       </main>
-      {!player && <Player />}
+      {!player && playerStore.audio && <Player />}
     </div>
   );
 }

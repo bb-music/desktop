@@ -4,25 +4,21 @@ import styles from './index.module.scss';
 import { UIPrefix } from '@/app/consts';
 
 export interface ImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElement>, 'type'> {
-  mode?: 'cover';
+  mode?: React.CSSProperties['objectFit'];
 }
 
-export function Image({ className, style, mode, src, ...props }: ImageProps) {
-  if (mode) {
-    return (
-      <div
-        {...props}
-        className={cls(styles.img, `${UIPrefix}-img`, styles[mode], className)}
-        style={{ ...style, backgroundImage: `url(${src})` }}
-      />
-    );
-  }
+export function Image({ className, style, mode, src, alt, ...props }: ImageProps) {
   return (
-    <img
-      {...props}
-      src={src}
+    <div
       className={cls(styles.img, `${UIPrefix}-img`, className)}
       style={style}
-    />
+      {...props}
+    >
+      <img
+        style={{ objectFit: mode }}
+        src={src}
+        alt={alt}
+      />
+    </div>
   );
 }

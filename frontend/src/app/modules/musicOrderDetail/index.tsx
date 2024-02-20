@@ -15,21 +15,24 @@ import { useMusicOrderDetailStore } from './store';
 import { seconds2mmss } from '../player/utils';
 import { useUserLocalMusicOrderStore } from '../musicOrderList/store';
 import { api } from '@/app/api';
+import { ContextMenu } from '@/app/components/ui/contextMenu';
 
 export interface MusicOrderDetailProps {
   data?: MusicOrderItem;
 }
 
 export function MusicOrderDetail({}: MusicOrderDetailProps) {
-  const player = usePlayerStore(useShallow((s) => ({ addPlayerList: s.addPlayerList })));
+  const player = usePlayerStore();
   const musicOrder = useUserLocalMusicOrderStore();
   const data = useMusicOrderDetailStore(useShallow((state) => state.data));
+  console.log('DetailData: ', data);
   const [searchKeyword, setSearchKeyword] = useState('');
   return (
     <div className={styles.container}>
       <div className={styles.headerCard}>
         {data?.cover && (
           <Image
+            mode='cover'
             className={styles.cover}
             src={data.cover}
           />
@@ -107,22 +110,63 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
           <tbody>
             {data?.musicList?.map((m, index) => {
               return (
-                <tr
+                <ContextMenu
+                  asChild
                   key={m.id}
-                  style={{ display: m.name.includes(searchKeyword) ? '' : 'none' }}
+                  items={[
+                    {
+                      label: '播放',
+                      key: '播放',
+                      onClick: () => {
+                        player.play(m);
+                      },
+                    },
+                    {
+                      label: '添加到播放列表',
+                      key: '添加到播放列表',
+                      onClick: () => {
+                        player.addPlayerList(m);
+                      },
+                    },
+                    {
+                      label: '下一首播放',
+                      key: '下一首播放',
+                      onClick: () => {
+                        player.nextPlayer(m);
+                      },
+                    },
+                    {
+                      label: '下载',
+                      key: '下载',
+                    },
+                    {
+                      label: '收藏到歌单',
+                      key: '收藏到歌单',
+                    },
+                    {
+                      label: '从歌单中删除',
+                      key: '从歌单中删除',
+                    },
+                  ]}
                 >
-                  <td>{index + 1}</td>
-                  <td
-                    className={styles.name}
-                    title={m.name}
+                  <tr
+                    key={m.id}
+                    style={{ display: m.name.includes(searchKeyword) ? '' : 'none' }}
                   >
-                    {m.name}
-                  </td>
-                  <td>
-                    <Download title='下载' />
-                  </td>
-                  <td>{seconds2mmss(m.duration)}</td>
-                </tr>
+                    <td>{index + 1}</td>
+
+                    <td
+                      className={styles.name}
+                      title={m.name}
+                    >
+                      {m.name}
+                    </td>
+                    <td>
+                      <Download title='下载' />
+                    </td>
+                    <td>{seconds2mmss(m.duration)}</td>
+                  </tr>
+                </ContextMenu>
               );
             })}
           </tbody>

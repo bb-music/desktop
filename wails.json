@@ -1,7 +1,7 @@
 {
   "$schema": "https://wails.io/schemas/config.v2.json",
-  "name": "bb-music-desktop",
-  "outputfilename": "bb-music-desktop",
+  "name": "哔哔音乐",
+  "outputfilename": "哔哔音乐",
   "frontend:install": "pnpm install",
   "frontend:build": "npm run build",
   "frontend:dev:watcher": "npm run dev",

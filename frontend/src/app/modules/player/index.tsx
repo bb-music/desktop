@@ -239,7 +239,7 @@ function PlayerProgress({ progress }: { progress: number }) {
         const p = (e.clientX - left) / width;
         setWidth(p * 100);
         const duration = player.current?.duration || 0;
-        player.audio.setCurrentTime(duration * p);
+        player.audio?.setCurrentTime(duration * p);
       }}
       onMouseMove={(e) => {
         if (statusRef.current.mouseDown) {

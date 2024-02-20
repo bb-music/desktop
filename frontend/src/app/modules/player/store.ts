@@ -89,6 +89,7 @@ export const playerStore = create<PlayerStore>()((set, get) => {
         });
         const url = await api.music.getMusicPlayerUrl(m);
         store.audio?.setSrc(url);
+        store.audio?.setCurrentTime(0);
         store.audio?.play();
         store.addPlayerHistory();
       } else {

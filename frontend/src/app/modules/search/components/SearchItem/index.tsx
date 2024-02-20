@@ -7,6 +7,7 @@ import { Image } from '@/app/components/ui/image';
 import { usePlayerStore } from '@/app/modules/player/store';
 import { seconds2mmss } from '@/app/modules/player/utils';
 import { PageView, openPage } from '@/app/modules/container/store';
+import { Button } from '@/app/components/ui/button';
 
 export default function SearchItem({ data }: { data: SearchItemInter }) {
   const player = usePlayerStore();
@@ -60,15 +61,23 @@ export default function SearchItem({ data }: { data: SearchItemInter }) {
 
       {loading && <div className={styles.loading}>加载中...</div>}
       <div className={cls(styles.operate, show ? styles.show : '')}>
-        <span>立即播放</span>
-        <span
+        <Button
+          type='primary'
+          onClick={() => {
+            player.play(music!);
+          }}
+        >
+          立即播放
+        </Button>
+        <Button type='primary'>加入歌单</Button>
+        <Button
+          type='primary'
           onClick={() => {
             player.addPlayerList(music!);
           }}
         >
-          加入歌单
-        </span>
-        <span>添加至播放列表</span>
+          添加至播放列表
+        </Button>
       </div>
     </div>
   );

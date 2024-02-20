@@ -20,6 +20,7 @@ import { seconds2mmss } from './utils';
 import { Table } from '@/app/components/ui/table';
 import { useShallow } from 'zustand/react/shallow';
 import { api } from '@/app/api';
+import { ContextMenu } from '@/app/components/ui/contextMenu';
 
 const ProgressCacheKey = 'BBPlayerProgress';
 
@@ -180,23 +181,55 @@ function PlayerList({ open }: { open: boolean }) {
           <tbody>
             {player.playerList.map((item, index) => {
               return (
-                <tr
-                  onDoubleClick={() => {
-                    player.play(item);
-                  }}
+                <ContextMenu
+                  asChild
+                  items={[
+                    {
+                      label: '播放',
+                      key: '播放',
+                      onClick: () => {
+                        player.play(item);
+                      },
+                    },
+                    {
+                      label: '从列表中移除',
+                      key: '移除',
+                      onClick: () => {
+                        player.removePlayerList([item.id]);
+                      },
+                    },
+                    {
+                      label: '收藏到歌单',
+                      key: '收藏到歌单',
+                      onClick: () => {},
+                    },
+                    {
+                      label: '下载',
+                      key: '下载',
+                      onClick: () => {},
+                    },
+                  ]}
                   key={item.id}
                 >
-                  <td className={cls(styles.name, player.current?.id === item.id && styles.active)}>
-                    <div className={styles.icon}>
-                      <RightOne
-                        theme='filled'
-                        strokeWidth={2}
-                      />
-                    </div>
-                    <span className={styles.nameText}>{item.name}</span>
-                  </td>
-                  <td>{seconds2mmss(item.duration)}</td>
-                </tr>
+                  <tr
+                    onDoubleClick={() => {
+                      player.play(item);
+                    }}
+                  >
+                    <td
+                      className={cls(styles.name, player.current?.id === item.id && styles.active)}
+                    >
+                      <div className={styles.icon}>
+                        <RightOne
+                          theme='filled'
+                          strokeWidth={2}
+                        />
+                      </div>
+                      <span className={styles.nameText}>{item.name}</span>
+                    </td>
+                    <td>{seconds2mmss(item.duration)}</td>
+                  </tr>
+                </ContextMenu>
               );
             })}
           </tbody>

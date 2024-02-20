@@ -30,6 +30,7 @@ export function OpenMusicOrder() {
             <ContextMenu
               key={i.id + i.name}
               items={[]}
+              asChild
             >
               <MusicOrderItemComp data={i} />
             </ContextMenu>

@@ -43,9 +43,17 @@ export function ContextMenu({
   );
   return (
     <RadixContextMenu.Root>
-      <RadixContextMenu.Trigger {...props}>{children}</RadixContextMenu.Trigger>
+      <RadixContextMenu.Trigger
+        {...props}
+        style={{ ...props.style, zIndex: 9999 }}
+      >
+        {children}
+      </RadixContextMenu.Trigger>
       <RadixContextMenu.Portal>
-        <RadixContextMenu.Content className={cls(styles.menu, global.theme)}>
+        <RadixContextMenu.Content
+          className={cls(styles.menu, global.theme)}
+          style={{ zIndex: 9999 }}
+        >
           {items.map((item) => {
             return (
               <MenuItem

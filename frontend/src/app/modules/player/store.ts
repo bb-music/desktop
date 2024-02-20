@@ -56,18 +56,19 @@ export const playerStore = create<PlayerStore>()((set, get) => {
     playerMode: PlayerMode.ListLoop,
     playerHistory: [],
     init: async () => {
-      loadCache();
+      loadCache().then(async () => {
+        const store = get();
+        if (store.current) {
+          console.log('store.current: ', store.current);
+          const url = await api.music.getMusicPlayerUrl(store.current);
+          audio.setSrc(url);
+        }
+      });
       const audio = api.music.createAudio();
       set({
         audio,
         playerStatus: PlayerStatus.Stop,
       });
-      const store = get();
-
-      if (store.current) {
-        const url = await api.music.getMusicPlayerUrl(store.current);
-        audio.setSrc(url);
-      }
     },
     play: async (m) => {
       const store = get();
@@ -99,8 +100,6 @@ export const playerStore = create<PlayerStore>()((set, get) => {
           set({
             playerStatus: PlayerStatus.Play,
           });
-          const url = await api.music.getMusicPlayerUrl(store.current!);
-          store.audio?.setSrc(url);
           store.audio?.play();
           store.addPlayerHistory();
         }
@@ -277,7 +276,6 @@ async function loadCache() {
   try {
     const str = await api.cacheStorage.getItem(CACHE_KEY);
     const state = JSON.parse(str || '');
-    console.log('loadCache: ', state);
     playerStore.setState({
       playerList: state.playerList,
       playerMode: state.playerMode,

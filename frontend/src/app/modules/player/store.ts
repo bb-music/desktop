@@ -98,6 +98,8 @@ export const playerStore = create<PlayerStore>()((set, get) => {
           set({
             playerStatus: PlayerStatus.Play,
           });
+          const url = await api.music.getMusicPlayerUrl(store.current!);
+          store.audio?.setSrc(url);
           store.audio?.play();
           store.addPlayerHistory();
         }
@@ -185,7 +187,8 @@ export const playerStore = create<PlayerStore>()((set, get) => {
       const playerList = store.playerList.filter((p) => !ms.find((m) => m.id === p.id));
       const currentIndex = playerList.findIndex((p) => p.id === current?.id);
       if (currentIndex) {
-        playerList.splice(currentIndex + 1, 0);
+        console.log('currentIndex: ', currentIndex);
+        playerList.splice(currentIndex + 1, 0, m);
       }
       set({
         playerList,

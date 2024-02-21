@@ -16,6 +16,7 @@ import { seconds2mmss } from '../player/utils';
 import { musicCollect, useUserLocalMusicOrderStore } from '../musicOrderList';
 import { api } from '@/app/api';
 import { ContextMenu } from '@/app/components/ui/contextMenu';
+import { downloadMusic } from '@/app/utils';
 
 export interface MusicOrderDetailProps {
   data?: MusicOrderItem;
@@ -79,7 +80,7 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
             >
               追加到播放列表
             </Button>
-            <Button>下载全部</Button>
+            {/* <Button>下载全部</Button> */}
           </div>
         </div>
       </div>
@@ -138,6 +139,9 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
                     {
                       label: '下载',
                       key: '下载',
+                      onClick: () => {
+                        downloadMusic(m);
+                      },
                     },
                     {
                       label: '收藏到歌单',

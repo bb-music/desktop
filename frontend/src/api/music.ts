@@ -101,7 +101,7 @@ export class MusicInstance implements Music {
     const port = config.video_proxy_port;
     const uid = createMusicId({ aid, bvid, cid });
     const baseUrl = `http://localhost:${port}`;
-    await axios.get(`${baseUrl}/setcookie`, {
+    await axios.get(`${baseUrl}/setauth`, {
       params: {
         uuid_v3: setting?.spiData.uuid_v3,
         uuid_v4: setting?.spiData.uuid_v4,
@@ -117,13 +117,12 @@ export class MusicInstance implements Music {
     const dir = config?.downloadDir;
 
     if (!dir) {
-      // TODO 提示，要去设置下载目录
-      return;
+      return Promise.reject(new Error('请先设置下载目录'));
     }
 
     const auth = await getAuth();
 
-    DownloadMusic(
+    return DownloadMusic(
       {
         aid: music.extraData.aid + '',
         cid: music.extraData.cid + '',
@@ -132,9 +131,7 @@ export class MusicInstance implements Music {
         name: music.name,
       },
       auth
-    ).then((res) => {
-      console.log(res);
-    });
+    );
   };
   createAudio() {
     return new PlayerAudio();

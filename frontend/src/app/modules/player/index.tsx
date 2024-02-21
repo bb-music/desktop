@@ -22,6 +22,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { api } from '@/app/api';
 import { ContextMenu } from '@/app/components/ui/contextMenu';
 import { musicCollect } from '../musicOrderList';
+import { downloadMusic } from '@/app/utils';
 
 const ProgressCacheKey = 'BBPlayerProgress';
 
@@ -216,7 +217,9 @@ function PlayerList({ open }: { open: boolean }) {
                     {
                       label: '下载',
                       key: '下载',
-                      onClick: () => {},
+                      onClick: () => {
+                        downloadMusic(item);
+                      },
                     },
                   ]}
                   key={item.id}

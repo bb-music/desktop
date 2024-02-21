@@ -81,8 +81,8 @@ func ProxyServer(port int) {
 		}
 	})
 
-	// 设置 cookie
-	http.HandleFunc("/setcookie", func(w http.ResponseWriter, r *http.Request) {
+	// 设置验证信息
+	http.HandleFunc("/setauth", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "POST")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")

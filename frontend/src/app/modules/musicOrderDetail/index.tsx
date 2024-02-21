@@ -71,6 +71,13 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
             <Button
               type='primary'
               title='替换当前播放列表'
+              onClick={() => {
+                if (data?.musicList) {
+                  player.clearPlayerList();
+                  player.addPlayerList(data.musicList);
+                  player.play(data.musicList[0]);
+                }
+              }}
             >
               播放全部
             </Button>

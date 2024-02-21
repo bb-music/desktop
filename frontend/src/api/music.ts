@@ -109,7 +109,7 @@ export class MusicInstance implements Music {
         sub_key: setting?.signData.subKey,
       },
     });
-    const url = `${baseUrl}/videofile/${uid}?${q.toString()}`;
+    const url = `${baseUrl}/video/proxy/${music.origin}/${uid}.music?${q.toString()}`;
     return url;
   };
   download = async (music: MusicItem) => {

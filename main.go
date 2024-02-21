@@ -35,8 +35,8 @@ func main() {
 			WebviewIsTransparent: true,
 		},
 		AssetServer: &assetserver.Options{
-			Assets: assets,
-			// Handler: app.NewFileLoader(a),
+			Assets:  assets,
+			Handler: app.NewFileLoader(),
 			// Middleware: app.NewMiddleware(a),
 		},
 		BackgroundColour: &options.RGBA{R: 251, G: 251, B: 251, A: 1},

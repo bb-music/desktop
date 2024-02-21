@@ -19,7 +19,7 @@ var auth = AuthInfo{}
 
 func ProxyServer(port int) {
 	// 视频代理服务
-	http.HandleFunc("/videofile/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/video/proxy/", func(w http.ResponseWriter, r *http.Request) {
 		query := r.URL.Query()
 		aid := query.Get("aid")
 		bvid := query.Get("bvid")

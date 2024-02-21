@@ -74,24 +74,26 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
             >
               播放全部
             </Button>
-            <Button
-              onClick={() => {
-                if (!data) return;
-                api.userLocalMusicOrder
-                  .create({
-                    name: data.name,
-                    cover: data.cover,
-                    desc: data.desc,
-                    musicList: data.musicList,
-                    extraData: data.extraData,
-                  })
-                  .then(() => {
-                    musicOrder.load();
-                  });
-              }}
-            >
-              收藏歌单
-            </Button>
+            {!store.canEditMusic && (
+              <Button
+                onClick={() => {
+                  if (!data) return;
+                  api.userLocalMusicOrder
+                    .create({
+                      name: data.name,
+                      cover: data.cover,
+                      desc: data.desc,
+                      musicList: data.musicList,
+                      extraData: data.extraData,
+                    })
+                    .then(() => {
+                      musicOrder.load();
+                    });
+                }}
+              >
+                收藏歌单
+              </Button>
+            )}
             <Button
               onClick={() => {
                 player.addPlayerList(data?.musicList || []);

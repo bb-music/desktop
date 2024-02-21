@@ -18,10 +18,6 @@ import {
 } from '../musicOrderList';
 import { api } from '@/app/api';
 import { ContextMenu } from '@/app/components/ui/contextMenu';
-import { Modal } from '@/app/components/ui/modal';
-import { FormItem } from '@/app/components/ui/form';
-import { useSettingStore } from '../setting/store';
-import { message } from '@/app/components/ui/message';
 import { deleteMusic, downloadMusic } from '../music';
 import { updateMusicInfo } from '../music/store';
 
@@ -226,8 +222,14 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
                     >
                       {m.name}
                     </td>
-                    <td>
-                      <Download title='下载' />
+                    <td
+                      style={{ cursor: 'pointer' }}
+                      title='下载'
+                      onClick={() => {
+                        downloadMusic(m);
+                      }}
+                    >
+                      <Download />
                     </td>
                     <td>{seconds2mmss(m.duration)}</td>
                   </tr>

@@ -61,9 +61,9 @@ func (a *App) GetJsonOrigin(originUrl string) ([]MusicOrderItem, error) {
 		return []MusicOrderItem{}, err
 	}
 	defer resp.Body.Close()
-	fmt.Println("===============================")
-	fmt.Printf("resp%v\n", resp)
-	fmt.Println("===============================")
+	// fmt.Println("===============================")
+	// fmt.Printf("resp%v\n", resp)
+	// fmt.Println("===============================")
 
 	if resp.StatusCode != 200 {
 		return []MusicOrderItem{}, err
@@ -76,7 +76,7 @@ func (a *App) GetJsonOrigin(originUrl string) ([]MusicOrderItem, error) {
 			return []MusicOrderItem{}, err
 
 		}
-		fmt.Printf("resp%v\n", result)
+		// fmt.Printf("resp%v\n", result)
 
 		return result, nil
 	}

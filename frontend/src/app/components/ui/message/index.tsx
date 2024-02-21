@@ -29,6 +29,9 @@ export function MessageRoot() {
       loading: (message) => {
         open(message, { duration: 60 * 1000 * 10 });
       },
+      error: (message) => {
+        open(message, {});
+      },
     };
   }, []);
   return (
@@ -69,7 +72,7 @@ export function MessageItem({ open, message, onClose, duration = 3000 }: Message
 
 interface MessageInstance {
   success: (message: React.ReactNode) => void;
-  // error: (message: React.ReactNode) => void;
+  error: (message: React.ReactNode) => void;
   // info: (message: React.ReactNode) => void;
   // warning: (message: React.ReactNode) => void;
   loading: (message: React.ReactNode) => void;

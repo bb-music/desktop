@@ -3,6 +3,7 @@ import { getAuth, settingCache } from './setting';
 import { DownloadMusic } from '@wails/go/app/App';
 import { AudioInstance, Music, MusicItem, MusicOrderItem } from '@/app/api/music';
 import { createMusicId, transformImgUrl } from '@/utils';
+import axios from 'axios';
 
 class PlayerAudio implements AudioInstance {
   ctx = new Audio();
@@ -91,14 +92,24 @@ export class MusicInstance implements Music {
     q.set('aid', aid);
     q.set('bvid', bvid);
     q.set('cid', cid);
-    q.set('uuid_v3', setting?.spiData.uuid_v3!);
-    q.set('uuid_v4', setting?.spiData.uuid_v4!);
-    q.set('img_key', setting?.signData.imgKey!);
-    q.set('sub_key', setting?.signData.subKey!);
+    // q.set('uuid_v3', setting?.spiData.uuid_v3!);
+    // q.set('uuid_v4', setting?.spiData.uuid_v4!);
+    // q.set('img_key', setting?.signData.imgKey!);
+    // q.set('sub_key', setting?.signData.subKey!);
     // q.set('name', music.name);
     const config = await GetConfig();
     const port = config.video_proxy_port;
-    const url = `http://localhost:${port}/videofile/${music.name}?${q.toString()}`;
+    const uid = createMusicId({ aid, bvid, cid });
+    const baseUrl = `http://localhost:${port}`;
+    await axios.get(`${baseUrl}/setauth`, {
+      params: {
+        uuid_v3: setting?.spiData.uuid_v3,
+        uuid_v4: setting?.spiData.uuid_v4,
+        img_key: setting?.signData.imgKey,
+        sub_key: setting?.signData.subKey,
+      },
+    });
+    const url = `${baseUrl}/video/proxy/${music.origin}/${uid}.music?${q.toString()}`;
     return url;
   };
   download = async (music: MusicItem) => {
@@ -106,13 +117,12 @@ export class MusicInstance implements Music {
     const dir = config?.downloadDir;
 
     if (!dir) {
-      // TODO 提示，要去设置下载目录
-      return;
+      return Promise.reject(new Error('请先设置下载目录'));
     }
 
     const auth = await getAuth();
 
-    DownloadMusic(
+    return DownloadMusic(
       {
         aid: music.extraData.aid + '',
         cid: music.extraData.cid + '',
@@ -121,9 +131,7 @@ export class MusicInstance implements Music {
         name: music.name,
       },
       auth
-    ).then((res) => {
-      console.log(res);
-    });
+    );
   };
   createAudio() {
     return new PlayerAudio();

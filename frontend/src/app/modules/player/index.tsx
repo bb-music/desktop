@@ -21,6 +21,8 @@ import { Table } from '@/app/components/ui/table';
 import { useShallow } from 'zustand/react/shallow';
 import { api } from '@/app/api';
 import { ContextMenu } from '@/app/components/ui/contextMenu';
+import { musicCollect } from '../musicOrderList';
+import { downloadMusic } from '../music';
 
 const ProgressCacheKey = 'BBPlayerProgress';
 
@@ -157,7 +159,14 @@ function PlayerList({ open }: { open: boolean }) {
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span className={styles.total}>总{player.playerList.length}首</span>
           <div style={{ display: 'flex', gap: '16px' }}>
-            <span className={styles.operateBtn}>收藏全部</span>
+            <span
+              className={styles.operateBtn}
+              onClick={() => {
+                musicCollect(player.playerList);
+              }}
+            >
+              收藏全部
+            </span>
             <span
               className={styles.clear}
               onClick={() => {
@@ -201,12 +210,16 @@ function PlayerList({ open }: { open: boolean }) {
                     {
                       label: '收藏到歌单',
                       key: '收藏到歌单',
-                      onClick: () => {},
+                      onClick: () => {
+                        musicCollect(item);
+                      },
                     },
                     {
                       label: '下载',
                       key: '下载',
-                      onClick: () => {},
+                      onClick: () => {
+                        downloadMusic(item);
+                      },
                     },
                   ]}
                   key={item.id}

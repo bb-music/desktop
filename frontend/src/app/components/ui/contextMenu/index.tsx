@@ -74,6 +74,7 @@ export function MenuItem({ item }: { item: MenuItem }) {
       theme: s.theme,
     }))
   );
+  if (item.hide) return null;
   if (item.type === 'divider') {
     return (
       <RadixContextMenu.Separator

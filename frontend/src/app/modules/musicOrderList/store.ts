@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { api } from '@/app/api';
-import { MusicOrderItem } from '@/app/api/music';
+import { MusicItem, MusicOrderItem } from '@/app/api/music';
 import { settingStore } from '../setting/store';
 
 interface UserLocalMusicOrderState {
@@ -140,3 +140,41 @@ export const musicOrderFormModalStore = create<MusicOrderFormModalStore>()((set,
 });
 
 export const useMusicOrderFormModalStore = musicOrderFormModalStore;
+
+// 收藏到歌单
+interface MusicOrderCollectModalState {
+  open: boolean;
+  musicList: MusicItem[];
+}
+interface MusicOrderCollectModalHandler {
+  show: (v: MusicItem[] | MusicItem) => void;
+  close: () => void;
+}
+
+type MusicOrderCollectModalStore = MusicOrderCollectModalState & MusicOrderCollectModalHandler;
+
+export const musicOrderCollectModalStore = create<MusicOrderCollectModalStore>()((set, get) => {
+  return {
+    open: false,
+    musicList: [],
+    show: (m) => {
+      set({
+        open: true,
+        musicList: Array.isArray(m) ? m : [m],
+      });
+    },
+    close: () => {
+      set({
+        open: false,
+        musicList: [],
+      });
+    },
+  };
+});
+
+export const useMusicOrderCollectModalStore = musicOrderCollectModalStore;
+
+// 收藏歌曲
+export function musicCollect(m: MusicItem[] | MusicItem) {
+  return musicOrderCollectModalStore.getState().show(m);
+}

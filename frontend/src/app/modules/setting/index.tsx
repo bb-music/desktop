@@ -75,9 +75,11 @@ export function MainSetting() {
               onClick={() => {
                 console.log(api);
                 api.setting.selectDownloadDir?.().then((res) => {
-                  api.setting.updateDownloadDir?.(res).then(() => {
-                    store.load();
-                  });
+                  if (res) {
+                    api.setting.updateDownloadDir?.(res).then(() => {
+                      store.load();
+                    });
+                  }
                 });
               }}
             >

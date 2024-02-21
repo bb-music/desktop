@@ -3,28 +3,28 @@ name: Wails build
 on:
   push:
     tags:
-    # Match any new tag
+      # Match any new tag
       - '*'
 
 env:
   # Necessary for most environments as build failure can occur due to OOM issues
-  NODE_OPTIONS: "--max-old-space-size=4096"
+  NODE_OPTIONS: '--max-old-space-size=4096'
 
 jobs:
   build:
     strategy:
-    # Failure in one platform build won't impact the others
+      # Failure in one platform build won't impact the others
       fail-fast: false
       matrix:
         build:
           - name: 'App'
-            platform:  'linux/amd64'
+            platform: 'linux/amd64'
             os: 'ubuntu-latest'
           - name: 'App'
-            platform:  'windows/amd64'
+            platform: 'windows/amd64'
             os: 'windows-latest'
           - name: 'App'
-            platform:  'darwin/universal'
+            platform: 'darwin/universal'
             os: 'macos-latest'
 
     runs-on: ${{ matrix.build.os }}
@@ -37,7 +37,6 @@ jobs:
       - uses: pnpm/action-setup@v3
         with:
           version: 8
-          cache: 'pnpm'
 
       - name: Build wails
         uses: dAppServer/wails-build-action@v2.2
@@ -47,3 +46,10 @@ jobs:
           build-platform: ${{ matrix.build.platform }}
           package: false
           go-version: '1.20'
+
+      - name: Upload artifact
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: 'build/bin/*'
+          bodyFile: 'body.md'
+          token: ${{ secrets.GITHUB_TOKEN }}

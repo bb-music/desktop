@@ -6,3 +6,4 @@ frontend/dist
 /download_temp
 
 /config/*
+.bb_music

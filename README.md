@@ -25,9 +25,15 @@
 
 ## 技术栈
 
-1. Next.js 作为全栈脚手架
-2. React
-3. zustand 状态管理
+1. React
+2. zustand 状态管理
+3. wails
+
+## dmg 打包
+
+```sh
+create-dmg --volname 哔哔音乐 --window-size 400 200 --icon-size 100 --icon 哔哔音乐 30 70 --app-drop-link 200 70  build/bin/哔哔音乐.dmg build/bin/哔哔音乐.app
+```
 
 ## 鸣谢致敬
 

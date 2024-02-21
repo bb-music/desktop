@@ -7,27 +7,50 @@ import { Button } from '@/app/components/ui/button';
 import { Input } from '@/app/components/ui/input';
 import { Download, Search } from '@icon-park/react';
 import { Table } from '@/app/components/ui/table';
-import { MusicOrderItem } from '@/app/api/music';
 import { useState } from 'react';
 import { usePlayerStore } from '../player/store';
-import { useShallow } from 'zustand/react/shallow';
-import { useMusicOrderDetailStore } from './store';
+import { MusicOrderDetailStoreState, useMusicOrderDetailStore } from './store';
 import { seconds2mmss } from '../player/utils';
-import { musicCollect, useUserLocalMusicOrderStore } from '../musicOrderList';
+import {
+  musicCollect,
+  useUserLocalMusicOrderStore,
+  useUserRemoteMusicOrderStore,
+} from '../musicOrderList';
 import { api } from '@/app/api';
 import { ContextMenu } from '@/app/components/ui/contextMenu';
-import { downloadMusic } from '@/app/utils';
+import { Modal } from '@/app/components/ui/modal';
+import { FormItem } from '@/app/components/ui/form';
+import { useSettingStore } from '../setting/store';
+import { message } from '@/app/components/ui/message';
+import { deleteMusic, downloadMusic } from '../music';
+import { updateMusicInfo } from '../music/store';
 
-export interface MusicOrderDetailProps {
-  data?: MusicOrderItem;
-}
+export type MusicOrderDetailProps = Partial<MusicOrderDetailStoreState>;
 
 export function MusicOrderDetail({}: MusicOrderDetailProps) {
   const player = usePlayerStore();
   const musicOrder = useUserLocalMusicOrderStore();
-  const data = useMusicOrderDetailStore(useShallow((state) => state.data));
-  console.log('DetailData: ', data);
+  const store = useMusicOrderDetailStore();
+  const localStore = useUserLocalMusicOrderStore();
+  const remoteStore = useUserRemoteMusicOrderStore();
+  let data = store.data;
+  if (store.canEditMusic) {
+    if (!store.remoteName) {
+      const r = localStore.list.find((l) => l.id === store.data?.id);
+      if (r) {
+        data = r;
+      }
+    } else {
+      const r = remoteStore.list
+        .find((l) => l.name === store.remoteName)
+        ?.list.find((l) => l.id === store.data?.id);
+      if (r) {
+        data = r;
+      }
+    }
+  }
   const [searchKeyword, setSearchKeyword] = useState('');
+  if (!data) return null;
   return (
     <div className={styles.container}>
       <div className={styles.headerCard}>
@@ -137,11 +160,34 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
                       },
                     },
                     {
+                      type: 'divider',
+                      key: '1',
+                    },
+                    {
                       label: '下载',
                       key: '下载',
                       onClick: () => {
                         downloadMusic(m);
                       },
+                    },
+                    {
+                      type: 'divider',
+                      key: '2',
+                      hide: !store.canEditMusic,
+                    },
+                    {
+                      label: '修改',
+                      key: '修改',
+                      hide: !store.canEditMusic,
+                      onClick: () => {
+                        if (data) {
+                          updateMusicInfo(m, data.id, store.remoteName);
+                        }
+                      },
+                    },
+                    {
+                      type: 'divider',
+                      key: '3',
                     },
                     {
                       label: '收藏到歌单',
@@ -153,12 +199,24 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
                     {
                       label: '从歌单中删除',
                       key: '从歌单中删除',
+                      onClick: () => {
+                        const musicOrderId = data?.id;
+                        if (!musicOrderId) return null;
+                        deleteMusic({
+                          musicOrderId,
+                          music: m,
+                          remoteName: store.remoteName,
+                        });
+                      },
                     },
                   ]}
                 >
                   <tr
                     key={m.id}
                     style={{ display: m.name.includes(searchKeyword) ? '' : 'none' }}
+                    onDoubleClick={() => {
+                      player.play(m);
+                    }}
                   >
                     <td>{index + 1}</td>
 

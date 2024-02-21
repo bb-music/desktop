@@ -9,7 +9,7 @@ import { seconds2mmss } from '@/app/modules/player/utils';
 import { PageView, openPage } from '@/app/modules/container/store';
 import { Button } from '@/app/components/ui/button';
 import { musicCollect } from '@/app/modules/musicOrderList';
-import { downloadMusic } from '@/app/utils';
+import { downloadMusic } from '@/app/modules/music';
 
 export default function SearchItem({ data }: { data: SearchItemInter }) {
   const player = usePlayerStore();

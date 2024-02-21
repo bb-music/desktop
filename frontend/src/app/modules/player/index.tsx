@@ -22,7 +22,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { api } from '@/app/api';
 import { ContextMenu } from '@/app/components/ui/contextMenu';
 import { musicCollect } from '../musicOrderList';
-import { downloadMusic } from '@/app/utils';
+import { downloadMusic } from '../music';
 
 const ProgressCacheKey = 'BBPlayerProgress';
 

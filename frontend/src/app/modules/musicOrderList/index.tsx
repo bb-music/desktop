@@ -279,7 +279,7 @@ export function MusicOrderList({
             className='item'
             key={item.id}
             onClick={() => {
-              openPage(PageView.MusicOrderDetail, { data: item });
+              openPage(PageView.MusicOrderDetail, { data: item, canEditMusic: true, remoteName });
             }}
           >
             <MusicMenu

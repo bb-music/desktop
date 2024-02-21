@@ -1,8 +1,10 @@
 import { create } from 'zustand';
-import { MusicOrderItem } from '@/app/api/music';
+import { MusicItem, MusicOrderItem } from '@/app/api/music';
 
-interface MusicOrderDetailStoreState {
+export interface MusicOrderDetailStoreState {
   data?: MusicOrderItem;
+  remoteName?: string;
+  canEditMusic?: boolean;
 }
 interface MusicOrderDetailStoreHandler {
   setData: (data: MusicOrderItem) => void;
@@ -12,6 +14,7 @@ type MusicOrderDetailStore = MusicOrderDetailStoreState & MusicOrderDetailStoreH
 
 export const musicOrderDetailStore = create<MusicOrderDetailStore>()((set, get) => {
   return {
+    canEditMusic: false,
     setData: (data) => {
       set({ data });
     },

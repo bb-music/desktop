@@ -233,17 +233,42 @@ export function MusicOrderList({
                     label: r.name,
                     key: r.name,
                     onClick: () => {
+                      message.success('同步中');
                       // 看远端有没有这个歌单，只匹配歌单名称，宁多勿少
                       const remote = userRemoteMusicOrderStore.list.find((l) => l.name === r.name);
                       const { config } =
                         setting.userMusicOrderOrigin.find((u) => u.name === r.name) || {};
                       const server = api.userRemoteMusicOrder.find((r) => r.name === r.name);
                       if (!remote || !config || !server) return;
-                      // 没有则创建
-                      if (!remote.list.find((l) => l.name === item.name)) {
-                        server.action.create(item, config).then(() => {
-                          userRemoteMusicOrderStore.load();
+
+                      const remoteCurrent = remote.list.find((l) => l.name === item.name);
+                      if (!remoteCurrent) {
+                        // 没有则创建
+                        server.action
+                          .create(item, config)
+                          .then(() => {
+                            message.success('同步成功');
+                            userRemoteMusicOrderStore.load();
+                          })
+                          .finally(() => {
+                            message.error('同步失败');
+                          });
+                      } else {
+                        // 有则合并（不会删除）
+                        const ms = item.musicList?.filter((m) => {
+                          return !remoteCurrent.musicList?.find((r) => r.name === m.name);
                         });
+                        if (ms?.length) {
+                          server.action
+                            .appendMusic(remoteCurrent.id, ms, config)
+                            .then(() => {
+                              message.success('同步成功');
+                              userRemoteMusicOrderStore.load();
+                            })
+                            .finally(() => {
+                              message.error('同步失败');
+                            });
+                        }
                       }
                     },
                   };

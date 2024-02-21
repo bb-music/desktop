@@ -142,6 +142,16 @@ export const playerStore = create<PlayerStore>()((set, get) => {
       const store = get();
       const current = store.current;
       if (!current) return;
+      // 单曲循环
+      function signalLoop() {
+        store.audio?.setCurrentTime(0);
+        store.pause();
+        store.play(current);
+      }
+      if (store.playerMode === PlayerMode.SignalLoop) {
+        signalLoop();
+        return;
+      }
       // 随机播放
       if (store.playerMode === PlayerMode.Random) {
         const list = store.playerList.filter((p) => !store.playerHistory.includes(p.id + ''));
@@ -159,22 +169,24 @@ export const playerStore = create<PlayerStore>()((set, get) => {
           store.play(list[n]);
         }
       }
-      // 单曲循环
-      if (store.playerMode === PlayerMode.SignalLoop) {
-        store.audio?.setCurrentTime(0);
-        store.pause();
-        store.play(current);
+
+      const index = store.playerList?.findIndex((p) => p.id === store.current?.id);
+
+      // 列表顺序播放
+      if (store.playerMode === PlayerMode.ListOrder) {
+        if (index !== store.playerList.length - 1) {
+          store.play(store.playerList[index + 1]);
+        }
+        // 列表顺序结尾停止
       }
-      // 列表循环 / 列表结尾停止
-      if (store.playerMode === PlayerMode.ListLoop || store.playerMode === PlayerMode.ListOrder) {
-        const index = store.playerList?.findIndex((p) => p.id === store.current?.id);
-        if (index === store.playerList.length - 1) {
-          if (store.playerMode === PlayerMode.ListOrder) {
-            // 列表顺序结尾停止
-            return;
-          } else {
-            store.play(store.playerList[0]);
-          }
+
+      // 列表循环
+      if (store.playerMode === PlayerMode.ListLoop) {
+        if (store.playerList.length === 1) {
+          // 只有一个时就是单曲循环
+          signalLoop();
+        } else if (index === store.playerList.length - 1) {
+          store.play(store.playerList[0]);
         } else {
           store.play(store.playerList[index + 1]);
         }

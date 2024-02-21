@@ -1,7 +1,10 @@
 name: Wails build
 
 on:
-  workflow_dispatch:
+  push:
+    tags:
+    # Match any new tag
+      - '*'
 
 env:
   # Necessary for most environments as build failure can occur due to OOM issues

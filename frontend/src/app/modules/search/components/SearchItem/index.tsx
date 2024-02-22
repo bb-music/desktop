@@ -62,7 +62,12 @@ export default function SearchItem({ data }: { data: SearchItemInter }) {
       </div>
 
       {loading && <div className={styles.loading}>加载中...</div>}
-      <div className={cls(styles.operate, show ? styles.show : '')}>
+      <div
+        className={cls(styles.operate, show ? styles.show : '')}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
         <Button
           type='primary'
           onClick={() => {

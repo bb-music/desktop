@@ -10,6 +10,11 @@ interface SearchStoreState {
   data: SearchItem[];
   loading: boolean;
   history: string[];
+  pagination?: {
+    total: number;
+    pageSize: number;
+    current: number;
+  };
 }
 interface SearchStoreHandler {
   setParams: (params: Partial<SearchParams>) => void;
@@ -17,6 +22,8 @@ interface SearchStoreHandler {
   loadHistoryList: () => Promise<void>;
   deleteHistory: (keyword: string) => Promise<void>;
   clearHistory: () => Promise<void>;
+  next: () => Promise<void>;
+  prev: () => Promise<void>;
 }
 
 type SearchStore = SearchStoreState & SearchStoreHandler;
@@ -42,12 +49,18 @@ export const searchStore = create<SearchStore>()((set, get) => {
       });
       try {
         const res = await api.search.getList(params);
+        console.log('res: ', res);
         appendHistory(params.keyword).then(() => {
           loadHistoryList();
         });
         set({
           data: res.list,
           loading: false,
+          pagination: {
+            current: res.current,
+            total: res.total,
+            pageSize: res.pageSize,
+          },
         });
       } catch (e) {
         console.log('e: ', e);
@@ -77,6 +90,24 @@ export const searchStore = create<SearchStore>()((set, get) => {
     clearHistory: async () => {
       await searchHistoryCache.set([]);
       loadHistoryList();
+    },
+    prev: async () => {
+      const store = get();
+      if (!store.pagination) return;
+      const { current } = store.pagination;
+      if (current && current > 1) {
+        set({ params: { ...store.params, current: current - 1 } });
+        await store.load();
+      }
+    },
+    next: async () => {
+      const store = get();
+      if (!store.pagination) return;
+      const { current, total, pageSize } = store.pagination;
+      if (current && current < total / pageSize) {
+        set({ params: { ...store.params, current: current + 1 } });
+        await store.load();
+      }
     },
   };
 });

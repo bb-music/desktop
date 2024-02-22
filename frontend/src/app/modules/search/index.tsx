@@ -20,6 +20,24 @@ export function Search() {
             />
           );
         })}
+        {store.pagination && (
+          <div className={styles.pagination}>
+            <span
+              onClick={() => {
+                store.prev();
+              }}
+            >
+              上一页
+            </span>
+            <span
+              onClick={() => {
+                store.next();
+              }}
+            >
+              下一页
+            </span>
+          </div>
+        )}
       </div>
     </>
   );

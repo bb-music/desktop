@@ -16,10 +16,12 @@ export class SearchInstance implements BBSearch {
       },
       auth
     );
+    console.log('rrrrres: ', res);
+
     return {
       current: page,
       total: res.numResults,
-      pageSize: res.numPages,
+      pageSize: res.pagesize,
       list: res.result
         .filter((r) => !['ketang'].includes(r.type))
         .map((item) => ({

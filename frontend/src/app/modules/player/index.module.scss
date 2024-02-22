@@ -62,6 +62,7 @@
   align-items: center;
   gap: 14px;
   flex: 0 0 300px;
+  line-height: 1;
   .cover {
     width: 40px;
     height: 40px;
@@ -75,10 +76,11 @@
     color: var(--font-light-color);
   }
   .name {
-    width: 120px;
+    width: 180px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    margin-bottom: 8px;
   }
 }
 .playerOperate {

@@ -69,6 +69,7 @@ export function Player() {
         <Image
           src={api.utils.imgUrlTransform(player.current?.cover || '')}
           className={styles.cover}
+          mode='cover'
         />
         <div>
           <div className={styles.name}>{player.current?.name}</div>

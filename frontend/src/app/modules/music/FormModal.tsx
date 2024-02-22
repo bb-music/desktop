@@ -5,7 +5,7 @@ import { useUserLocalMusicOrderStore, useUserRemoteMusicOrderStore } from '../mu
 import { api } from '@/app/api';
 import { Modal } from '@/app/components/ui/modal';
 import { FormItem } from '@/app/components/ui/form';
-import { useSettingStore } from '../setting/store';
+import { useSettingStore } from '../setting';
 import { message } from '@/app/components/ui/message';
 
 export function MusicFormModal() {

@@ -4,12 +4,12 @@ import { useState } from 'react';
 import { api } from '@/app/api';
 import { SearchItem as SearchItemInter, SearchType } from '@/app/api/search';
 import { Image } from '@/app/components/ui/image';
-import { usePlayerStore } from '@/app/modules/player/store';
-import { seconds2mmss } from '@/app/modules/player/utils';
+import { usePlayerStore } from '../../../player';
 import { PageView, openPage } from '@/app/modules/container/store';
 import { Button } from '@/app/components/ui/button';
 import { musicCollect } from '@/app/modules/musicOrderList';
 import { downloadMusic } from '@/app/modules/music';
+import { seconds2mmss } from '@/app/utils';
 
 export default function SearchItem({ data }: { data: SearchItemInter }) {
   const player = usePlayerStore();

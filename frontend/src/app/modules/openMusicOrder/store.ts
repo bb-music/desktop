@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { api } from '@/app/api';
 import { MusicOrderItem } from '@/app/api/music';
-import { settingStore } from '../setting/store';
+import { settingStore } from '../setting';
 
 interface OpenMusicOrderStoreState {
   list: MusicOrderItem[];

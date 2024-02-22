@@ -8,9 +8,8 @@ import { Input } from '@/app/components/ui/input';
 import { Download, Search } from '@icon-park/react';
 import { Table } from '@/app/components/ui/table';
 import { useState } from 'react';
-import { usePlayerStore } from '../player/store';
+import { usePlayerStore } from '../player';
 import { MusicOrderDetailStoreState, useMusicOrderDetailStore } from './store';
-import { seconds2mmss } from '../player/utils';
 import {
   musicCollect,
   useUserLocalMusicOrderStore,
@@ -19,7 +18,10 @@ import {
 import { api } from '@/app/api';
 import { ContextMenu } from '@/app/components/ui/contextMenu';
 import { deleteMusic, downloadMusic } from '../music';
-import { updateMusicInfo } from '../music/store';
+import { updateMusicInfo } from '../music';
+import { seconds2mmss } from '@/app/utils';
+
+export * from './store';
 
 export type MusicOrderDetailProps = Partial<MusicOrderDetailStoreState>;
 

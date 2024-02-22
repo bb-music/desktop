@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { MusicItem, MusicOrderItem } from '@/app/api/music';
+import { MusicOrderItem } from '@/app/api/music';
 
 export interface MusicOrderDetailStoreState {
   data?: MusicOrderItem;

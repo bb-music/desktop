@@ -5,10 +5,12 @@ import { Help, Plus } from '@icon-park/react';
 import styles from './index.module.scss';
 import { Input } from '@/app/components/ui/input';
 import { Button } from '@/app/components/ui/button';
-import { ReactNode, createRef, useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useSettingStore } from './store';
 import { api } from '@/app/api';
 import { Modal } from '@/app/components/ui/modal';
+
+export * from './store';
 
 export interface SettingProps {}
 

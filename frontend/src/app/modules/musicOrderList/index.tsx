@@ -1,7 +1,7 @@
 /**
  * 歌单列表
  */
-import { MusicMenu, Plus, UpdateRotation } from '@icon-park/react';
+import { MusicMenu, Plus } from '@icon-park/react';
 import { useEffect } from 'react';
 import { api } from '@/app/api';
 import { Modal } from '@/app/components/ui/modal';
@@ -15,10 +15,10 @@ import {
 } from './store';
 import { useShallow } from 'zustand/react/shallow';
 import { MusicOrderItem } from '@/app/api/music';
-import { useSettingStore } from '../setting/store';
+import { useSettingStore } from '../setting';
 import { PageView, openPage } from '../container/store';
 import { ContextMenu } from '@/app/components/ui/contextMenu';
-import { usePlayerStore } from '../player/store';
+import { usePlayerStore } from '../player';
 import { message } from '@/app/components/ui/message';
 import styles from './index.module.scss';
 import { Image } from '@/app/components/ui/image';

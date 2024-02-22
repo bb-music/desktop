@@ -5,12 +5,14 @@ import { Image } from '@/app/components/ui/image';
 import styles from './index.module.scss';
 import { User } from '@icon-park/react';
 import { PageView, openPage } from '../container/store';
-import { useSettingStore } from '../setting/store';
+import { useSettingStore } from '../setting';
 import { useEffect } from 'react';
 import { MusicOrderItem } from '@/app/api/music';
 import { useShallow } from 'zustand/react/shallow';
 import { useOpenMusicOrderStore } from './store';
 import { ContextMenu } from '@/app/components/ui/contextMenu';
+
+export * from './store';
 
 export interface OpenMusicOrderProps {}
 

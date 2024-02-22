@@ -16,13 +16,15 @@ import { usePlayerStore } from './store';
 import { cls } from '@/utils';
 import { PlayerMode, PlayerModeMap, PlayerStatus } from './constants';
 import { useEffect, useRef, useState } from 'react';
-import { seconds2mmss } from './utils';
 import { Table } from '@/app/components/ui/table';
 import { useShallow } from 'zustand/react/shallow';
 import { api } from '@/app/api';
 import { ContextMenu } from '@/app/components/ui/contextMenu';
 import { musicCollect } from '../musicOrderList';
 import { downloadMusic } from '../music';
+import { seconds2mmss } from '@/app/utils';
+
+export * from './store';
 
 const ProgressCacheKey = 'BBPlayerProgress';
 

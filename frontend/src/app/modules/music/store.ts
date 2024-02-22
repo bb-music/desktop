@@ -53,4 +53,3 @@ export const musicFormModalStore = create<MusicFormModalModalStore>()((set, get)
 });
 
 export const useMusicFormModalStore = musicFormModalStore;
-export const updateMusicInfo = musicFormModalStore.getState().show;

@@ -1,8 +1,12 @@
 import { userLocalMusicOrderStore, userRemoteMusicOrderStore } from '../musicOrderList';
 import { api } from '@/app/api';
-import { settingStore } from '../setting/store';
+import { settingStore } from '../setting';
 import { message } from '@/app/components/ui/message';
 import { MusicItem } from '@/app/api/music';
+import { musicFormModalStore } from './store';
+
+export * from './store';
+export * from './FormModal';
 
 // 删除歌曲
 export function deleteMusic({
@@ -34,7 +38,7 @@ export function deleteMusic({
   }
 }
 
-/** 下载歌曲 */
+// 下载歌曲
 export async function downloadMusic(item: MusicItem) {
   message.success('开始下载');
   try {
@@ -44,3 +48,6 @@ export async function downloadMusic(item: MusicItem) {
     message.error(e?.message || '下载失败');
   }
 }
+
+// 修改歌曲信息
+export const updateMusicInfo = musicFormModalStore.getState().show;

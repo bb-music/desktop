@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { api } from '@/app/api';
 import { MusicItem, MusicOrderItem } from '@/app/api/music';
-import { settingStore } from '../setting/store';
+import { settingStore } from '../setting';
 
 interface UserLocalMusicOrderState {
   list: MusicOrderItem[];

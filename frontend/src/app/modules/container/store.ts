@@ -1,10 +1,9 @@
 import { create } from 'zustand';
 import { OpenMusicOrder, OpenMusicOrderProps } from '../openMusicOrder';
 import { MusicOrderDetail, MusicOrderDetailProps } from '../musicOrderDetail';
-import { Search, SearchProps } from '../search/index';
+import { Search, SearchProps } from '../search';
 import { Setting, SettingProps } from '../setting';
 import { musicOrderDetailStore } from '../musicOrderDetail/store';
-import { MusicOrderItem } from '@/app/api/music';
 
 export const enum PageView {
   OpenMusicOrder = 'OpenMusicOrder', // 广场

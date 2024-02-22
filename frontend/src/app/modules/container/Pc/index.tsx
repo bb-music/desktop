@@ -9,12 +9,11 @@ import { useGlobalStore } from '@/app/store/global';
 import { PageViewMap, useContainerStore } from '../store';
 import { useEffect, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { useSettingStore } from '../../setting/store';
-import { Player } from '../../player';
+import { useSettingStore } from '../../setting';
+import { Player, usePlayerStore } from '../../player';
 import { MessageRoot } from '@/app/components/ui/message';
-import { usePlayerStore } from '../../player/store';
 import { MusicOrderModal } from '../../musicOrderList';
-import { MusicFormModal } from '../../music/FormModal';
+import { MusicFormModal } from '../../music';
 
 export interface PcContainerProps extends BaseElementProps {
   header?: React.ReactNode;

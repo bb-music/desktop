@@ -3,6 +3,10 @@ import SearchItem from './components/SearchItem';
 import { useSearchStore } from './store';
 import styles from './index.module.scss';
 
+export * from './store';
+export * from './components/SearchForm';
+export * from './components/SearchItem';
+
 export interface SearchProps {}
 
 export function Search() {

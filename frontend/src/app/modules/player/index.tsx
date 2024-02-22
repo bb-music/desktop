@@ -292,7 +292,7 @@ function PlayerProgress({ progress }: { progress: number }) {
       }}
       onMouseMove={(e) => {
         if (statusRef.current.mouseDown) {
-          console.log('move');
+          // TODO
         }
       }}
     >

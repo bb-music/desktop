@@ -50,7 +50,6 @@ export class SettingInstance implements Setting {
     return settingCache.update('downloadDir', dir);
   };
   updateOpenMusicOrderOrigin: Setting['updateOpenMusicOrderOrigin'] = async (value) => {
-    console.log('value: ', value);
     return settingCache.update('openMusicOrderOrigin', value);
   };
   updateUserMusicOrderOrigin: Setting['updateUserMusicOrderOrigin'] = async (value) => {

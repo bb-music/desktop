@@ -49,7 +49,6 @@ export const searchStore = create<SearchStore>()((set, get) => {
       });
       try {
         const res = await api.search.getList(params);
-        console.log('res: ', res);
         appendHistory(params.keyword).then(() => {
           loadHistoryList();
         });
@@ -63,7 +62,6 @@ export const searchStore = create<SearchStore>()((set, get) => {
           },
         });
       } catch (e) {
-        console.log('e: ', e);
         set({
           loading: false,
         });

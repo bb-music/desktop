@@ -206,7 +206,6 @@ export function MusicOrderList({
                 label: '删除',
                 key: '删除',
                 onClick: () => {
-                  console.log(type);
                   if (type === 'local') {
                     api.userLocalMusicOrder.delete(item).then((res) => {
                       userLocalMusicOrderStore.load();

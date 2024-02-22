@@ -83,7 +83,6 @@ export class MusicInstance implements Music {
     };
   };
   getMusicPlayerUrl = async (music: MusicItem) => {
-    console.log('music: ', music);
     const q = new URLSearchParams();
     const aid = music.extraData.aid?.toString()!;
     const bvid = music.extraData.bvid?.toString()!;

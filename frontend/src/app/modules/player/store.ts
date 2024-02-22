@@ -59,7 +59,6 @@ export const playerStore = create<PlayerStore>()((set, get) => {
       loadCache().then(async () => {
         const store = get();
         if (store.current) {
-          console.log('store.current: ', store.current);
           const url = await api.music.getMusicPlayerUrl(store.current);
           audio.setSrc(url);
         }
@@ -199,7 +198,6 @@ export const playerStore = create<PlayerStore>()((set, get) => {
       const playerList = store.playerList.filter((p) => !ms.find((m) => m.id === p.id));
       const currentIndex = playerList.findIndex((p) => p.id === current?.id);
       if (currentIndex) {
-        console.log('currentIndex: ', currentIndex);
         playerList.splice(currentIndex + 1, 0, m);
       }
       set({
@@ -270,7 +268,6 @@ export const playerStore = create<PlayerStore>()((set, get) => {
 
 let timer: NodeJS.Timeout;
 playerStore.subscribe((state, preState) => {
-  console.log('playerStore', state);
   clearTimeout(timer);
   timer = setTimeout(() => {
     api.cacheStorage.setItem(

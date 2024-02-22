@@ -26,8 +26,6 @@ export const useOpenMusicOrderStore = create<OpenMusicOrderStore>()((set, get) =
       res.forEach((r) => {
         list.push(...r);
       });
-      console.log('list: ', list);
-
       set({ list });
     },
   };

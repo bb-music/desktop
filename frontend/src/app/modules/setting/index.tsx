@@ -59,9 +59,7 @@ export function MainSetting() {
       刷新
     </Button>
   );
-  useEffect(() => {
-    console.log(store);
-  }, []);
+
   return (
     <>
       <SubTitle title='系统设置' />
@@ -75,7 +73,6 @@ export function MainSetting() {
             <Button
               type='link'
               onClick={() => {
-                console.log(api);
                 api.setting.selectDownloadDir?.().then((res) => {
                   if (res) {
                     api.setting.updateDownloadDir?.(res).then(() => {

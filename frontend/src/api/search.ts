@@ -16,7 +16,6 @@ export class SearchInstance implements BBSearch {
       },
       auth
     );
-    console.log('rrrrres: ', res);
 
     return {
       current: page,

@@ -5,13 +5,11 @@ import { MusicItem, MusicOrderItem } from '@/app/api/music';
 export class OpenMusicOrderInstance implements OpenMusicOrder {
   useOriginGetMusicOrder = async (url: string) => {
     const res = await GetJsonOrigin(url);
-    console.log('useOriginGetMusicOrder: ', res);
     const newList: MusicOrderItem[] = [];
     res.forEach((r) => {
       const item: MusicOrderItem = {
         ...r,
         musicList: r.musicList.map((m: MusicItem) => {
-          // console.log('MusicItem: ', m);
           return {
             id: m.id,
             name: m.name,

@@ -42,16 +42,12 @@ export const userRemoteMusicOrderStore = create<UserRemoteMusicOrderStore>()((se
     list: [],
     load: async () => {
       const setting = settingStore.getState();
-      console.log('setting: ', setting);
-
       const res = await Promise.all(
         api.userRemoteMusicOrder.map((r) => {
           const config = setting.userMusicOrderOrigin.find((u) => u.name === r.name);
           return r.action.getList(config?.config);
         })
       );
-      console.log('res: ', res);
-
       const result: RemoteMusicOrderItem[] = res.map((r, i) => {
         return {
           name: api.userRemoteMusicOrder[i].name,

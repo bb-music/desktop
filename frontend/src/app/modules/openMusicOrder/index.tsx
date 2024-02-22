@@ -4,19 +4,21 @@
 import { Image } from '@/app/components/ui/image';
 import styles from './index.module.scss';
 import { User } from '@icon-park/react';
-import { PageView, openPage } from '../container/store';
 import { useSettingStore } from '../setting';
 import { useEffect } from 'react';
 import { MusicOrderItem } from '@/app/api/music';
 import { useShallow } from 'zustand/react/shallow';
 import { useOpenMusicOrderStore } from './store';
 import { ContextMenu } from '@/app/components/ui/contextMenu';
+import { MusicOrderDetailProps } from '../musicOrderDetail';
 
 export * from './store';
 
-export interface OpenMusicOrderProps {}
+export interface OpenMusicOrderProps {
+  gotoMusicOrderDetail: (opt: MusicOrderDetailProps) => void;
+}
 
-export function OpenMusicOrder() {
+export function OpenMusicOrder({ gotoMusicOrderDetail }: OpenMusicOrderProps) {
   const store = useOpenMusicOrderStore();
   const origins = useSettingStore(useShallow((state) => state.openMusicOrderOrigin));
 
@@ -34,7 +36,10 @@ export function OpenMusicOrder() {
               items={[]}
               asChild
             >
-              <MusicOrderItemComp data={i} />
+              <MusicOrderItemComp
+                data={i}
+                gotoMusicOrderDetail={gotoMusicOrderDetail}
+              />
             </ContextMenu>
           );
         })}
@@ -43,12 +48,18 @@ export function OpenMusicOrder() {
   );
 }
 
-export function MusicOrderItemComp({ data }: { data: MusicOrderItem }) {
+export function MusicOrderItemComp({
+  data,
+  gotoMusicOrderDetail,
+}: {
+  data: MusicOrderItem;
+  gotoMusicOrderDetail: OpenMusicOrderProps['gotoMusicOrderDetail'];
+}) {
   return (
     <div
       className={styles.orderItem}
       onClick={() => {
-        openPage(PageView.MusicOrderDetail, { data });
+        gotoMusicOrderDetail({ data });
       }}
     >
       <div className={styles.cover}>

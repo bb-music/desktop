@@ -12,12 +12,19 @@ export const enum PageView {
   Setting = 'Setting', // 设置
 }
 
+const gotoMusicOrderDetail = (props: OpenMusicOrderProps) => {
+  openPage(PageView.MusicOrderDetail, props);
+};
+
 export const PageViewMap = new Map([
   [
     PageView.OpenMusicOrder,
     {
       Component: OpenMusicOrder,
       label: '广场',
+      props: {
+        gotoMusicOrderDetail,
+      },
     },
   ],
   [
@@ -32,6 +39,9 @@ export const PageViewMap = new Map([
     {
       Component: Search,
       label: '搜索',
+      props: {
+        gotoMusicOrderDetail,
+      },
     },
   ],
   [

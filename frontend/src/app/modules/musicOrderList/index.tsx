@@ -16,20 +16,22 @@ import {
 import { useShallow } from 'zustand/react/shallow';
 import { MusicOrderItem } from '@/app/api/music';
 import { useSettingStore } from '../setting';
-import { PageView, openPage } from '../container/store';
 import { ContextMenu } from '@/app/components/ui/contextMenu';
 import { usePlayerStore } from '../player';
 import { message } from '@/app/components/ui/message';
 import styles from './index.module.scss';
 import { Image } from '@/app/components/ui/image';
+import { MusicOrderDetailProps } from '../musicOrderDetail';
 
 export * from './origin';
 export * from './store';
 
-export interface MusicOrderListProps {}
+export interface MusicOrderListProps {
+  gotoMusicOrderDetail: ListProps['gotoMusicOrderDetail'];
+}
 
 // 本地歌单
-export function LocalMusicOrder() {
+export function LocalMusicOrder({ gotoMusicOrderDetail }: MusicOrderListProps) {
   const store = useUserLocalMusicOrderStore(
     useShallow((state) => ({ load: state.load, list: state.list }))
   );
@@ -59,6 +61,7 @@ export function LocalMusicOrder() {
       <MusicOrderList
         list={store.list}
         type='local'
+        gotoMusicOrderDetail={gotoMusicOrderDetail}
       />
       <MusicOrderFormModal />
     </>
@@ -66,7 +69,7 @@ export function LocalMusicOrder() {
 }
 
 // 远程歌单
-export function RemoteMusicOrder() {
+export function RemoteMusicOrder({ gotoMusicOrderDetail }: MusicOrderListProps) {
   const setting = useSettingStore(
     useShallow((s) => ({ userMusicOrderOrigin: s.userMusicOrderOrigin }))
   );
@@ -99,6 +102,7 @@ export function RemoteMusicOrder() {
               list={m.list}
               type='remote'
               remoteName={m.name}
+              gotoMusicOrderDetail={gotoMusicOrderDetail}
             />
           </div>
         );
@@ -119,15 +123,14 @@ export function SubTitle({
   );
 }
 
-export function MusicOrderList({
-  list,
-  type,
-  remoteName,
-}: {
+interface ListProps {
   list: MusicOrderItem[];
   type: 'local' | 'remote';
   remoteName?: string;
-}) {
+  gotoMusicOrderDetail: (opt: MusicOrderDetailProps) => void;
+}
+
+export function MusicOrderList({ list, type, remoteName, gotoMusicOrderDetail }: ListProps) {
   const player = usePlayerStore();
   const userLocalMusicOrderStore = useUserLocalMusicOrderStore();
   const userRemoteMusicOrderStore = useUserRemoteMusicOrderStore();
@@ -278,7 +281,7 @@ export function MusicOrderList({
             className='item'
             key={item.id}
             onClick={() => {
-              openPage(PageView.MusicOrderDetail, { data: item, canEditMusic: true, remoteName });
+              gotoMusicOrderDetail({ data: item, canEditMusic: true, remoteName });
             }}
           >
             <MusicMenu

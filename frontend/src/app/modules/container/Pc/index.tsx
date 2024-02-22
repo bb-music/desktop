@@ -54,8 +54,14 @@ function ContainerContent() {
   );
   const component = useMemo(() => {
     const View = PageViewMap.get(active)?.Component;
+    const commonProps = PageViewMap.get(active)?.props as any;
     if (!View) return null;
-    return <View {...props} />;
+    return (
+      <View
+        {...props}
+        {...commonProps}
+      />
+    );
   }, [active]);
 
   return <div className={styles.content}>{component}</div>;

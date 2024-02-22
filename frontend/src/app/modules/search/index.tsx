@@ -2,14 +2,17 @@ import SearchForm from './components/SearchForm';
 import SearchItem from './components/SearchItem';
 import { useSearchStore } from './store';
 import styles from './index.module.scss';
+import { MusicOrderDetailProps } from '../musicOrderDetail';
 
 export * from './store';
 export * from './components/SearchForm';
 export * from './components/SearchItem';
 
-export interface SearchProps {}
+export interface SearchProps {
+  gotoMusicOrderDetail: (opt: MusicOrderDetailProps) => void;
+}
 
-export function Search() {
+export function Search({ gotoMusicOrderDetail }: SearchProps) {
   const store = useSearchStore();
 
   return (
@@ -21,6 +24,7 @@ export function Search() {
             <SearchItem
               data={item}
               key={item.id}
+              gotoMusicOrderDetail={gotoMusicOrderDetail}
             />
           );
         })}

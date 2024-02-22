@@ -10,8 +10,13 @@ import { Button } from '@/app/components/ui/button';
 import { musicCollect } from '@/app/modules/musicOrderList';
 import { downloadMusic } from '@/app/modules/music';
 import { seconds2mmss } from '@/app/utils';
+import { MusicOrderDetailProps } from '@/app/modules/musicOrderDetail';
 
-export default function SearchItem({ data }: { data: SearchItemInter }) {
+interface SearchItemProps {
+  data: SearchItemInter;
+  gotoMusicOrderDetail: (opt: MusicOrderDetailProps) => void;
+}
+export default function SearchItem({ data, gotoMusicOrderDetail }: SearchItemProps) {
   const player = usePlayerStore();
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -25,7 +30,8 @@ export default function SearchItem({ data }: { data: SearchItemInter }) {
         id: info.id.toString(),
       });
       if (info.type === SearchType.Order) {
-        openPage(PageView.MusicOrderDetail, { data: info });
+        gotoMusicOrderDetail({ data: info });
+        // openPage(PageView.MusicOrderDetail, { data: info });
       } else {
         setShow(true);
       }

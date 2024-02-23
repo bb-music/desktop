@@ -8,11 +8,11 @@ interface MusicFormModalModalState {
     name: string;
   };
   music?: MusicItem;
-  remoteName?: string;
+  originName?: string;
   musicOrderId?: string;
 }
 interface MusicFormModalModalHandler {
-  show: (m: MusicItem, musicOrderId: string, remoteName?: string) => void;
+  show: (m: MusicItem, musicOrderId: string, originName?: string) => void;
   setForm: (v: MusicFormModalModalState['form']) => void;
   close: () => void;
 }
@@ -25,11 +25,11 @@ export const musicFormModalStore = create<MusicFormModalModalStore>()((set, get)
     form: {
       name: '',
     },
-    show: (m, musicOrderId, remoteName) => {
+    show: (m, musicOrderId, originName) => {
       set({
         open: true,
         music: m,
-        remoteName,
+        originName,
         musicOrderId,
         form: {
           name: m.name,

@@ -12,7 +12,7 @@ export const userLocalMusicOrderCache = new JsonCacheStorage<MusicOrderItem[]>(
   'bb-music-local-order'
 );
 
-export class UserLocalMusicOrderInstance implements UserLocalMusicOrder {
+export class UserLocalMusicOrderAction implements UserLocalMusicOrder {
   getList = async () => {
     const res = (await userLocalMusicOrderCache.get()) || [];
     return res;
@@ -101,8 +101,9 @@ interface GithubSyncValue {
   repo: string;
   token: string;
 }
-export class UserRemoteGithubMusicOrderInstance implements UserRemoteMusicOrder<GithubSyncValue> {
+export class UserGithubMusicOrderInstance implements UserRemoteMusicOrder<GithubSyncValue> {
   name = 'Github';
+  cname = 'Github 歌单';
   ConfigElement = ({
     value = {
       repo: '',
@@ -152,4 +153,10 @@ export class UserRemoteGithubMusicOrderInstance implements UserRemoteMusicOrder<
     );
   };
   action = new GithubUserMusicOrderAction();
+}
+
+export class UserLocalMusicOrderInstance implements UserRemoteMusicOrder<GithubSyncValue> {
+  name = 'Local';
+  cname = '本地歌单';
+  action = new UserLocalMusicOrderAction();
 }

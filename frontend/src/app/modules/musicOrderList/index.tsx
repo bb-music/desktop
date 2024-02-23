@@ -10,8 +10,7 @@ import { Input } from '@/app/components/ui/input';
 import {
   useMusicOrderCollectModalStore,
   useMusicOrderFormModalStore,
-  useUserLocalMusicOrderStore,
-  useUserRemoteMusicOrderStore,
+  useUserMusicOrderStore,
 } from './store';
 import { useShallow } from 'zustand/react/shallow';
 import { MusicOrderItem } from '@/app/api/music';
@@ -30,50 +29,12 @@ export interface MusicOrderListProps {
   gotoMusicOrderDetail: ListProps['gotoMusicOrderDetail'];
 }
 
-// 本地歌单
-export function LocalMusicOrder({ gotoMusicOrderDetail }: MusicOrderListProps) {
-  const store = useUserLocalMusicOrderStore(
-    useShallow((state) => ({ load: state.load, list: state.list }))
-  );
-  const modalStore = useMusicOrderFormModalStore();
-  useEffect(() => {
-    store.load();
-  }, []);
-  return (
-    <>
-      <SubTitle
-        extra={
-          <Plus
-            className='ui-icon'
-            title='创建歌单'
-            onClick={() => {
-              modalStore.openHandler(null, (value) => {
-                return api.userLocalMusicOrder.create(value).then((res) => {
-                  store.load();
-                });
-              });
-            }}
-          />
-        }
-      >
-        本地歌单
-      </SubTitle>
-      <MusicOrderList
-        list={store.list}
-        type='local'
-        gotoMusicOrderDetail={gotoMusicOrderDetail}
-      />
-      <MusicOrderFormModal />
-    </>
-  );
-}
-
-// 远程歌单
-export function RemoteMusicOrder({ gotoMusicOrderDetail }: MusicOrderListProps) {
+// 歌单
+export function MusicOrder({ gotoMusicOrderDetail }: MusicOrderListProps) {
   const setting = useSettingStore(
     useShallow((s) => ({ userMusicOrderOrigin: s.userMusicOrderOrigin }))
   );
-  const store = useUserRemoteMusicOrderStore(
+  const store = useUserMusicOrderStore(
     useShallow((state) => ({ load: state.load, list: state.list }))
   );
   useEffect(() => {
@@ -81,6 +42,7 @@ export function RemoteMusicOrder({ gotoMusicOrderDetail }: MusicOrderListProps) 
       store.load();
     }
   }, [setting.userMusicOrderOrigin]);
+  const modalStore = useMusicOrderFormModalStore();
 
   return (
     <>
@@ -88,20 +50,29 @@ export function RemoteMusicOrder({ gotoMusicOrderDetail }: MusicOrderListProps) 
         return (
           <div key={m.name}>
             <SubTitle
-            // extra={
-            //   <UpdateRotation
-            //     className='ui-icon'
-            //     title='同步至本地'
-            //     onClick={() => {}}
-            //   />
-            // }
+              extra={
+                <Plus
+                  className='ui-icon'
+                  title='创建歌单'
+                  onClick={() => {
+                    const origin = api.userMusicOrder.find((u) => u.name === m.name);
+                    const config = setting.userMusicOrderOrigin.find(
+                      (u) => u.name === m.name
+                    )?.config;
+                    modalStore.openHandler(null, async (value) => {
+                      await origin?.action.create(value, config).then((res) => {
+                        store.load();
+                      });
+                    });
+                  }}
+                />
+              }
             >
-              远程-{m.name}
+              {m.cname}
             </SubTitle>
             <MusicOrderList
               list={m.list}
-              type='remote'
-              remoteName={m.name}
+              originName={m.name}
               gotoMusicOrderDetail={gotoMusicOrderDetail}
             />
           </div>
@@ -125,19 +96,17 @@ export function SubTitle({
 
 interface ListProps {
   list: MusicOrderItem[];
-  type: 'local' | 'remote';
-  remoteName?: string;
+  originName?: string;
   gotoMusicOrderDetail: (opt: MusicOrderDetailProps) => void;
 }
 
-export function MusicOrderList({ list, type, remoteName, gotoMusicOrderDetail }: ListProps) {
+export function MusicOrderList({ list, originName, gotoMusicOrderDetail }: ListProps) {
   const player = usePlayerStore();
-  const userLocalMusicOrderStore = useUserLocalMusicOrderStore();
-  const userRemoteMusicOrderStore = useUserRemoteMusicOrderStore();
+  const userMusicOrderStore = useUserMusicOrderStore();
   const modalStore = useMusicOrderFormModalStore();
   const setting = useSettingStore();
-  const origin = api.userRemoteMusicOrder.find((u) => u.name === remoteName);
-  const config = setting.userMusicOrderOrigin.find((u) => u.name === remoteName)?.config;
+  const origin = api.userMusicOrder.find((u) => u.name === originName);
+  const config = setting.userMusicOrderOrigin.find((u) => u.name === originName)?.config;
 
   return (
     <ul className='item-list'>
@@ -176,112 +145,34 @@ export function MusicOrderList({ list, type, remoteName, gotoMusicOrderDetail }:
                 label: '编辑',
                 key: '2',
                 onClick: () => {
-                  if (type === 'local') {
-                    modalStore.openHandler(item, (value) => {
-                      const id = value.id;
-                      if (id) {
-                        return api.userLocalMusicOrder.update({ ...value, id }).then((res) => {
-                          userLocalMusicOrderStore.load();
-                        });
-                      } else {
-                        console.error('id为空');
-                        return Promise.reject('id为空');
-                      }
-                    });
-                  }
-                  if (type === 'remote') {
-                    modalStore.openHandler(item, (value) => {
-                      const id = value.id;
-
-                      if (id && origin) {
-                        return origin.action.update({ ...value, id }, config).then((res) => {
-                          userRemoteMusicOrderStore.load();
-                        });
-                      } else {
-                        console.error('id为空');
-                        return Promise.reject('id为空');
-                      }
-                    });
-                  }
+                  modalStore.openHandler(item, (value) => {
+                    const id = value.id;
+                    if (id && origin) {
+                      return origin.action.update({ ...value, id }, config).then((res) => {
+                        userMusicOrderStore.load();
+                      });
+                    } else {
+                      console.error('id为空');
+                      return Promise.reject('id为空');
+                    }
+                  });
                 },
               },
               {
                 label: '删除',
                 key: '删除',
                 onClick: () => {
-                  if (type === 'local') {
-                    api.userLocalMusicOrder.delete(item).then((res) => {
-                      userLocalMusicOrderStore.load();
-                    });
-                  }
-                  if (type === 'remote') {
-                    origin?.action.delete({ ...item }, config).then((res) => {
-                      userRemoteMusicOrderStore.load();
-                    });
-                  }
+                  origin?.action.delete({ ...item }, config).then((res) => {
+                    userMusicOrderStore.load();
+                  });
                 },
-              },
-              {
-                type: 'divider',
-                key: 'divider2',
-                hide: type === 'remote',
-              },
-              {
-                label: '同步到远端',
-                key: '同步到远端',
-                hide: type === 'remote',
-                children: api.userRemoteMusicOrder.map((r) => {
-                  return {
-                    label: r.name,
-                    key: r.name,
-                    onClick: () => {
-                      message.success('同步中');
-                      // 看远端有没有这个歌单，只匹配歌单名称，宁多勿少
-                      const remote = userRemoteMusicOrderStore.list.find((l) => l.name === r.name);
-                      const { config } =
-                        setting.userMusicOrderOrigin.find((u) => u.name === r.name) || {};
-                      const server = api.userRemoteMusicOrder.find((r) => r.name === r.name);
-                      if (!remote || !config || !server) return;
-
-                      const remoteCurrent = remote.list.find((l) => l.name === item.name);
-                      if (!remoteCurrent) {
-                        // 没有则创建
-                        server.action
-                          .create(item, config)
-                          .then(() => {
-                            message.success('同步成功');
-                            userRemoteMusicOrderStore.load();
-                          })
-                          .finally(() => {
-                            message.error('同步失败');
-                          });
-                      } else {
-                        // 有则合并（不会删除）
-                        const ms = item.musicList?.filter((m) => {
-                          return !remoteCurrent.musicList?.find((r) => r.name === m.name);
-                        });
-                        if (ms?.length) {
-                          server.action
-                            .appendMusic(remoteCurrent.id, ms, config)
-                            .then(() => {
-                              message.success('同步成功');
-                              userRemoteMusicOrderStore.load();
-                            })
-                            .finally(() => {
-                              message.error('同步失败');
-                            });
-                        }
-                      }
-                    },
-                  };
-                }),
               },
             ]}
             tag='li'
             className='item'
             key={item.id}
             onClick={() => {
-              gotoMusicOrderDetail({ data: item, canEditMusic: true, remoteName });
+              gotoMusicOrderDetail({ data: item, canEditMusic: true, originName });
             }}
           >
             <MusicMenu
@@ -335,10 +226,7 @@ export function MusicOrderFormModal() {
 }
 
 export function MusicOrderModal() {
-  const localStore = useUserLocalMusicOrderStore(
-    useShallow((state) => ({ load: state.load, list: state.list }))
-  );
-  const remoteStore = useUserRemoteMusicOrderStore(
+  const musicOrderStore = useUserMusicOrderStore(
     useShallow((state) => ({ load: state.load, list: state.list }))
   );
   const store = useMusicOrderCollectModalStore();
@@ -353,21 +241,8 @@ export function MusicOrderModal() {
       footer={<></>}
     >
       <div className={styles.MusicOrderList}>
-        <div className={styles.MusicOrderSubTitle}>本地歌单</div>
         <div>
-          {localStore.list.map((item) => {
-            return (
-              <CollectItem
-                key={item.id}
-                data={item}
-              />
-            );
-          })}
-        </div>
-        <br />
-        <div className={styles.MusicOrderSubTitle}>远程歌单</div>
-        <div>
-          {remoteStore.list.map((r) => {
+          {musicOrderStore.list.map((r) => {
             return (
               <div key={r.name}>
                 {r.list.map((item) => {
@@ -375,7 +250,7 @@ export function MusicOrderModal() {
                     <CollectItem
                       key={item.id}
                       data={item}
-                      remoteName={r.name}
+                      originName={r.name}
                     />
                   );
                 })}
@@ -388,36 +263,24 @@ export function MusicOrderModal() {
   );
 }
 
-function CollectItem({ data, remoteName }: { data: MusicOrderItem; remoteName?: string }) {
+function CollectItem({ data, originName }: { data: MusicOrderItem; originName?: string }) {
   const store = useMusicOrderCollectModalStore();
   const setting = useSettingStore();
-  const localStore = useUserLocalMusicOrderStore(
+  const musicOrderStore = useUserMusicOrderStore(
     useShallow((state) => ({ load: state.load, list: state.list }))
   );
-  const remoteStore = useUserRemoteMusicOrderStore(
-    useShallow((state) => ({ load: state.load, list: state.list }))
-  );
-  const origin = api.userRemoteMusicOrder.find((u) => u.name === remoteName);
-  const config = setting.userMusicOrderOrigin.find((u) => u.name === remoteName)?.config;
+  const origin = api.userMusicOrder.find((u) => u.name === originName);
+  const config = setting.userMusicOrderOrigin.find((u) => u.name === originName)?.config;
 
   return (
     <div
       className={styles.MusicOrderItem}
       onClick={() => {
         store.close();
-        if (!remoteName) {
-          // 本地歌单
-          api.userLocalMusicOrder.appendMusic(data.id, store.musicList).then(() => {
-            localStore.load();
-            message.success('已添加');
-          });
-        } else {
-          // 远程歌单
-          origin?.action.appendMusic(data.id, store.musicList, config).then(() => {
-            remoteStore.load();
-            message.success('已添加');
-          });
-        }
+        origin?.action.appendMusic(data.id, store.musicList, config).then(() => {
+          musicOrderStore.load();
+          message.success('已添加');
+        });
       }}
     >
       <Image

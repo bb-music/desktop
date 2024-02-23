@@ -3,54 +3,35 @@ import { api } from '@/app/api';
 import { MusicItem, MusicOrderItem } from '@/app/api/music';
 import { settingStore } from '../setting';
 
-interface UserLocalMusicOrderState {
-  list: MusicOrderItem[];
-}
-interface UserLocalMusicOrderHandler {
-  load: () => Promise<void>;
-}
-
-type UserLocalMusicOrderStore = UserLocalMusicOrderState & UserLocalMusicOrderHandler;
-
-export const userLocalMusicOrderStore = create<UserLocalMusicOrderStore>()((set, get) => {
-  return {
-    list: [],
-    load: async () => {
-      const res = await api.userLocalMusicOrder.getList();
-      set({ list: res || [] });
-    },
-  };
-});
-
-export const useUserLocalMusicOrderStore = userLocalMusicOrderStore;
-
-interface RemoteMusicOrderItem {
+interface MusicOrderOriginItem {
   name: string;
+  cname: string;
   list: MusicOrderItem[];
 }
-interface UserRemoteMusicOrderState {
-  list: RemoteMusicOrderItem[];
+interface UserMusicOrderState {
+  list: MusicOrderOriginItem[];
 }
-interface UserRemoteMusicOrderHandler {
+interface UserMusicOrderHandler {
   load: () => Promise<void>;
 }
 
-type UserRemoteMusicOrderStore = UserRemoteMusicOrderState & UserRemoteMusicOrderHandler;
+type UserMusicOrderStore = UserMusicOrderState & UserMusicOrderHandler;
 
-export const userRemoteMusicOrderStore = create<UserRemoteMusicOrderStore>()((set, get) => {
+export const userMusicOrderStore = create<UserMusicOrderStore>()((set, get) => {
   return {
     list: [],
     load: async () => {
       const setting = settingStore.getState();
       const res = await Promise.all(
-        api.userRemoteMusicOrder.map((r) => {
+        api.userMusicOrder.map((r) => {
           const config = setting.userMusicOrderOrigin.find((u) => u.name === r.name);
           return r.action.getList(config?.config);
         })
       );
-      const result: RemoteMusicOrderItem[] = res.map((r, i) => {
+      const result: MusicOrderOriginItem[] = res.map((r, i) => {
         return {
-          name: api.userRemoteMusicOrder[i].name,
+          name: api.userMusicOrder[i].name,
+          cname: api.userMusicOrder[i].cname,
           list: r,
         };
       });
@@ -60,7 +41,7 @@ export const userRemoteMusicOrderStore = create<UserRemoteMusicOrderStore>()((se
   };
 });
 
-export const useUserRemoteMusicOrderStore = userRemoteMusicOrderStore;
+export const useUserMusicOrderStore = userMusicOrderStore;
 
 interface MusicOrderFormModalState {
   form: {

@@ -211,8 +211,9 @@ export function OrderSyncSetting() {
   return (
     <>
       <SubTitle title='歌单同步' />
-      {api.userRemoteMusicOrder.map((m, index) => {
+      {api.userMusicOrder.map((m, index) => {
         const Comp = m.ConfigElement;
+        if (!Comp) return null;
         const value = setting.userMusicOrderOrigin?.find((u) => u.name === m.name)!;
         return (
           <div key={index}>

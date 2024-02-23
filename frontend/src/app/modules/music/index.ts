@@ -1,4 +1,4 @@
-import { userLocalMusicOrderStore, userRemoteMusicOrderStore } from '../musicOrderList';
+import { userMusicOrderStore } from '../musicOrderList';
 import { api } from '@/app/api';
 import { settingStore } from '../setting';
 import { message } from '@/app/components/ui/message';
@@ -12,30 +12,21 @@ export * from './FormModal';
 export function deleteMusic({
   music,
   musicOrderId,
-  remoteName,
+  originName,
 }: {
   musicOrderId: string;
   music: MusicItem;
-  remoteName?: string;
+  originName?: string;
 }) {
-  if (!remoteName) {
-    // 本地歌单
-    api.userLocalMusicOrder.deleteMusic(musicOrderId, [music]).then(() => {
-      userLocalMusicOrderStore.getState().load();
-      message.success('已删除');
-    });
-  } else {
-    // 远程歌单
-    const remote = api.userRemoteMusicOrder.find((u) => u.name === remoteName);
-    const config = settingStore
-      .getState()
-      .userMusicOrderOrigin.find((u) => u.name === remoteName)?.config;
+  const order = api.userMusicOrder.find((u) => u.name === originName);
+  const config = settingStore
+    .getState()
+    .userMusicOrderOrigin.find((u) => u.name === originName)?.config;
 
-    remote?.action.deleteMusic(musicOrderId, [music], config).then(() => {
-      userRemoteMusicOrderStore.getState().load();
-      message.success('已删除');
-    });
-  }
+  order?.action.deleteMusic(musicOrderId, [music], config).then(() => {
+    userMusicOrderStore.getState().load();
+    message.success('已删除');
+  });
 }
 
 // 下载歌曲

@@ -3,7 +3,7 @@ import { MusicOrderItem } from '@/app/api/music';
 
 export interface MusicOrderDetailStoreState {
   data?: MusicOrderItem;
-  remoteName?: string;
+  originName?: string;
   canEditMusic?: boolean;
 }
 interface MusicOrderDetailStoreHandler {

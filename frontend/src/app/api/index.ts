@@ -2,7 +2,7 @@ import { Search } from './search';
 import { Setting } from './setting';
 import { Music } from './music';
 import { OpenMusicOrder } from './openMusicOpen';
-import { UserLocalMusicOrder, UserRemoteMusicOrder } from './userMusicOrder';
+import { UserMusicOrder } from './userMusicOrder';
 import { StateStorage } from 'zustand/middleware';
 import { Utils } from './utils';
 
@@ -15,8 +15,7 @@ export interface Api {
   search: Search;
   music: Music;
   openMusicOrder: OpenMusicOrder;
-  userLocalMusicOrder: UserLocalMusicOrder;
-  userRemoteMusicOrder: UserRemoteMusicOrder[];
+  userMusicOrder: UserMusicOrder[];
 }
 
 export function registerApiInstance(instance: Api) {

@@ -3,7 +3,7 @@ import { SettingInstance } from './setting';
 import { SearchInstance } from './search';
 import { MusicInstance } from './music';
 import { OpenMusicOrderInstance } from './openMusicOrder';
-import { UserLocalMusicOrderInstance, UserRemoteGithubMusicOrderInstance } from './userMusicOrder';
+import { UserGithubMusicOrderInstance, UserLocalMusicOrderInstance } from './userMusicOrder';
 import { cacheStorage } from '@/lib/cacheStorage';
 import { UtilsInstance } from './utils';
 
@@ -14,6 +14,5 @@ export const apiInstance: Api = {
   search: new SearchInstance(),
   music: new MusicInstance(),
   openMusicOrder: new OpenMusicOrderInstance(),
-  userLocalMusicOrder: new UserLocalMusicOrderInstance(),
-  userRemoteMusicOrder: [new UserRemoteGithubMusicOrderInstance()],
+  userMusicOrder: [new UserLocalMusicOrderInstance(), new UserGithubMusicOrderInstance()],
 };

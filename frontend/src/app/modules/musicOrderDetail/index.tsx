@@ -10,12 +10,7 @@ import { Table } from '@/app/components/ui/table';
 import { useState } from 'react';
 import { usePlayerStore } from '../player';
 import { MusicOrderDetailStoreState, useMusicOrderDetailStore } from './store';
-import {
-  musicCollect,
-  useUserLocalMusicOrderStore,
-  useUserRemoteMusicOrderStore,
-} from '../musicOrderList';
-import { api } from '@/app/api';
+import { musicCollect, useUserMusicOrderStore } from '../musicOrderList';
 import { ContextMenu } from '@/app/components/ui/contextMenu';
 import { deleteMusic, downloadMusic } from '../music';
 import { updateMusicInfo } from '../music';
@@ -27,24 +22,15 @@ export type MusicOrderDetailProps = Partial<MusicOrderDetailStoreState>;
 
 export function MusicOrderDetail({}: MusicOrderDetailProps) {
   const player = usePlayerStore();
-  const musicOrder = useUserLocalMusicOrderStore();
   const store = useMusicOrderDetailStore();
-  const localStore = useUserLocalMusicOrderStore();
-  const remoteStore = useUserRemoteMusicOrderStore();
+  const musicOrderStore = useUserMusicOrderStore();
   let data = store.data;
   if (store.canEditMusic) {
-    if (!store.remoteName) {
-      const r = localStore.list.find((l) => l.id === store.data?.id);
-      if (r) {
-        data = r;
-      }
-    } else {
-      const r = remoteStore.list
-        .find((l) => l.name === store.remoteName)
-        ?.list.find((l) => l.id === store.data?.id);
-      if (r) {
-        data = r;
-      }
+    const r = musicOrderStore.list
+      .find((l) => l.name === store.originName)
+      ?.list.find((l) => l.id === store.data?.id);
+    if (r) {
+      data = r;
     }
   }
   const [searchKeyword, setSearchKeyword] = useState('');
@@ -87,17 +73,9 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
               <Button
                 onClick={() => {
                   if (!data) return;
-                  api.userLocalMusicOrder
-                    .create({
-                      name: data.name,
-                      cover: data.cover,
-                      desc: data.desc,
-                      musicList: data.musicList,
-                      extraData: data.extraData,
-                    })
-                    .then(() => {
-                      musicOrder.load();
-                    });
+                  if (data.musicList?.length) {
+                    musicCollect(data.musicList || []);
+                  }
                 }}
               >
                 收藏歌单
@@ -188,7 +166,7 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
                       hide: !store.canEditMusic,
                       onClick: () => {
                         if (data) {
-                          updateMusicInfo(m, data.id, store.remoteName);
+                          updateMusicInfo(m, data.id, store.originName);
                         }
                       },
                     },
@@ -212,7 +190,7 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
                         deleteMusic({
                           musicOrderId,
                           music: m,
-                          remoteName: store.remoteName,
+                          originName: store.originName,
                         });
                       },
                     },

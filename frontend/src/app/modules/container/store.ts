@@ -72,11 +72,11 @@ export const useContainerStore = create<ContainerStore>()((set, get) => {
     active: PageView.OpenMusicOrder,
     setActive: (active, props) => {
       if (active === PageView.MusicOrderDetail) {
-        const { data, canEditMusic, remoteName } = (props as MusicOrderDetailProps) || {};
+        const { data, canEditMusic, originName } = (props as MusicOrderDetailProps) || {};
         musicOrderDetailStore.setState({
           data,
           canEditMusic,
-          remoteName,
+          originName,
         });
       }
       set({ active, props });

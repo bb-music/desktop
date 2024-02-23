@@ -39,8 +39,6 @@ export abstract class AudioInstance {
 }
 
 export abstract class Music<E = any, T = any> {
-  /** 歌单详情 */
-  abstract getMusicOrderInfo(item: MusicOrderItem<E, T>): Promise<MusicOrderItem<E, T>>;
   /** 获取音乐播放地址 */
   abstract getMusicPlayerUrl(item: MusicItem): Promise<string>;
   /** 下载音乐 */

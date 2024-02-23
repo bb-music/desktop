@@ -44,44 +44,44 @@ class PlayerAudio implements AudioInstance {
 }
 
 export class MusicInstance implements Music {
-  getMusicOrderInfo = async (data: MusicOrderItem) => {
-    const auth = await getAuth();
-    const info = await GetVideoDetail(
-      {
-        aid: data.extraData.aid + '',
-        bvid: data.extraData.bvid,
-      },
-      auth
-    );
+  // getMusicOrderInfo = async (data: MusicOrderItem) => {
+  //   const auth = await getAuth();
+  //   const info = await GetVideoDetail(
+  //     {
+  //       aid: data.extraData.aid + '',
+  //       bvid: data.extraData.bvid,
+  //     },
+  //     auth
+  //   );
 
-    return {
-      id: `${info.aid}_${info.bvid}`,
-      name: info.title,
-      cover: transformImgUrl(info.pic),
-      duration: info.duration,
-      extraData: info,
-      author: '',
-      musicList: info.pages.map((p) => {
-        return {
-          id: createMusicId({
-            aid: info.aid,
-            bvid: info.bvid,
-            cid: p.cid,
-          }),
-          cover: transformImgUrl(p.first_frame),
-          name: p.part,
-          duration: p.duration,
-          author: '',
-          origin: 'bili',
-          extraData: {
-            aid: info.aid,
-            bvid: info.bvid,
-            cid: p.cid,
-          },
-        };
-      }),
-    };
-  };
+  //   return {
+  //     id: `${info.aid}_${info.bvid}`,
+  //     name: info.title,
+  //     cover: transformImgUrl(info.pic),
+  //     duration: info.duration,
+  //     extraData: info,
+  //     author: '',
+  //     musicList: info.pages.map((p) => {
+  //       return {
+  //         id: createMusicId({
+  //           aid: info.aid,
+  //           bvid: info.bvid,
+  //           cid: p.cid,
+  //         }),
+  //         cover: transformImgUrl(p.first_frame),
+  //         name: p.part,
+  //         duration: p.duration,
+  //         author: '',
+  //         origin: 'bili',
+  //         extraData: {
+  //           aid: info.aid,
+  //           bvid: info.bvid,
+  //           cid: p.cid,
+  //         },
+  //       };
+  //     }),
+  //   };
+  // };
   getMusicPlayerUrl = async (music: MusicItem) => {
     const q = new URLSearchParams();
     const aid = music.extraData.aid?.toString()!;

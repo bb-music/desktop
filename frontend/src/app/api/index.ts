@@ -5,6 +5,7 @@ import { OpenMusicOrder } from './openMusicOpen';
 import { UserMusicOrder } from './userMusicOrder';
 import { StateStorage } from 'zustand/middleware';
 import { Utils } from './utils';
+import { MusicService } from './musicService';
 
 export let api: Api;
 
@@ -16,6 +17,7 @@ export interface Api {
   music: Music;
   openMusicOrder: OpenMusicOrder;
   userMusicOrder: UserMusicOrder[];
+  musicServices: MusicService[];
 }
 
 export function registerApiInstance(instance: Api) {

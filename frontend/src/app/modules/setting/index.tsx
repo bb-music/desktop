@@ -24,12 +24,31 @@ export function Setting() {
 
       <div className={styles.divider}></div>
 
+      <ServiceSetting />
+
+      <div className={styles.divider}></div>
+
       <OpenSetting />
 
       <div className={styles.divider}></div>
 
       <OrderSyncSetting />
     </div>
+  );
+}
+
+export function ServiceSetting() {
+  return (
+    <>
+      {api.musicServices.map((service) => {
+        return (
+          <div key={service.name}>
+            <SubTitle title={`「${service.cname}」源设置`} />
+            {service.ConfigElement?.()}
+          </div>
+        );
+      })}
+    </>
   );
 }
 

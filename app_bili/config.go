@@ -36,7 +36,7 @@ func (a *App) InitConfig() error {
 	}
 
 	if cacheConfig.CreatedAt.Add(time.Hour * 24).Before(time.Now()) {
-		log.Panicln("bili 缓存配置已过期 ")
+		log.Println("bili 缓存配置已过期 ")
 		// 获取秘钥配置
 		if data, err := a.client.GetSignData(); err != nil {
 			return err

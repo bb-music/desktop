@@ -15,7 +15,7 @@ func New() *Logger {
 
 // Print works like Sprintf.
 func (l *Logger) Print(message string) {
-	log.Panicln(message)
+	log.Println(message)
 }
 
 // Trace level logging. Works like Sprintf.

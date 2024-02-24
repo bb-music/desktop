@@ -1,25 +1,35 @@
-import { MusicService, MusicServiceAction } from '@/app/api/musicService';
-import { SearchItem, SearchParams, SearchType } from '@/app/api/search';
-import { Search } from '@wails/go/app/App';
+import {
+  MusicService,
+  MusicServiceAction,
+  MusicServiceHooks,
+  SearchItem,
+  SearchParams,
+  SearchType,
+} from '@/app/api/musicService';
 import { createMusicId, html2text, mmss2seconds, transformImgUrl } from '@/utils';
-import { bb_client } from '@wails/go/models';
-import { GetConfig, GetVideoDetail } from '@wails/go/app/App';
-import { getAuth, settingCache } from './setting';
-import { DownloadMusic } from '@wails/go/app/App';
+import { app_bili, bb_client } from '@wails/go/models';
+import { settingCache } from './setting';
 import { MusicItem } from '@/app/api/music';
-import axios from 'axios';
+import {
+  DownloadMusic,
+  GetConfig,
+  GetMusicDetail,
+  GetMusicPlayerUrl,
+  Search,
+  InitConfig,
+} from '@wails/go/app_bili/App';
+import { SettingItem } from '@/app/modules/setting';
+import { Input } from '@/app/components/ui/input';
+import { useEffect, useState } from 'react';
+import { Button } from '@/app/components/ui/button';
 
 class BiliAction implements MusicServiceAction {
   searchList = async (params: SearchParams) => {
-    const auth = await getAuth();
     const page = params.current || 1;
-    const res = await Search(
-      {
-        page: page + '',
-        keyword: params.keyword,
-      },
-      auth
-    );
+    const res = await Search({
+      page: page + '',
+      keyword: params.keyword,
+    });
 
     return {
       current: page,
@@ -43,15 +53,11 @@ class BiliAction implements MusicServiceAction {
     };
   };
   searchItemDetail = async (item: SearchItem<bb_client.SearchResultItem>) => {
-    const auth = await getAuth();
     const data = item.extraData!;
-    const info = await GetVideoDetail(
-      {
-        aid: data.aid + '',
-        bvid: data.bvid,
-      },
-      auth
-    );
+    const info = await GetMusicDetail({
+      aid: data.aid + '',
+      bvid: data.bvid,
+    });
     if (info.videos > 1) {
       return {
         ...item,
@@ -91,33 +97,11 @@ class BiliAction implements MusicServiceAction {
     }
   };
   getMusicPlayerUrl = async (music: MusicItem) => {
-    const q = new URLSearchParams();
     const aid = music.extraData.aid?.toString()!;
     const bvid = music.extraData.bvid?.toString()!;
     const cid = music.extraData.cid?.toString()!;
-    const setting = await settingCache.get();
-    q.set('aid', aid);
-    q.set('bvid', bvid);
-    q.set('cid', cid);
-    // q.set('uuid_v3', setting?.spiData.uuid_v3!);
-    // q.set('uuid_v4', setting?.spiData.uuid_v4!);
-    // q.set('img_key', setting?.signData.imgKey!);
-    // q.set('sub_key', setting?.signData.subKey!);
-    // q.set('name', music.name);
-    const config = await GetConfig();
-    const port = config.video_proxy_port;
-    const uid = createMusicId({ aid, bvid, cid });
-    const baseUrl = `http://localhost:${port}`;
-    await axios.get(`${baseUrl}/setauth`, {
-      params: {
-        uuid_v3: setting?.spiData.uuid_v3,
-        uuid_v4: setting?.spiData.uuid_v4,
-        img_key: setting?.signData.imgKey,
-        sub_key: setting?.signData.subKey,
-      },
-    });
-    const url = `${baseUrl}/video/proxy/${music.origin}/${uid}.music?${q.toString()}`;
-    return url;
+    const url = await GetMusicPlayerUrl({ aid, bvid, cid });
+    return url || '';
   };
   download = async (music: MusicItem) => {
     const config = await settingCache.get();
@@ -127,18 +111,18 @@ class BiliAction implements MusicServiceAction {
       return Promise.reject(new Error('请先设置下载目录'));
     }
 
-    const auth = await getAuth();
-
-    return DownloadMusic(
-      {
-        aid: music.extraData.aid + '',
-        cid: music.extraData.cid + '',
-        bvid: music.extraData.bvid + '',
-        download_dir: dir,
-        name: music.name,
-      },
-      auth
-    );
+    return DownloadMusic({
+      aid: music.extraData.aid + '',
+      cid: music.extraData.cid + '',
+      bvid: music.extraData.bvid + '',
+      download_dir: dir,
+      name: music.name,
+    });
+  };
+}
+class BiliHooks implements MusicServiceHooks {
+  init = async () => {
+    await InitConfig();
   };
 }
 
@@ -146,7 +130,56 @@ export class BiliMusicServiceInstance implements MusicService {
   name = 'bili';
   cname = '哔哩哔哩';
   ConfigElement = () => {
-    return <></>;
+    const [config, setConfig] = useState<app_bili.Config>();
+    const loadHandler = () => {
+      GetConfig().then((res) => {
+        setConfig(res);
+      });
+    };
+    useEffect(() => {
+      loadHandler();
+    }, []);
+    return (
+      <>
+        <SettingItem label='imgKey'>
+          <Input
+            value={config?.sign_data.img_key}
+            disabled
+          />
+        </SettingItem>
+        <SettingItem label='subKey'>
+          <Input
+            value={config?.sign_data.img_key}
+            disabled
+          />
+        </SettingItem>
+        <SettingItem label='UUID_V3'>
+          <Input
+            value={config?.spi_data.b_3}
+            disabled
+          />
+        </SettingItem>
+        <SettingItem label='UUID_V4'>
+          <Input
+            value={config?.spi_data.b_4}
+            disabled
+          />
+        </SettingItem>
+        <div style={{ marginBottom: 15 }}>
+          <Button
+            type='primary'
+            onClick={() => {
+              InitConfig().then((res) => {
+                loadHandler();
+              });
+            }}
+          >
+            刷新源配置
+          </Button>
+        </div>
+      </>
+    );
   };
   action = new BiliAction();
+  hooks = new BiliHooks();
 }

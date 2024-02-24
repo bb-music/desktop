@@ -43,7 +43,7 @@ export function ServiceSetting() {
       {api.musicServices.map((service) => {
         return (
           <div key={service.name}>
-            <SubTitle title={`「${service.cname}」源设置`} />
+            <SubTitle title={`${service.cname} 源设置`} />
             {service.ConfigElement?.()}
           </div>
         );
@@ -54,30 +54,6 @@ export function ServiceSetting() {
 
 export function MainSetting() {
   const store = useSettingStore();
-  const signUpdateButton = (
-    <Button
-      type='link'
-      onClick={() => {
-        api.setting.updateSignData().then(() => {
-          store.load();
-        });
-      }}
-    >
-      刷新
-    </Button>
-  );
-  const spiUpdateButton = (
-    <Button
-      type='link'
-      onClick={() => {
-        api.setting.updateSpiData().then(() => {
-          store.load();
-        });
-      }}
-    >
-      刷新
-    </Button>
-  );
 
   return (
     <>
@@ -106,34 +82,6 @@ export function MainSetting() {
           )}
         </SettingItem>
       )}
-      <SettingItem label='imgKey'>
-        <Input
-          value={store.signData.imgKey}
-          disabled
-        />
-        {signUpdateButton}
-      </SettingItem>
-      <SettingItem label='subKey'>
-        <Input
-          value={store.signData.subKey}
-          disabled
-        />
-        {signUpdateButton}
-      </SettingItem>
-      <SettingItem label='UUID_V3'>
-        <Input
-          value={store.spiData.uuid_v3}
-          disabled
-        />
-        {spiUpdateButton}
-      </SettingItem>
-      <SettingItem label='UUID_V4'>
-        <Input
-          value={store.spiData.uuid_v4}
-          disabled
-        />
-        {spiUpdateButton}
-      </SettingItem>
       <SettingItem label='视频代理服务端口'>
         <Input
           style={{ width: 100 }}

@@ -39,10 +39,6 @@ export abstract class AudioInstance {
 }
 
 export abstract class Music<E = any, T = any> {
-  /** 获取音乐播放地址 */
-  abstract getMusicPlayerUrl(item: MusicItem): Promise<string>;
-  /** 下载音乐 */
-  abstract download(item: MusicItem<T>): Promise<unknown>;
   /** 播放器实例 */
   abstract createAudio(): AudioInstance;
 }

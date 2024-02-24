@@ -2,7 +2,7 @@ import { isJson } from '@/utils';
 import { UserMusicOrderOrigin } from '../common';
 import axios from 'axios';
 import { MusicItem, MusicOrderItem } from '@/app/api/music';
-import { Action } from '@/app/api/userMusicOrder';
+import { UserMusicOrderAction } from '@/app/api/userMusicOrder';
 import dayjs from 'dayjs';
 import { nanoid } from 'nanoid';
 import { Base64 } from 'js-base64';
@@ -21,7 +21,7 @@ interface ListResponse {
   encoding: string;
 }
 
-export class GithubUserMusicOrderAction implements Action {
+export class GithubUserMusicOrderAction implements UserMusicOrderAction {
   public async getList(config: UserMusicOrderOrigin.GithubConfig) {
     let list: MusicOrderItem[] = [];
     try {

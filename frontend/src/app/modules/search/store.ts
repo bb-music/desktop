@@ -1,7 +1,8 @@
 import { create } from 'zustand';
-import { SearchItem, SearchParams } from '@/app/api/search';
+import { MusicService, SearchItem, SearchParams } from '@/app/api/musicService';
 import { api } from '@/app/api';
 import { JsonCacheStorage } from '@/app/lib/cacheStorage';
+import { getMusicService } from '@/app/utils';
 
 const searchHistoryCache = new JsonCacheStorage<string[]>('bb-music-search-history');
 
@@ -15,8 +16,11 @@ interface SearchStoreState {
     pageSize: number;
     current: number;
   };
+  originList: Pick<MusicService, 'name' | 'cname'>[];
+  originActive: string;
 }
 interface SearchStoreHandler {
+  init: () => Promise<void>;
   setParams: (params: Partial<SearchParams>) => void;
   load: () => Promise<void>;
   loadHistoryList: () => Promise<void>;
@@ -34,6 +38,7 @@ export const searchStore = create<SearchStore>()((set, get) => {
       set({ history: res });
     });
   };
+
   return {
     params: {
       keyword: '',
@@ -42,13 +47,28 @@ export const searchStore = create<SearchStore>()((set, get) => {
     data: [],
     loading: false,
     history: [],
+    originList: [],
+    originActive: '',
+    init: async () => {
+      const originList = api.musicServices.map((m) => ({
+        name: m.name,
+        cname: m.cname,
+      }));
+      set({
+        originActive: originList[0].name,
+        originList,
+      });
+    },
     load: async () => {
       const params = get().params;
+      const origin = get().originActive;
       set({
         loading: true,
       });
       try {
-        const res = await api.search.getList(params);
+        const service = getMusicService(origin);
+        if (!service) return;
+        const res = await service?.action.searchList(params);
         appendHistory(params.keyword).then(() => {
           loadHistoryList();
         });

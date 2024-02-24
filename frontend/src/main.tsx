@@ -3,10 +3,9 @@ import { PcContainer } from './app/modules/container';
 import { apiInstance } from './api';
 import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { settingCache } from './api/setting';
 import './style.scss';
 import { Close, Minus } from '@icon-park/react';
-import { Quit, Hide, WindowMinimise } from '@wails/runtime';
+import { Quit, WindowMinimise } from '@wails/runtime';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -16,13 +15,13 @@ function Root() {
 
   const init = async () => {
     setInitLoading(true);
-    const res = await settingCache.get();
-    if (!res?.signData?.imgKey || !res?.signData?.subKey) {
-      await apiInstance.setting.updateSignData();
-    }
-    if (!res?.spiData?.uuid_v3 || !res?.spiData?.uuid_v4) {
-      await apiInstance.setting.updateSpiData();
-    }
+    // const res = await settingCache.get();
+    // if (!res?.signData?.imgKey || !res?.signData?.subKey) {
+    //   await apiInstance.setting.updateSignData();
+    // }
+    // if (!res?.spiData?.uuid_v3 || !res?.spiData?.uuid_v4) {
+    //   await apiInstance.setting.updateSpiData();
+    // }
     setInitLoading(false);
   };
 

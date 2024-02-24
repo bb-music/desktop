@@ -9,5 +9,6 @@
   "author": {
     "name": "lvyueyang",
     "email": "975794403@qq.com"
-  }
+  },
+  "appargs": "--development"
 }

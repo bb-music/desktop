@@ -1,4 +1,4 @@
-module bbmusic
+module github.com/OpenBBMusic/desktop
 
 go 1.18
 
@@ -6,6 +6,7 @@ require (
 	github.com/duke-git/lancet/v2 v2.2.9
 	github.com/go-resty/resty/v2 v2.11.0
 	github.com/wailsapp/wails/v2 v2.8.0
+	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 )
 
 require (

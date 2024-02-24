@@ -4,6 +4,7 @@ import { settingStore } from '../setting';
 import { message } from '@/app/components/ui/message';
 import { MusicItem } from '@/app/api/music';
 import { musicFormModalStore } from './store';
+import { getMusicService } from '@/app/utils';
 
 export * from './store';
 export * from './FormModal';
@@ -33,7 +34,8 @@ export function deleteMusic({
 export async function downloadMusic(item: MusicItem) {
   message.success('开始下载');
   try {
-    await api.music.download(item);
+    const service = getMusicService(item.origin);
+    await service?.action.download(item);
     message.success('下载成功');
   } catch (e: any) {
     message.error(e?.message || '下载失败');

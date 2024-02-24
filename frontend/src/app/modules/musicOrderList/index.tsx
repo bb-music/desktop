@@ -59,6 +59,7 @@ export function MusicOrder({ gotoMusicOrderDetail }: MusicOrderListProps) {
                     const config = setting.userMusicOrderOrigin.find(
                       (u) => u.name === m.name
                     )?.config;
+                    console.log(origin, config);
                     modalStore.openHandler(null, async (value) => {
                       await origin?.action.create(value, config).then((res) => {
                         store.load();
@@ -78,6 +79,7 @@ export function MusicOrder({ gotoMusicOrderDetail }: MusicOrderListProps) {
           </div>
         );
       })}
+      <MusicOrderFormModal />
     </>
   );
 }

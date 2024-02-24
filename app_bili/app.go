@@ -1,45 +1,36 @@
 package app_bili
 
 import (
-	"bbmusic/pkg/bb_client"
 	"context"
 	"os/user"
 	"path/filepath"
+
+	"github.com/OpenBBMusic/desktop/app_base"
+	"github.com/OpenBBMusic/desktop/pkg/bb_client"
 
 	osruntime "runtime"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
-type Config struct {
-	ProxyServerPort int                `json:"proxy_server_port"`
-	SignData        bb_client.SignData `json:"sign_data"`
-	SpiData         bb_client.SpiData  `json:"spi_data"`
-}
-
 type App struct {
-	Config
-	ctx context.Context
+	Config  *Config `json:"config"`
+	client  *bb_client.Client
+	ctx     context.Context
+	appBase *app_base.App
 }
 
-func NewApp() *App {
-	return &App{}
+func New(appBase *app_base.App) *App {
+	return &App{
+		client:  bb_client.New(),
+		appBase: appBase,
+		Config:  &Config{},
+	}
 }
 
 func (a *App) Startup(ctx context.Context) {
 	a.ctx = ctx
 	runtime.LogPrintf(ctx, "AppConfig %+v", a.Config)
-	// port, _ := GetFreePort()
-	port := 56592
-	a.ProxyServerPort = port
-	// 启动一个代理服务
-	ProxyServer(port)
-}
-
-// 请求时需要的认证数据
-type AuthParams struct {
-	SignData bb_client.SignData `json:"sign_data"` // 签名
-	SpiData  bb_client.SpiData  `json:"spi_data"`  // 风控数据
 }
 
 func GetConfigDir() (string, error) {

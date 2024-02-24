@@ -1,10 +1,10 @@
-import { GetJsonOrigin } from '@wails/go/app/App';
 import { OpenMusicOrder } from '@/app/api/openMusicOpen';
 import { MusicItem, MusicOrderItem } from '@/app/api/music';
+import { GetOpenMusicOrderList } from '@wails/go/app_bili/App';
 
 export class OpenMusicOrderInstance implements OpenMusicOrder {
   useOriginGetMusicOrder = async (url: string) => {
-    const res = await GetJsonOrigin(url);
+    const res = await GetOpenMusicOrderList(url);
     const newList: MusicOrderItem[] = [];
     res.forEach((r) => {
       const item: MusicOrderItem = {

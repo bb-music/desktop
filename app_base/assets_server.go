@@ -1,14 +1,15 @@
 // 此方案目前存在缺陷，无法流式加载
-package app
+package app_base
 
 import (
-	"bbmusic/pkg/bb_client"
 	"fmt"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
 	"os"
 	"strings"
+
+	"github.com/OpenBBMusic/desktop/pkg/bb_client"
 )
 
 type FileLoader struct {

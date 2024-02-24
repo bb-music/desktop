@@ -1,25 +1,30 @@
-export namespace app {
+export namespace app_base {
 	
-	export class AppConfig {
-	    video_proxy_port: number;
+	export class Config {
+	    proxy_server_port: number;
 	    config_dir: string;
 	
 	    static createFrom(source: any = {}) {
-	        return new AppConfig(source);
+	        return new Config(source);
 	    }
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.video_proxy_port = source["video_proxy_port"];
+	        this.proxy_server_port = source["proxy_server_port"];
 	        this.config_dir = source["config_dir"];
 	    }
 	}
-	export class AuthParams {
+
+}
+
+export namespace app_bili {
+	
+	export class Config {
 	    sign_data: bb_client.SignData;
 	    spi_data: bb_client.SpiData;
 	
 	    static createFrom(source: any = {}) {
-	        return new AuthParams(source);
+	        return new Config(source);
 	    }
 	
 	    constructor(source: any = {}) {
@@ -222,30 +227,6 @@ export namespace bb_client {
 	        this.width = source["width"];
 	        this.height = source["height"];
 	        this.rotate = source["rotate"];
-	    }
-	}
-	export class Durl {
-	    order: number;
-	    length: number;
-	    size: number;
-	    ahead: string;
-	    vhead: string;
-	    url: string;
-	    backup_url: string[];
-	
-	    static createFrom(source: any = {}) {
-	        return new Durl(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.order = source["order"];
-	        this.length = source["length"];
-	        this.size = source["size"];
-	        this.ahead = source["ahead"];
-	        this.vhead = source["vhead"];
-	        this.url = source["url"];
-	        this.backup_url = source["backup_url"];
 	    }
 	}
 	export class GetVideoDetailParams {
@@ -525,28 +506,6 @@ export namespace bb_client {
 	        this.b_4 = source["b_4"];
 	    }
 	}
-	export class Supportformat {
-	    quality: number;
-	    format: string;
-	    new_description: string;
-	    display_desc: string;
-	    superscript: string;
-	    codecs?: any;
-	
-	    static createFrom(source: any = {}) {
-	        return new Supportformat(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.quality = source["quality"];
-	        this.format = source["format"];
-	        this.new_description = source["new_description"];
-	        this.display_desc = source["display_desc"];
-	        this.superscript = source["superscript"];
-	        this.codecs = source["codecs"];
-	    }
-	}
 	export class VideoDetailPage {
 	    cid: number;
 	    page: number;
@@ -646,68 +605,6 @@ export namespace bb_client {
 	        this.dimension = this.convertValues(source["dimension"], Dimension);
 	        this.pages = this.convertValues(source["pages"], VideoDetailPage);
 	        this.subtitle = this.convertValues(source["subtitle"], null);
-	    }
-	
-		convertValues(a: any, classs: any, asMap: boolean = false): any {
-		    if (!a) {
-		        return a;
-		    }
-		    if (a.slice) {
-		        return (a as any[]).map(elem => this.convertValues(elem, classs));
-		    } else if ("object" === typeof a) {
-		        if (asMap) {
-		            for (const key of Object.keys(a)) {
-		                a[key] = new classs(a[key]);
-		            }
-		            return a;
-		        }
-		        return new classs(a);
-		    }
-		    return a;
-		}
-	}
-	export class VideoUrlResponse {
-	    from: string;
-	    result: string;
-	    message: string;
-	    quality: number;
-	    format: string;
-	    timelength: number;
-	    accept_format: string;
-	    accept_description: string[];
-	    accept_quality: number[];
-	    video_codecid: number;
-	    seek_param: string;
-	    seek_type: string;
-	    durl: Durl[];
-	    support_formats: Supportformat[];
-	    high_format?: any;
-	    last_play_time: number;
-	    last_play_cid: number;
-	
-	    static createFrom(source: any = {}) {
-	        return new VideoUrlResponse(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.from = source["from"];
-	        this.result = source["result"];
-	        this.message = source["message"];
-	        this.quality = source["quality"];
-	        this.format = source["format"];
-	        this.timelength = source["timelength"];
-	        this.accept_format = source["accept_format"];
-	        this.accept_description = source["accept_description"];
-	        this.accept_quality = source["accept_quality"];
-	        this.video_codecid = source["video_codecid"];
-	        this.seek_param = source["seek_param"];
-	        this.seek_type = source["seek_type"];
-	        this.durl = this.convertValues(source["durl"], Durl);
-	        this.support_formats = this.convertValues(source["support_formats"], Supportformat);
-	        this.high_format = source["high_format"];
-	        this.last_play_time = source["last_play_time"];
-	        this.last_play_cid = source["last_play_cid"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

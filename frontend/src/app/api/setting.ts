@@ -33,10 +33,6 @@ export class SettingInfo {
 export abstract class Setting {
   /** 获取配置信息 */
   abstract getInfo: () => Promise<SettingInfo>;
-  /** 更新签名数据 */
-  abstract updateSignData: () => Promise<void>;
-  /** 更新 Spi 风控数据 */
-  abstract updateSpiData: () => Promise<void>;
   /** 选中下载目录 */
   abstract selectDownloadDir?: () => Promise<string>;
   /** 更新下载目录 */

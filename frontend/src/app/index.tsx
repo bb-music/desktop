@@ -22,6 +22,12 @@ export function BBMusicApp({
     globalStore.setState({ theme });
   }, [theme]);
 
+  useEffect(() => {
+    Promise.all(apiInstance.musicServices.map((s) => s.hooks?.init?.())).then(() => {
+      console.log('配置初始化完成');
+    });
+  }, []);
+
   if (!apiInstance) return null;
   return <>{children}</>;
 }

@@ -1,6 +1,6 @@
 import { MusicItem, MusicOrderItem } from './music';
 
-export abstract class Action<T = any> {
+export abstract class UserMusicOrderAction<T = any> {
   /** 获取我的歌单 */
   public abstract getList(config: T): Promise<MusicOrderItem[]>;
   /** 创建歌单 */
@@ -24,5 +24,5 @@ export abstract class UserMusicOrder<T = any> {
   public abstract name: string; // 歌单源的唯一标识
   public abstract cname: string; // 显示名
   public abstract ConfigElement?(p: { value: T; onChange: (v: T) => void }): React.ReactElement;
-  public abstract action: Action;
+  public abstract action: UserMusicOrderAction;
 }

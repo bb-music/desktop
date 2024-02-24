@@ -1,18 +1,18 @@
 import { JsonCacheStorage } from '@/lib/cacheStorage';
 import { MusicItem, MusicOrderItem } from '@/app/api/music';
-import { UserLocalMusicOrder, UserRemoteMusicOrder } from '@/app/api/userMusicOrder';
 import { GithubUserMusicOrderAction } from '@/lib/userMusicOrder';
 import { Input } from '@/app/components/ui/input';
 import { SettingItem } from '@/app/modules/setting';
 import { useEffect, useState } from 'react';
 import { nanoid } from 'nanoid';
 import dayjs from 'dayjs';
+import { UserMusicOrder, UserMusicOrderAction } from '@/app/api/userMusicOrder';
 
 export const userLocalMusicOrderCache = new JsonCacheStorage<MusicOrderItem[]>(
   'bb-music-local-order'
 );
 
-export class UserLocalMusicOrderAction implements UserLocalMusicOrder {
+export class UserLocalMusicOrderAction implements UserMusicOrderAction {
   getList = async () => {
     const res = (await userLocalMusicOrderCache.get()) || [];
     return res;
@@ -101,7 +101,7 @@ interface GithubSyncValue {
   repo: string;
   token: string;
 }
-export class UserGithubMusicOrderInstance implements UserRemoteMusicOrder<GithubSyncValue> {
+export class UserGithubMusicOrderInstance implements UserMusicOrder<GithubSyncValue> {
   name = 'Github';
   cname = 'Github 歌单';
   ConfigElement = ({
@@ -155,7 +155,7 @@ export class UserGithubMusicOrderInstance implements UserRemoteMusicOrder<Github
   action = new GithubUserMusicOrderAction();
 }
 
-export class UserLocalMusicOrderInstance implements UserRemoteMusicOrder<GithubSyncValue> {
+export class UserLocalMusicOrderInstance implements UserMusicOrder<null> {
   name = 'Local';
   cname = '本地歌单';
   action = new UserLocalMusicOrderAction();

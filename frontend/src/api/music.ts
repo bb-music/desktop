@@ -1,9 +1,4 @@
-import { GetConfig, GetVideoDetail } from '@wails/go/app/App';
-import { getAuth, settingCache } from './setting';
-import { DownloadMusic } from '@wails/go/app/App';
-import { AudioInstance, Music, MusicItem, MusicOrderItem } from '@/app/api/music';
-import { createMusicId, transformImgUrl } from '@/utils';
-import axios from 'axios';
+import { AudioInstance, Music } from '@/app/api/music';
 
 class PlayerAudio implements AudioInstance {
   ctx = new Audio();
@@ -44,94 +39,6 @@ class PlayerAudio implements AudioInstance {
 }
 
 export class MusicInstance implements Music {
-  // getMusicOrderInfo = async (data: MusicOrderItem) => {
-  //   const auth = await getAuth();
-  //   const info = await GetVideoDetail(
-  //     {
-  //       aid: data.extraData.aid + '',
-  //       bvid: data.extraData.bvid,
-  //     },
-  //     auth
-  //   );
-
-  //   return {
-  //     id: `${info.aid}_${info.bvid}`,
-  //     name: info.title,
-  //     cover: transformImgUrl(info.pic),
-  //     duration: info.duration,
-  //     extraData: info,
-  //     author: '',
-  //     musicList: info.pages.map((p) => {
-  //       return {
-  //         id: createMusicId({
-  //           aid: info.aid,
-  //           bvid: info.bvid,
-  //           cid: p.cid,
-  //         }),
-  //         cover: transformImgUrl(p.first_frame),
-  //         name: p.part,
-  //         duration: p.duration,
-  //         author: '',
-  //         origin: 'bili',
-  //         extraData: {
-  //           aid: info.aid,
-  //           bvid: info.bvid,
-  //           cid: p.cid,
-  //         },
-  //       };
-  //     }),
-  //   };
-  // };
-  getMusicPlayerUrl = async (music: MusicItem) => {
-    const q = new URLSearchParams();
-    const aid = music.extraData.aid?.toString()!;
-    const bvid = music.extraData.bvid?.toString()!;
-    const cid = music.extraData.cid?.toString()!;
-    const setting = await settingCache.get();
-    q.set('aid', aid);
-    q.set('bvid', bvid);
-    q.set('cid', cid);
-    // q.set('uuid_v3', setting?.spiData.uuid_v3!);
-    // q.set('uuid_v4', setting?.spiData.uuid_v4!);
-    // q.set('img_key', setting?.signData.imgKey!);
-    // q.set('sub_key', setting?.signData.subKey!);
-    // q.set('name', music.name);
-    const config = await GetConfig();
-    const port = config.video_proxy_port;
-    const uid = createMusicId({ aid, bvid, cid });
-    const baseUrl = `http://localhost:${port}`;
-    await axios.get(`${baseUrl}/setauth`, {
-      params: {
-        uuid_v3: setting?.spiData.uuid_v3,
-        uuid_v4: setting?.spiData.uuid_v4,
-        img_key: setting?.signData.imgKey,
-        sub_key: setting?.signData.subKey,
-      },
-    });
-    const url = `${baseUrl}/video/proxy/${music.origin}/${uid}.music?${q.toString()}`;
-    return url;
-  };
-  download = async (music: MusicItem) => {
-    const config = await settingCache.get();
-    const dir = config?.downloadDir;
-
-    if (!dir) {
-      return Promise.reject(new Error('请先设置下载目录'));
-    }
-
-    const auth = await getAuth();
-
-    return DownloadMusic(
-      {
-        aid: music.extraData.aid + '',
-        cid: music.extraData.cid + '',
-        bvid: music.extraData.bvid + '',
-        download_dir: dir,
-        name: music.name,
-      },
-      auth
-    );
-  };
   createAudio() {
     return new PlayerAudio();
   }

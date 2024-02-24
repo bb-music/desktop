@@ -1,4 +1,3 @@
-import { Search } from './search';
 import { Setting } from './setting';
 import { Music } from './music';
 import { OpenMusicOrder } from './openMusicOpen';
@@ -13,7 +12,6 @@ export interface Api {
   utils: Utils;
   cacheStorage: StateStorage;
   setting: Setting;
-  search: Search;
   music: Music;
   openMusicOrder: OpenMusicOrder;
   userMusicOrder: UserMusicOrder[];

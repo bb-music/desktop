@@ -3,6 +3,7 @@ import SearchItem from './components/SearchItem';
 import { useSearchStore } from './store';
 import styles from './index.module.scss';
 import { MusicOrderDetailProps } from '../musicOrderDetail';
+import { useEffect } from 'react';
 
 export * from './store';
 export * from './components/SearchForm';
@@ -14,6 +15,10 @@ export interface SearchProps {
 
 export function Search({ gotoMusicOrderDetail }: SearchProps) {
   const store = useSearchStore();
+
+  useEffect(() => {
+    store.init();
+  }, []);
 
   return (
     <>

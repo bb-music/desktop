@@ -1,16 +1,14 @@
 import styles from './index.module.scss';
 import { cls, transformImgUrl } from '@/utils';
 import { useState } from 'react';
-import { api } from '@/app/api';
-import { SearchItem as SearchItemInter, SearchType } from '@/app/api/search';
 import { Image } from '@/app/components/ui/image';
 import { usePlayerStore } from '../../../player';
-import { PageView, openPage } from '@/app/modules/container/store';
 import { Button } from '@/app/components/ui/button';
 import { musicCollect } from '@/app/modules/musicOrderList';
 import { downloadMusic } from '@/app/modules/music';
-import { seconds2mmss } from '@/app/utils';
+import { getMusicService, seconds2mmss } from '@/app/utils';
 import { MusicOrderDetailProps } from '@/app/modules/musicOrderDetail';
+import { SearchType, SearchItem as SearchItemInter } from '@/app/api/musicService';
 
 interface SearchItemProps {
   data: SearchItemInter;
@@ -24,7 +22,9 @@ export default function SearchItem({ data, gotoMusicOrderDetail }: SearchItemPro
   const getDetailHandler = async () => {
     setLoading(true);
     try {
-      const info = await api.search.getItemInfo(data);
+      const service = getMusicService(data.origin);
+      if (!service) return;
+      const info = await service?.action.searchItemDetail(data);
       setMusic({
         ...info,
         id: info.id.toString(),

@@ -2,6 +2,7 @@ import { PlayerMode, PlayerStatus } from './constants';
 import { create } from 'zustand';
 import { AudioInstance, MusicItem } from '@/app/api/music';
 import { api } from '@/app/api';
+import { getMusicService } from '@/app/utils';
 
 const CACHE_KEY = 'BBPlayerStorage';
 
@@ -59,7 +60,9 @@ export const playerStore = create<PlayerStore>()((set, get) => {
       loadCache().then(async () => {
         const store = get();
         if (store.current) {
-          const url = await api.music.getMusicPlayerUrl(store.current);
+          const service = getMusicService(store.current.origin);
+          if (!service) return;
+          const url = await service?.action.getMusicPlayerUrl(store.current);
           audio.setSrc(url);
         }
       });
@@ -87,7 +90,9 @@ export const playerStore = create<PlayerStore>()((set, get) => {
           current: m,
           playerStatus: PlayerStatus.Play,
         });
-        const url = await api.music.getMusicPlayerUrl(m);
+        const service = getMusicService(m.origin);
+        if (!service) return;
+        const url = await service.action.getMusicPlayerUrl(m);
         store.audio?.setSrc(url);
         store.audio?.setCurrentTime(0);
         store.audio?.play();

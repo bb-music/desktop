@@ -2,13 +2,13 @@ import { Input } from '@/app/components/ui/input';
 import { useSearchStore } from '../../store';
 import styles from './index.module.scss';
 import { Button } from '@/app/components/ui/button';
-import { Close, CloseOne } from '@icon-park/react';
+import { CloseOne } from '@icon-park/react';
 import { useEffect } from 'react';
 
 export default function SearchForm() {
   const searchStore = useSearchStore();
   const searchHandler = () => {
-    if (!searchStore.params.keyword) return;
+    if (!searchStore.params.keyword.trim()) return;
     searchStore.setParams({ current: 1 });
     searchStore.load();
   };
@@ -22,7 +22,7 @@ export default function SearchForm() {
           type='text'
           value={searchStore.params.keyword}
           onChange={(e) => {
-            searchStore.setParams({ keyword: e.target.value.trim() });
+            searchStore.setParams({ keyword: e.target.value });
           }}
           placeholder='请输入要搜索的歌曲名称'
           onKeyUp={(e) => {

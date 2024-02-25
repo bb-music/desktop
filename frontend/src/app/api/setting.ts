@@ -1,5 +1,3 @@
-import { MusicService } from './musicService';
-
 interface UserMusicOrderOriginItem<T = Record<string, any>> {
   name: string;
   config: T;

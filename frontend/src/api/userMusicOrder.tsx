@@ -55,7 +55,7 @@ export class UserLocalMusicOrderAction implements UserMusicOrderAction {
     }
     return info;
   };
-  appendMusic = async (id: string, musics: MusicItem<any>[]) => {
+  appendMusic = async (id: string, musics: MusicItem[]) => {
     await this.updateItem(id, (l) => {
       const newList = l.musicList?.filter((i) => !musics.find((m) => m.id === i.id));
       return {
@@ -63,7 +63,7 @@ export class UserLocalMusicOrderAction implements UserMusicOrderAction {
       };
     });
   };
-  updateMusic = async (id: string, music: MusicItem<any>) => {
+  updateMusic = async (id: string, music: MusicItem) => {
     await this.updateItem(id, (l) => {
       const newList = l.musicList?.map((i) => {
         if (i.id === music.id) {
@@ -80,7 +80,7 @@ export class UserLocalMusicOrderAction implements UserMusicOrderAction {
       };
     });
   };
-  deleteMusic = async (id: string, musics: MusicItem<any>[]) => {
+  deleteMusic = async (id: string, musics: MusicItem[]) => {
     await this.updateItem(id, (l) => {
       const newList = l.musicList?.filter((i) => {
         return !musics.map((m) => m.id).includes(i.id);

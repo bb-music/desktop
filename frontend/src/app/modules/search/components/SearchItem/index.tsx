@@ -25,10 +25,7 @@ export default function SearchItem({ data, gotoMusicOrderDetail }: SearchItemPro
       const service = getMusicService(data.origin);
       if (!service) return;
       const info = await service?.action.searchItemDetail(data);
-      setMusic({
-        ...info,
-        id: info.id.toString(),
-      });
+      setMusic(info);
       if (info.type === SearchType.Order) {
         gotoMusicOrderDetail({ data: info });
         // openPage(PageView.MusicOrderDetail, { data: info });

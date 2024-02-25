@@ -60,13 +60,7 @@ func ProxyServer(port int, fileStorage *file_storage.FileStorage) {
 			}
 			// fmt.Printf("client: %+v\n", client)
 			// 取出播放地址
-			resp, err := client.GetVideoUrl(bb_client.GetVideoUrlParams{
-				GetVideoDetailParams: bb_client.GetVideoDetailParams{
-					Aid:  aid,
-					Bvid: bvid,
-				},
-				Cid: cid,
-			})
+			resp, err := client.GetVideoUrl(aid, bvid, cid)
 			if err != nil {
 				fmt.Printf("err: %+v\n", err)
 			}

@@ -8,14 +8,14 @@ export function DownloadMusic(arg1:app_bili.DownloadMusicParams):Promise<string>
 
 export function GetConfig():Promise<app_bili.Config>;
 
-export function GetMusicDetail(arg1:bb_client.GetVideoDetailParams):Promise<bb_client.VideoDetailResponse>;
-
-export function GetMusicPlayerUrl(arg1:bb_client.GetVideoUrlParams):Promise<string>;
+export function GetMusicPlayerUrl(arg1:string,arg2:string):Promise<string>;
 
 export function GetOpenMusicOrderList(arg1:string):Promise<Array<app_bili.MusicOrderItem>>;
 
 export function InitConfig():Promise<void>;
 
-export function Search(arg1:bb_client.SearchParams):Promise<bb_client.SearchResponse>;
+export function Search(arg1:bb_client.SearchParams):Promise<app_bili.SearchResponse>;
+
+export function SearchDetail(arg1:string,arg2:string):Promise<app_bili.SearchItem>;
 
 export function Startup(arg1:context.Context):Promise<void>;

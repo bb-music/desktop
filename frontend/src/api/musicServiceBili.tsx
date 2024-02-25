@@ -6,17 +6,17 @@ import {
   SearchParams,
   SearchType,
 } from '@/app/api/musicService';
-import { createMusicId, html2text, mmss2seconds, transformImgUrl } from '@/utils';
-import { app_bili, bb_client } from '@wails/go/models';
+import { html2text, transformImgUrl } from '@/utils';
+import { app_bili } from '@wails/go/models';
 import { settingCache } from './setting';
 import { MusicItem } from '@/app/api/music';
 import {
   DownloadMusic,
   GetConfig,
-  GetMusicDetail,
   GetMusicPlayerUrl,
   Search,
   InitConfig,
+  SearchDetail,
 } from '@wails/go/app_bili/App';
 import { SettingItem } from '@/app/modules/setting';
 import { Input } from '@/app/components/ui/input';
@@ -43,75 +43,26 @@ class BiliAction implements MusicServiceAction {
       keyword: params.keyword,
     });
     return {
-      current: page,
-      total: res.numResults,
-      pageSize: res.pagesize,
-      list: res.result
-        .filter((r) => !['ketang'].includes(r.type))
-        .map((item) => ({
-          id: item.id + '',
-          name: html2text(item.title),
-          cover: transformImgUrl(item.pic),
-          duration: mmss2seconds(item.duration),
-          author: item.author,
-          type: SearchType.Order,
-          origin: 'bili',
-          extraData: {
-            aid: item.aid,
-            bvid: item.bvid,
-          },
-        })),
+      ...res,
+      data: res.data.map((item) => ({
+        ...item,
+        name: html2text(item.name),
+        cover: transformImgUrl(item.cover),
+        type: item.type as SearchType,
+      })),
     };
   };
-  searchItemDetail = async (item: SearchItem<bb_client.SearchResultItem>) => {
-    const data = item.extraData!;
-    const info = await GetMusicDetail({
-      aid: data.aid + '',
-      bvid: data.bvid,
-    });
-    if (info.videos > 1) {
-      return {
-        ...item,
-        musicList: info.pages.map((p) => {
-          const f = { aid: info.aid, bvid: info.bvid, cid: p.cid };
-          return {
-            id: createMusicId(f),
-            cover: p.first_frame,
-            name: p.part,
-            duration: p.duration,
-            author: item.author,
-            origin: 'bili',
-            extraData: {
-              aid: f.aid,
-              bvid: f.bvid,
-              cid: p.cid,
-            },
-          };
-        }),
-        type: SearchType.Order,
-        extraData: {
-          aid: info.aid,
-          bvid: info.bvid,
-          cid: info.cid,
-        },
-      };
-    } else {
-      return {
-        ...item,
-        type: SearchType.Music,
-        extraData: {
-          aid: info.aid,
-          bvid: info.bvid,
-          cid: info.cid,
-        },
-      };
-    }
+  searchItemDetail = async (item: SearchItem) => {
+    const info = await SearchDetail(item.id, item.origin);
+    return {
+      ...info,
+      type: info.type as SearchType,
+    };
   };
   getMusicPlayerUrl = async (music: MusicItem) => {
-    const aid = music.extraData.aid?.toString()!;
-    const bvid = music.extraData.bvid?.toString()!;
-    const cid = music.extraData.cid?.toString()!;
-    const url = await GetMusicPlayerUrl({ aid, bvid, cid });
+    console.log('music: ', music);
+    const url = await GetMusicPlayerUrl(music.id, music.origin);
+    console.log('url: ', url);
     return url || '';
   };
   download = async (music: MusicItem) => {
@@ -123,9 +74,8 @@ class BiliAction implements MusicServiceAction {
     }
 
     return DownloadMusic({
-      aid: music.extraData.aid + '',
-      cid: music.extraData.cid + '',
-      bvid: music.extraData.bvid + '',
+      id: music.id,
+      origin: music.origin,
       download_dir: dir,
       name: music.name,
     });

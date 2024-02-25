@@ -68,12 +68,16 @@ export const searchStore = create<SearchStore>()((set, get) => {
       try {
         const service = getMusicService(origin);
         if (!service) return;
-        const res = await service?.action.searchList(params);
-        appendHistory(params.keyword).then(() => {
+        const query = {
+          ...params,
+          keyword: params.keyword.trim(),
+        };
+        const res = await service?.action.searchList(query);
+        appendHistory(query.keyword).then(() => {
           loadHistoryList();
         });
         set({
-          data: res.list,
+          data: res.data,
           loading: false,
           pagination: {
             current: res.current,

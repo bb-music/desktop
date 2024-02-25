@@ -4,11 +4,11 @@ import { ListResult } from './common';
 import { MusicItem } from './music';
 
 export const enum SearchType {
-  Music = 1, // 歌曲
-  Order = 2, // 歌单
+  Music = 'music', // 歌曲
+  Order = 'order', // 歌单
 }
 
-export interface SearchItem<T = any> {
+export interface SearchItem {
   id: string; // ID
   cover: string; // 封面
   name: string; // 名称
@@ -16,7 +16,6 @@ export interface SearchItem<T = any> {
   author: string; // 作者
   type?: SearchType; // 类型
   musicList?: MusicItem[]; // 歌单中的歌曲列表
-  extraData?: T; // 扩展数据
   origin: string;
 }
 export interface SearchParams {

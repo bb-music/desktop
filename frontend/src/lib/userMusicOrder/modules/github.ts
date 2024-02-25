@@ -105,7 +105,7 @@ export class GithubUserMusicOrderAction implements UserMusicOrderAction {
     }
     return info;
   }
-  public async appendMusic(id: string, musics: MusicItem<any>[]) {
+  public async appendMusic(id: string, musics: MusicItem[]) {
     const config = await this.getConfig();
 
     await this.updateItem(
@@ -120,7 +120,7 @@ export class GithubUserMusicOrderAction implements UserMusicOrderAction {
       () => `新增歌曲`
     );
   }
-  public async updateMusic(id: string, music: MusicItem<any>) {
+  public async updateMusic(id: string, music: MusicItem) {
     const config = await this.getConfig();
 
     await this.updateItem(
@@ -144,7 +144,7 @@ export class GithubUserMusicOrderAction implements UserMusicOrderAction {
       () => `修改歌曲信息`
     );
   }
-  public async deleteMusic(id: string, musics: MusicItem<any>[]) {
+  public async deleteMusic(id: string, musics: MusicItem[]) {
     const config = await this.getConfig();
 
     await this.updateItem(

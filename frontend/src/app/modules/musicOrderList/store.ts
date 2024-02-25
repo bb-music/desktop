@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { api } from '@/app/api';
 import { MusicItem, MusicOrderItem } from '@/app/api/music';
-import { settingStore } from '../setting';
 
 interface MusicOrderOriginItem {
   name: string;
@@ -21,11 +20,9 @@ export const userMusicOrderStore = create<UserMusicOrderStore>()((set, get) => {
   return {
     list: [],
     load: async () => {
-      const setting = settingStore.getState();
       const res = await Promise.all(
         api.userMusicOrder.map((r) => {
-          const config = setting.userMusicOrderOrigin.find((u) => u.name === r.name);
-          return r.action.getList(config?.config);
+          return r.action.getList();
         })
       );
       const result: MusicOrderOriginItem[] = res.map((r, i) => {

@@ -10,12 +10,8 @@ export function GetConfig() {
   return window['go']['app_bili']['App']['GetConfig']();
 }
 
-export function GetMusicDetail(arg1) {
-  return window['go']['app_bili']['App']['GetMusicDetail'](arg1);
-}
-
-export function GetMusicPlayerUrl(arg1) {
-  return window['go']['app_bili']['App']['GetMusicPlayerUrl'](arg1);
+export function GetMusicPlayerUrl(arg1, arg2) {
+  return window['go']['app_bili']['App']['GetMusicPlayerUrl'](arg1, arg2);
 }
 
 export function GetOpenMusicOrderList(arg1) {
@@ -28,6 +24,10 @@ export function InitConfig() {
 
 export function Search(arg1) {
   return window['go']['app_bili']['App']['Search'](arg1);
+}
+
+export function SearchDetail(arg1, arg2) {
+  return window['go']['app_bili']['App']['SearchDetail'](arg1, arg2);
 }
 
 export function Startup(arg1) {

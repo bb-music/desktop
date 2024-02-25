@@ -1,33 +1,23 @@
+import { MusicService } from './musicService';
+
 interface UserMusicOrderOriginItem<T = Record<string, any>> {
   name: string;
   config: T;
 }
 
+type MusicServiceItem<T = any> = UserMusicOrderOriginItem<T>;
+
 export class SettingInfo {
-  /** 签名信息 */
-  signData: {
-    imgKey: string;
-    subKey: string;
-  } = {
-    imgKey: '',
-    subKey: '',
-  };
-  /** 风控 */
-  spiData: {
-    uuid_v3: string;
-    uuid_v4: string;
-  } = {
-    uuid_v3: '',
-    uuid_v4: '',
-  };
   /** 视频代理地址 */
-  videoProxyPort?: number;
+  proxyServerPort?: number;
   /** 文件下载目录 */
   downloadDir?: string;
   /** 歌单广场来源 */
   openMusicOrderOrigin: string[] = [];
   /** 个人歌单同步源 */
   userMusicOrderOrigin: UserMusicOrderOriginItem[] = [];
+  /** 歌曲服务 */
+  musicServices: MusicServiceItem[] = [];
 }
 
 export abstract class Setting {

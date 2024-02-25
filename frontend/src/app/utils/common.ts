@@ -13,6 +13,15 @@ export function seconds2mmss(duration: number) {
   return dayjs.duration(duration, 'seconds').format('mm:ss');
 }
 
+/** 根据歌单源的 name 获取对应的歌单源操作 */
+export function getMusicOrder(originName: string) {
+  const order = api.userMusicOrder.find((i) => i.name === originName);
+  if (!order) {
+    console.error(`歌单源 ${originName} 不存在`);
+  }
+  return order;
+}
+
 /** 根据歌曲源的 name 获取歌曲源的服务 */
 export function getMusicService(name: string) {
   const service = api.musicServices.find((i) => i.name === name);

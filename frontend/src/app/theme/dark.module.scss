@@ -69,6 +69,10 @@
   --button-text-hover-color: rgb(var(--main-color-light));
   --button-text-padding: 4px 0px;
 
+  // switch
+  --switch-bg: rgb(0, 0, 0);
+  --switch-focus-bg: rgb(var(--main-color));
+
   // 搜索页
   --search-item-bg: rgb(41, 41, 41); // 2n行背景色
   --search-item-hover-bg: rgb(50, 50, 50);

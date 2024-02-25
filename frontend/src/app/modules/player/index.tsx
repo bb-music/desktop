@@ -33,8 +33,9 @@ export function Player() {
   const [listShow, setListShow] = useState(false);
   const [progress, setProgress] = useState(0);
   const progressTimer = useRef<number>(0);
-  useEffect(() => {}, []);
-
+  useEffect(() => {
+    player.init();
+  }, []);
   useEffect(() => {
     if (!player.audio || !player.audio.addEventListener) return;
     (async () => {
@@ -63,6 +64,8 @@ export function Player() {
       document.removeEventListener('click', handler);
     };
   }, [player.audio]);
+
+  if (!player.audio) return null;
 
   return (
     <div className={styles.player}>

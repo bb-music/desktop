@@ -7,25 +7,14 @@ export const settingCache = new JsonCacheStorage<SettingInfo>('bb-setting');
 export class SettingInstance implements Setting {
   getInfo = async () => {
     const config = (await settingCache.get()) || {
-      signData: {
-        imgKey: '',
-        subKey: '',
-      },
-      spiData: {
-        uuid_v3: '',
-        uuid_v4: '',
-      },
       openMusicOrderOrigin: [],
       userMusicOrderOrigin: [],
+      musicServices: [],
     };
     const res = await GetConfig();
     return {
       ...config,
-      videoProxyPort: res.proxy_server_port,
-      // 歌单源
-      openMusicOrderOrigin: config.openMusicOrderOrigin,
-      // 个人歌单同步源
-      userMusicOrderOrigin: config.userMusicOrderOrigin,
+      proxyServerPort: res.proxy_server_port,
     };
   };
   selectDownloadDir = async () => {

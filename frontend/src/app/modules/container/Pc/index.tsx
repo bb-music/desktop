@@ -10,24 +10,21 @@ import { PageViewMap, useContainerStore } from '../store';
 import { useEffect, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useSettingStore } from '../../setting';
-import { Player, usePlayerStore } from '../../player';
+import { Player } from '../../player';
 import { MessageRoot } from '@/app/components/ui/message';
 import { MusicOrderModal } from '../../musicOrderList';
 import { MusicFormModal } from '../../music';
 
 export interface PcContainerProps extends BaseElementProps {
   header?: React.ReactNode;
-  player?: React.ReactNode;
   headerProps?: HeaderProps;
 }
 
-export function PcContainer({ className, style, header, headerProps, player }: PcContainerProps) {
-  const { theme } = useGlobalStore();
-  const playerStore = usePlayerStore();
+export function PcContainer({ className, style, header, headerProps }: PcContainerProps) {
+  const theme = useGlobalStore(useShallow((state) => state.theme));
   const settingLoad = useSettingStore(useShallow((state) => state.load));
 
   useEffect(() => {
-    playerStore.init();
     settingLoad();
   }, []);
   return (
@@ -41,7 +38,7 @@ export function PcContainer({ className, style, header, headerProps, player }: P
         <Sidebar />
         <ContainerContent />
       </main>
-      {!player && playerStore.audio && <Player />}
+      <Player />
       <MusicOrderModal />
       <MusicFormModal />
     </div>

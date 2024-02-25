@@ -22,7 +22,10 @@ interface ListResponse {
 }
 
 export class GithubUserMusicOrderAction implements UserMusicOrderAction {
-  public async getList(config: UserMusicOrderOrigin.GithubConfig) {
+  constructor(public getConfig: () => Promise<UserMusicOrderOrigin.GithubConfig>) {}
+
+  public async getList() {
+    const config = await this.getConfig();
     let list: MusicOrderItem[] = [];
     try {
       const res = await this.getData(config);
@@ -37,7 +40,8 @@ export class GithubUserMusicOrderAction implements UserMusicOrderAction {
     }
     return list;
   }
-  public async create(data: Omit<MusicOrderItem, 'id'>, config: UserMusicOrderOrigin.GithubConfig) {
+  public async create(data: Omit<MusicOrderItem, 'id'>) {
+    const config = await this.getConfig();
     const { request, filePath } = this.createConfig(config);
     const res = await this.getDataAndRsa(config);
     let list = res.data;
@@ -61,7 +65,8 @@ export class GithubUserMusicOrderAction implements UserMusicOrderAction {
       sha: res.sha,
     });
   }
-  public async update(data: MusicOrderItem, config: UserMusicOrderOrigin.GithubConfig) {
+  public async update(data: MusicOrderItem) {
+    const config = await this.getConfig();
     await this.updateItem(
       data.id,
       config,
@@ -75,7 +80,8 @@ export class GithubUserMusicOrderAction implements UserMusicOrderAction {
       (c) => `更新歌单${c.name}(${c.id})`
     );
   }
-  public async delete(data: Pick<MusicOrderItem, 'id'>, config: UserMusicOrderOrigin.GithubConfig) {
+  public async delete(data: Pick<MusicOrderItem, 'id'>) {
+    const config = await this.getConfig();
     const { request, filePath } = this.createConfig(config);
     const res = await this.getDataAndRsa(config);
     let list = res.data;
@@ -91,15 +97,17 @@ export class GithubUserMusicOrderAction implements UserMusicOrderAction {
       sha: res.sha,
     });
   }
-  public async getDetail(id: string, config: any) {
-    const res = await this.getList(config);
+  public async getDetail(id: string) {
+    const res = await this.getList();
     const info = res.find((r) => r.id === id);
     if (!info) {
       return Promise.reject(new Error('歌单不存在'));
     }
     return info;
   }
-  public async appendMusic(id: string, musics: MusicItem<any>[], config: any) {
+  public async appendMusic(id: string, musics: MusicItem<any>[]) {
+    const config = await this.getConfig();
+
     await this.updateItem(
       id,
       config,
@@ -112,7 +120,9 @@ export class GithubUserMusicOrderAction implements UserMusicOrderAction {
       () => `新增歌曲`
     );
   }
-  public async updateMusic(id: string, music: MusicItem<any>, config: any) {
+  public async updateMusic(id: string, music: MusicItem<any>) {
+    const config = await this.getConfig();
+
     await this.updateItem(
       id,
       config,
@@ -134,7 +144,9 @@ export class GithubUserMusicOrderAction implements UserMusicOrderAction {
       () => `修改歌曲信息`
     );
   }
-  public async deleteMusic(id: string, musics: MusicItem<any>[], config: any) {
+  public async deleteMusic(id: string, musics: MusicItem<any>[]) {
+    const config = await this.getConfig();
+
     await this.updateItem(
       id,
       config,
@@ -149,6 +161,7 @@ export class GithubUserMusicOrderAction implements UserMusicOrderAction {
       () => `移除歌曲`
     );
   }
+
   private async getDataAndRsa(config: UserMusicOrderOrigin.GithubConfig) {
     try {
       const res = await this.getData(config);
@@ -191,18 +204,18 @@ export class GithubUserMusicOrderAction implements UserMusicOrderAction {
   private async createMyJson(config: UserMusicOrderOrigin.GithubConfig) {
     const { request, filePath } = this.createConfig(config);
     // 字符串转 base64
-    const content = btoa('[]');
+    const content = Base64.atob('[]');
     await request.put(filePath, {
       message: '初始化歌单文件',
       content,
     });
   }
-  private updateItem = async (
+  private async updateItem(
     id: string,
     config: UserMusicOrderOrigin.GithubConfig,
     cb: (l: MusicOrderItem) => Partial<MusicOrderItem>,
     message: (l: MusicOrderItem) => string
-  ) => {
+  ) {
     const { request, filePath } = this.createConfig(config);
     const res = await this.getDataAndRsa(config);
     let list = res.data;
@@ -227,7 +240,7 @@ export class GithubUserMusicOrderAction implements UserMusicOrderAction {
       content,
       sha: res.sha,
     });
-  };
+  }
 }
 
 function transformRepoUrl(url: string) {

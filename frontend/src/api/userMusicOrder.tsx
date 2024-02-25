@@ -1,12 +1,22 @@
 import { JsonCacheStorage } from '@/lib/cacheStorage';
 import { MusicItem, MusicOrderItem } from '@/app/api/music';
-import { GithubUserMusicOrderAction } from '@/lib/userMusicOrder';
+import {
+  GithubUserMusicOrderAction,
+  UserMusicOrderOrigin,
+  UserMusicOrderOriginType,
+} from '@/lib/userMusicOrder';
 import { Input } from '@/app/components/ui/input';
 import { SettingItem } from '@/app/modules/setting';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { nanoid } from 'nanoid';
 import dayjs from 'dayjs';
 import { UserMusicOrder, UserMusicOrderAction } from '@/app/api/userMusicOrder';
+import { settingCache } from './setting';
+import { Button } from '@/app/components/ui/button';
+import { message } from '@/app/components/ui/message';
+
+const NAME = UserMusicOrderOriginType.Github;
+const CNAME = 'Github 歌单';
 
 export const userLocalMusicOrderCache = new JsonCacheStorage<MusicOrderItem[]>(
   'bb-music-local-order'
@@ -102,34 +112,41 @@ interface GithubSyncValue {
   token: string;
 }
 export class UserGithubMusicOrderInstance implements UserMusicOrder<GithubSyncValue> {
-  name = 'Github';
-  cname = 'Github 歌单';
-  ConfigElement = ({
-    value = {
-      repo: '',
-      token: '',
-    },
-    onChange,
-  }: {
-    value: GithubSyncValue;
-    onChange: (v: GithubSyncValue) => void;
-  }) => {
+  name = NAME;
+  cname = CNAME;
+  ConfigElement = ({ onChange }: { onChange?: (v: GithubSyncValue) => void }) => {
+    const timerRef = useRef<NodeJS.Timeout>();
+
     const [data, setData] = useState<GithubSyncValue>({
       repo: '',
       token: '',
     });
-    useEffect(() => {
-      if (value.repo !== data.repo || value.token !== data.token) {
-        setData(value);
+    const loadHandler = async () => {
+      const setting = await settingCache.get();
+      if (setting) {
+        const config = setting.userMusicOrderOrigin.find((u) => u.name === NAME)?.config;
+        if (config) {
+          setData({
+            repo: config.repo,
+            token: config.token,
+          });
+        }
       }
-    }, [value]);
+    };
+    useEffect(() => {
+      loadHandler();
+    }, []);
     const changeHandler = (key: keyof GithubSyncValue, value: string) => {
       const newValue = {
         ...data,
         [key]: value,
       };
       setData(newValue);
-      onChange(newValue);
+    };
+    const savaHandler = async () => {
+      await updateUserMusicOrderOriginConfig(NAME, data);
+      onChange?.(data);
+      message.success('已保存');
     };
     return (
       <>
@@ -149,14 +166,39 @@ export class UserGithubMusicOrderInstance implements UserMusicOrder<GithubSyncVa
             }}
           />
         </SettingItem>
+        <Button onClick={savaHandler}>保存</Button>
       </>
     );
   };
-  action = new GithubUserMusicOrderAction();
+  action = new GithubUserMusicOrderAction(async () => {
+    const setting = await settingCache.get();
+    return {
+      ...setting?.userMusicOrderOrigin.find((n) => n.name === NAME)?.config,
+    } as UserMusicOrderOrigin.GithubConfig;
+  });
 }
 
 export class UserLocalMusicOrderInstance implements UserMusicOrder<null> {
   name = 'Local';
   cname = '本地歌单';
   action = new UserLocalMusicOrderAction();
+}
+
+async function updateUserMusicOrderOriginConfig(originName: string, data: any) {
+  const setting = await settingCache.get();
+  let list = setting?.userMusicOrderOrigin || [];
+  if (list.find((n) => n.name === originName)) {
+    list = list.map((l) => {
+      if (l.name === originName) {
+        l.config = data;
+      }
+      return l;
+    });
+  } else {
+    list.push({
+      name: originName,
+      config: data,
+    });
+  }
+  settingCache.update('userMusicOrderOrigin', list);
 }

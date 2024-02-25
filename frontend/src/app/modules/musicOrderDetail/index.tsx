@@ -190,7 +190,7 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
                         deleteMusic({
                           musicOrderId,
                           music: m,
-                          originName: store.originName,
+                          originName: store.originName!,
                         });
                       },
                     },

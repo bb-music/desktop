@@ -5,7 +5,7 @@ import { Help, Plus } from '@icon-park/react';
 import styles from './index.module.scss';
 import { Input } from '@/app/components/ui/input';
 import { Button } from '@/app/components/ui/button';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { useSettingStore } from './store';
 import { api } from '@/app/api';
 import { Modal } from '@/app/components/ui/modal';
@@ -15,6 +15,10 @@ export * from './store';
 export interface SettingProps {}
 
 export function Setting() {
+  const store = useSettingStore();
+  useEffect(() => {
+    store.load();
+  }, []);
   return (
     <div
       className={styles.container}
@@ -32,19 +36,26 @@ export function Setting() {
 
       <div className={styles.divider}></div>
 
-      <OrderSyncSetting />
+      <MusicOrderSetting />
     </div>
   );
 }
 
 export function ServiceSetting() {
+  const store = useSettingStore();
   return (
     <>
       {api.musicServices.map((service) => {
+        const Comp = service.ConfigElement;
+        if (!Comp) return null;
         return (
           <div key={service.name}>
             <SubTitle title={`${service.cname} 源设置`} />
-            {service.ConfigElement?.()}
+            <Comp
+              onChange={() => {
+                store.load();
+              }}
+            />
           </div>
         );
       })}
@@ -86,7 +97,7 @@ export function MainSetting() {
         <Input
           style={{ width: 100 }}
           disabled
-          value={store.videoProxyPort?.toString() || ''}
+          value={store.proxyServerPort?.toString() || ''}
         />
       </SettingItem>
     </>
@@ -168,47 +179,21 @@ export function OpenSetting() {
   );
 }
 
-export function OrderSyncSetting() {
-  const setting = useSettingStore();
-  const timerRef = useRef<Record<string, NodeJS.Timeout>>({});
-  useEffect(() => {
-    setting.load();
-  }, []);
+export function MusicOrderSetting() {
+  const store = useSettingStore();
 
   return (
     <>
-      <SubTitle title='歌单同步' />
+      <SubTitle title='歌单同步设置' />
       {api.userMusicOrder.map((m, index) => {
         const Comp = m.ConfigElement;
         if (!Comp) return null;
-        const value = setting.userMusicOrderOrigin?.find((u) => u.name === m.name)!;
         return (
           <div key={index}>
             <SubTitle title={<span style={{ color: 'rgb(var(--main-color))' }}>{m.name}</span>} />
             <Comp
-              value={value?.config}
-              onChange={(value: any) => {
-                let newList = setting.userMusicOrderOrigin || [];
-                if (newList.find((n) => n.name === m.name)) {
-                  newList = setting.userMusicOrderOrigin.map((item) => {
-                    if (item.name !== m.name) return item;
-                    return {
-                      ...item,
-                      config: value,
-                    };
-                  });
-                } else {
-                  newList.push({
-                    name: m.name,
-                    config: value,
-                  });
-                }
-                clearTimeout(timerRef.current?.[m.name]);
-                if (timerRef.current) {
-                  timerRef.current[m.name] = setTimeout(() => {
-                    api.setting.updateUserMusicOrderOrigin(newList);
-                  }, 500);
-                }
+              onChange={() => {
+                store.load();
               }}
             />
           </div>

@@ -16,12 +16,11 @@ export const settingStore = create<SettingStore>()((set, get) => {
     load: async () => {
       const res = await api.setting.getInfo();
       set({
-        signData: res.signData,
-        spiData: res.spiData,
-        videoProxyPort: res.videoProxyPort,
+        proxyServerPort: res.proxyServerPort,
         downloadDir: res.downloadDir,
         openMusicOrderOrigin: res.openMusicOrderOrigin || [],
         userMusicOrderOrigin: res.userMusicOrderOrigin || [],
+        musicServices: res.musicServices || [],
       });
     },
   };

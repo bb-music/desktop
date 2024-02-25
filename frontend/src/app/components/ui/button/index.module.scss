@@ -1,4 +1,5 @@
 .btn {
+  all: unset;
   display: inline-flex;
   align-items: center;
   border: 1px var(--button-border-style) var(--button-border-color);
@@ -11,6 +12,7 @@
   cursor: pointer;
   padding: var(--button-padding);
   font-size: var(--button-font-size);
+  box-sizing: border-box;
 
   &:hover {
     background: var(--button-hover-bg);

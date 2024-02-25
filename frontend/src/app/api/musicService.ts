@@ -40,13 +40,13 @@ export abstract class MusicServiceHooks {
   abstract init?(): Promise<void>;
 }
 
-export abstract class MusicService {
+export abstract class MusicService<T = any> {
   /** 源的唯一名称 */
   abstract name: string;
   /** 源的显示名称 */
   abstract cname: string;
   /** 源的配置项 */
-  abstract ConfigElement: () => React.ReactElement;
+  public abstract ConfigElement?(p: { onChange?: (v: T) => void }): React.ReactElement;
   /** 源的操作 */
   abstract action: MusicServiceAction;
   /** 钩子 */

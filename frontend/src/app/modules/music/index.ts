@@ -1,10 +1,9 @@
 import { userMusicOrderStore } from '../musicOrderList';
 import { api } from '@/app/api';
-import { settingStore } from '../setting';
 import { message } from '@/app/components/ui/message';
 import { MusicItem } from '@/app/api/music';
 import { musicFormModalStore } from './store';
-import { getMusicService } from '@/app/utils';
+import { getMusicOrder, getMusicService } from '@/app/utils';
 
 export * from './store';
 export * from './FormModal';
@@ -17,14 +16,10 @@ export function deleteMusic({
 }: {
   musicOrderId: string;
   music: MusicItem;
-  originName?: string;
+  originName: string;
 }) {
-  const order = api.userMusicOrder.find((u) => u.name === originName);
-  const config = settingStore
-    .getState()
-    .userMusicOrderOrigin.find((u) => u.name === originName)?.config;
-
-  order?.action.deleteMusic(musicOrderId, [music], config).then(() => {
+  const order = getMusicOrder(originName);
+  order?.action.deleteMusic(musicOrderId, [music]).then(() => {
     userMusicOrderStore.getState().load();
     message.success('已删除');
   });

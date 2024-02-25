@@ -2,7 +2,7 @@ import { MusicOrderItem } from '@/app/api/music';
 
 export const enum UserMusicOrderOriginType {
   ExtendClass = 'ExtendClass', // https://extendsclass.com/
-  Github = 'github',
+  Github = 'Github',
 }
 
 export namespace UserMusicOrderOrigin {
@@ -11,12 +11,10 @@ export namespace UserMusicOrderOrigin {
   }
 
   export interface ExtendClassConfig extends BaseConfig {
-    type: UserMusicOrderOriginType.ExtendClass;
     secret: string;
     id?: string;
   }
   export interface GithubConfig extends BaseConfig {
-    type: UserMusicOrderOriginType.Github;
     token: string;
     repo: string;
   }

@@ -119,8 +119,8 @@ export const playerStore = create<PlayerStore>()((set, get) => {
     prev: () => {
       const store = get();
       if (!store.current) return;
-      const cind = store.playerHistory.findIndex((p) => p === store.current?.id);
-      const prevId = store.playerHistory[cind - 1];
+      const ind = store.playerHistory.findIndex((p) => p === store.current?.id);
+      const prevId = store.playerHistory[ind - 1];
       if (prevId) {
         const m = store.playerList.find((p) => p.id === prevId);
         store.play(m);

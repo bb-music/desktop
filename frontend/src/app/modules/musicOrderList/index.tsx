@@ -3,7 +3,6 @@
  */
 import { MusicMenu, Plus } from '@icon-park/react';
 import { useEffect } from 'react';
-import { api } from '@/app/api';
 import { Modal } from '@/app/components/ui/modal';
 import { FormItem } from '@/app/components/ui/form';
 import { Input } from '@/app/components/ui/input';
@@ -21,6 +20,7 @@ import { message } from '@/app/components/ui/message';
 import styles from './index.module.scss';
 import { Image } from '@/app/components/ui/image';
 import { MusicOrderDetailProps } from '../musicOrderDetail';
+import { getMusicOrder } from '@/app/utils';
 
 export * from './origin';
 export * from './store';
@@ -55,13 +55,9 @@ export function MusicOrder({ gotoMusicOrderDetail }: MusicOrderListProps) {
                   className='ui-icon'
                   title='创建歌单'
                   onClick={() => {
-                    const origin = api.userMusicOrder.find((u) => u.name === m.name);
-                    const config = setting.userMusicOrderOrigin.find(
-                      (u) => u.name === m.name
-                    )?.config;
-                    console.log(origin, config);
+                    const origin = getMusicOrder(m.name);
                     modalStore.openHandler(null, async (value) => {
-                      await origin?.action.create(value, config).then((res) => {
+                      await origin?.action.create(value).then((res) => {
                         store.load();
                       });
                     });
@@ -106,9 +102,7 @@ export function MusicOrderList({ list, originName, gotoMusicOrderDetail }: ListP
   const player = usePlayerStore();
   const userMusicOrderStore = useUserMusicOrderStore();
   const modalStore = useMusicOrderFormModalStore();
-  const setting = useSettingStore();
-  const origin = api.userMusicOrder.find((u) => u.name === originName);
-  const config = setting.userMusicOrderOrigin.find((u) => u.name === originName)?.config;
+  const origin = getMusicOrder(originName || '');
 
   return (
     <ul className='item-list'>
@@ -150,7 +144,7 @@ export function MusicOrderList({ list, originName, gotoMusicOrderDetail }: ListP
                   modalStore.openHandler(item, (value) => {
                     const id = value.id;
                     if (id && origin) {
-                      return origin.action.update({ ...value, id }, config).then((res) => {
+                      return origin.action.update({ ...value, id }).then((res) => {
                         userMusicOrderStore.load();
                       });
                     } else {
@@ -164,7 +158,7 @@ export function MusicOrderList({ list, originName, gotoMusicOrderDetail }: ListP
                 label: '删除',
                 key: '删除',
                 onClick: () => {
-                  origin?.action.delete({ ...item }, config).then((res) => {
+                  origin?.action.delete({ ...item }).then((res) => {
                     userMusicOrderStore.load();
                   });
                 },
@@ -267,19 +261,17 @@ export function MusicOrderModal() {
 
 function CollectItem({ data, originName }: { data: MusicOrderItem; originName?: string }) {
   const store = useMusicOrderCollectModalStore();
-  const setting = useSettingStore();
   const musicOrderStore = useUserMusicOrderStore(
     useShallow((state) => ({ load: state.load, list: state.list }))
   );
-  const origin = api.userMusicOrder.find((u) => u.name === originName);
-  const config = setting.userMusicOrderOrigin.find((u) => u.name === originName)?.config;
+  const origin = getMusicOrder(originName || '');
 
   return (
     <div
       className={styles.MusicOrderItem}
       onClick={() => {
         store.close();
-        origin?.action.appendMusic(data.id, store.musicList, config).then(() => {
+        origin?.action.appendMusic(data.id, store.musicList).then(() => {
           musicOrderStore.load();
           message.success('已添加');
         });

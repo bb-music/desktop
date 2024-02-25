@@ -7,35 +7,39 @@ import (
 	"strings"
 
 	"github.com/OpenBBMusic/desktop/pkg/bb_client"
+	"github.com/OpenBBMusic/desktop/pkg/bb_type"
 	"github.com/duke-git/lancet/v2/slice"
 )
 
 // 搜索视频
-func (a *App) Search(params bb_client.SearchParams) (SearchResponse, error) {
-	result := SearchResponse{}
-	raw, err := a.client.Search(params)
+func (a *App) Search(params bb_type.SearchParams) (bb_type.SearchResponse, error) {
+	result := bb_type.SearchResponse{}
+	raw, err := a.client.Search(bb_client.SearchParams{
+		Keyword: params.Keyword,
+		Page:    params.Page,
+	})
 	if err != nil {
 		return result, err
 	}
 
-	res := SearchResponse{
+	res := bb_type.SearchResponse{
 		Current:  raw.Page,
 		Total:    raw.NumResults,
 		PageSize: raw.PageSize,
-		Data:     []SearchItem{},
+		Data:     []bb_type.SearchItem{},
 	}
 
 	for _, item := range raw.Result {
 		if !slice.Contain([]string{"ketang"}, item.Type) {
 			// 类型为 ketang 的去掉
-			value := SearchItem{
+			value := bb_type.SearchItem{
 				ID:       DecodeBiliSearchItemId(item.Aid, item.Bvid),
 				Cover:    item.Pic,
 				Name:     item.Title,
 				Duration: Duration2Seconds(item.Duration),
 				Author:   item.Author,
-				Type:     SearchTypeMusic,
-				Origin:   BiliOriginName,
+				Type:     bb_type.SearchTypeMusic,
+				Origin:   bb_type.BiliOriginName,
 			}
 			res.Data = append(res.Data, value)
 		}
@@ -44,35 +48,35 @@ func (a *App) Search(params bb_client.SearchParams) (SearchResponse, error) {
 }
 
 // 详情
-func (a *App) SearchDetail(id string, origin OriginType) (SearchItem, error) {
+func (a *App) SearchDetail(id string) (bb_type.SearchItem, error) {
 	biliid, err := UnicodeBiliId(id)
 	if err != nil {
-		return SearchItem{}, err
+		return bb_type.SearchItem{}, err
 	}
 
 	info, err := a.client.GetVideoDetail(biliid.Aid, biliid.Bvid)
 
-	result := SearchItem{
+	result := bb_type.SearchItem{
 		ID:       DecodeBiliMusicItemId(info.Aid, info.Bvid, info.Cid),
 		Cover:    info.Pic,
 		Name:     info.Title,
 		Duration: info.Duration,
 		Author:   "",
-		Origin:   BiliOriginName,
-		Type:     SearchTypeMusic,
+		Origin:   bb_type.BiliOriginName,
+		Type:     bb_type.SearchTypeMusic,
 	}
 	if info.Videos > 1 {
 		// 歌单的 ID 和 Type 变一下
 		result.ID = DecodeBiliSearchItemId(info.Aid, info.Bvid)
-		result.Type = SearchTypeOrder
+		result.Type = bb_type.SearchTypeOrder
 		for _, item := range info.Pages {
-			result.MusicList = append(result.MusicList, MusicItem{
+			result.MusicList = append(result.MusicList, bb_type.MusicItem{
 				ID:       DecodeBiliMusicItemId(info.Aid, info.Bvid, item.Cid),
 				Cover:    item.FirstFrame,
 				Name:     item.Part,
 				Duration: item.Duration,
 				Author:   "",
-				Origin:   BiliOriginName,
+				Origin:   bb_type.BiliOriginName,
 			})
 		}
 	}

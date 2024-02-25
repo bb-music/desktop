@@ -5,20 +5,42 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/http/httputil"
+	"net/url"
 	"os"
 
 	"github.com/OpenBBMusic/desktop/pkg/bb_client"
+	"github.com/OpenBBMusic/desktop/pkg/bb_type"
 )
 
-// 获取播放地址
-func (a *App) GetMusicPlayerUrl(id string, origin string) (string, error) {
-	path := "/video/proxy/" + origin + "/" + id
-	port := a.appBase.Config.ProxyServerPort
-	return fmt.Sprintf("http://localhost:%+v%+v", port, path), nil
+// 获取歌曲文件
+func (a *App) GetMusicFile(id string) (*httputil.ReverseProxy, *http.Request, error) {
+	biliid, _ := UnicodeBiliId(id)
+
+	resp, _ := a.client.GetVideoUrl(biliid.Aid, biliid.Bvid, biliid.Cid)
+
+	if len(resp.Durl) > 0 {
+		originURL := resp.Durl[0].Url
+		u, _ := url.Parse(originURL)
+
+		proxy := httputil.NewSingleHostReverseProxy(u)
+
+		proxy.Director = func(r *http.Request) {
+			// 设置必须得请求头
+			r.Header.Set("Referer", "https://www.bilibili.com/")
+			r.Header.Set("Cookie", "")
+			r.Header.Set("User-Agent", bb_client.UserAgent)
+		}
+
+		req, _ := http.NewRequest("GET", resp.Durl[0].Url, nil)
+
+		return proxy, req, nil
+	}
+	return nil, nil, fmt.Errorf("Durl")
 }
 
 // 下载
-func (a *App) DownloadMusic(params DownloadMusicParams) (string, error) {
+func (a *App) DownloadMusic(params bb_type.DownloadMusicParams) (string, error) {
 	if params.DownloadDir == "" {
 		return "", errors.New("请先选择下载目录")
 	}

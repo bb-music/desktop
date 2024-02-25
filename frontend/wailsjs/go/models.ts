@@ -51,6 +51,44 @@ export namespace app_bili {
 		    return a;
 		}
 	}
+
+}
+
+export namespace bb_client {
+	
+	export class SignData {
+	    img_key: string;
+	    sub_key: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new SignData(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.img_key = source["img_key"];
+	        this.sub_key = source["sub_key"];
+	    }
+	}
+	export class SpiData {
+	    b_3: string;
+	    b_4: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new SpiData(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.b_3 = source["b_3"];
+	        this.b_4 = source["b_4"];
+	    }
+	}
+
+}
+
+export namespace bb_type {
+	
 	export class DownloadMusicParams {
 	    id: string;
 	    origin: string;
@@ -179,6 +217,20 @@ export namespace app_bili {
 		    return a;
 		}
 	}
+	export class SearchParams {
+	    keyword: string;
+	    page: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new SearchParams(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.keyword = source["keyword"];
+	        this.page = source["page"];
+	    }
+	}
 	export class SearchResponse {
 	    current: number;
 	    total: number;
@@ -214,53 +266,6 @@ export namespace app_bili {
 		    }
 		    return a;
 		}
-	}
-
-}
-
-export namespace bb_client {
-	
-	export class SearchParams {
-	    keyword: string;
-	    page: string;
-	
-	    static createFrom(source: any = {}) {
-	        return new SearchParams(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.keyword = source["keyword"];
-	        this.page = source["page"];
-	    }
-	}
-	export class SignData {
-	    img_key: string;
-	    sub_key: string;
-	
-	    static createFrom(source: any = {}) {
-	        return new SignData(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.img_key = source["img_key"];
-	        this.sub_key = source["sub_key"];
-	    }
-	}
-	export class SpiData {
-	    b_3: string;
-	    b_4: string;
-	
-	    static createFrom(source: any = {}) {
-	        return new SpiData(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.b_3 = source["b_3"];
-	        this.b_4 = source["b_4"];
-	    }
 	}
 
 }

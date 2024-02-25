@@ -28,7 +28,7 @@ func (a *App) InitConfig() error {
 	var spiData bb_client.SpiData
 	// 读缓存
 	// 读缓存
-	cacheConfigStr, _ := a.appBase.FileStorage.GetStorage(ConfigCacheKey)
+	cacheConfigStr, _ := a.cacheStorage.GetStorage(ConfigCacheKey)
 	cacheConfig := &CacheConfig{}
 	// 序列化为 json
 	if err := json.Unmarshal([]byte(cacheConfigStr), cacheConfig); err != nil {
@@ -61,23 +61,28 @@ func (a *App) InitConfig() error {
 				CreatedAt: time.Now(),
 			},
 		)
-		a.appBase.FileStorage.SetStorage(ConfigCacheKey, string(cacheConfigStr))
+		a.cacheStorage.SetStorage(ConfigCacheKey, string(cacheConfigStr))
 	} else {
 		signData = cacheConfig.SignData
 		spiData = cacheConfig.SpiData
 	}
 
-	a.Config.SignData = signData
-	a.Config.SpiData = spiData
+	a.config.SignData = signData
+	a.config.SpiData = spiData
 	a.client.SignData = signData
 	a.client.SpiData = spiData
 
-	fmt.Printf("AppConfig: %+v\n", a.Config)
+	fmt.Printf("AppConfig: %+v\n", a.config)
 
 	return nil
 }
 
 // 初始化配置信息
-func (a *App) GetConfig() Config {
-	return *a.Config
+func (a *App) GetConfig() any {
+	return *a.config
+}
+
+// 用于导出一个类型给前端
+func (a *App) ExportConfig() *Config {
+	return a.config
 }

@@ -20,6 +20,7 @@ import (
 	"github.com/OpenBBMusic/desktop/app_base"
 	"github.com/OpenBBMusic/desktop/app_bili"
 	"github.com/OpenBBMusic/desktop/pkg/logger"
+	"github.com/OpenBBMusic/desktop/server"
 )
 
 //go:embed all:frontend/dist
@@ -44,7 +45,11 @@ func main() {
 	}
 
 	app_base := app_base.New(configDir)
-	app_bili := app_bili.New(app_base)
+
+	bbsrv := server.New(9091, configDir)
+	go bbsrv.Run()
+
+	app_bili := app_bili.New(configDir)
 
 	err := wails.Run(&options.App{
 		Debug: options.Debug{
@@ -68,7 +73,9 @@ func main() {
 		BackgroundColour: &options.RGBA{R: 251, G: 251, B: 251, A: 1},
 		OnStartup: func(ctx context.Context) {
 			app_base.Startup(ctx)
-			app_bili.Startup(ctx)
+		},
+		OnShutdown: func(ctx context.Context) {
+			bbsrv.Close()
 		},
 		Bind: []interface{}{
 			app_base,

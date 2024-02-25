@@ -53,6 +53,13 @@ func (a *App) GetConfig() (Config, error) {
 	return *a.Config, nil
 }
 
+// 获取播放地址
+func (a *App) GetMusicPlayerUrl(id string, origin string) (string, error) {
+	path := "/video/proxy/" + origin + "/" + id
+	port := a.Config.ProxyServerPort
+	return fmt.Sprintf("http://localhost:%+v%+v", port, path), nil
+}
+
 // 随机取一个未占用的端口
 func GetFreePort() (int, error) {
 	addr, err := net.ResolveTCPAddr("tcp", "127.0.0.1:0")

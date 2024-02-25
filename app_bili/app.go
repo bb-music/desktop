@@ -1,29 +1,20 @@
 package app_bili
 
 import (
-	"context"
-
-	"github.com/OpenBBMusic/desktop/app_base"
 	"github.com/OpenBBMusic/desktop/pkg/bb_client"
-	"github.com/labstack/gommon/log"
+	"github.com/OpenBBMusic/desktop/pkg/file_storage"
 )
 
 type App struct {
-	Config  *Config `json:"config"`
-	client  *bb_client.Client
-	ctx     context.Context
-	appBase *app_base.App
+	config       *Config
+	client       *bb_client.Client
+	cacheStorage *file_storage.FileStorage
 }
 
-func New(appBase *app_base.App) *App {
+func New(cacheDir string) *App {
 	return &App{
-		client:  bb_client.New(),
-		appBase: appBase,
-		Config:  &Config{},
+		client:       bb_client.New(),
+		cacheStorage: file_storage.New(cacheDir),
+		config:       &Config{},
 	}
-}
-
-func (a *App) Startup(ctx context.Context) {
-	a.ctx = ctx
-	log.Printf("AppConfig %+v", a.Config)
 }

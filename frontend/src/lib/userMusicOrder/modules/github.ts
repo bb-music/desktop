@@ -26,6 +26,7 @@ export class GithubUserMusicOrderAction implements UserMusicOrderAction {
 
   public async getList() {
     const config = await this.getConfig();
+    console.log('config: ', config);
     let list: MusicOrderItem[] = [];
     try {
       const res = await this.getData(config);

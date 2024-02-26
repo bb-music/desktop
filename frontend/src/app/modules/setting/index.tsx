@@ -9,6 +9,7 @@ import { ReactNode, useEffect, useState } from 'react';
 import { useSettingStore } from './store';
 import { api } from '@/app/api';
 import { Modal } from '@/app/components/ui/modal';
+import { userMusicOrderStore } from '../musicOrderList';
 
 export * from './store';
 
@@ -194,6 +195,7 @@ export function MusicOrderSetting() {
             <Comp
               onChange={() => {
                 store.load();
+                userMusicOrderStore.getState().load();
               }}
             />
           </div>

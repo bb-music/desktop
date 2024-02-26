@@ -8,7 +8,8 @@ interface SettingStoreHandler {
   load: () => Promise<void>;
 }
 
-type SettingStore = SettingStoreState & SettingStoreHandler;
+type SettingStore = Omit<SettingStoreState, 'musicServices' | 'userMusicOrderOrigin'> &
+  SettingStoreHandler;
 
 export const settingStore = create<SettingStore>()((set, get) => {
   return {
@@ -19,8 +20,8 @@ export const settingStore = create<SettingStore>()((set, get) => {
         proxyServerPort: res.proxyServerPort,
         downloadDir: res.downloadDir,
         openMusicOrderOrigin: res.openMusicOrderOrigin || [],
-        userMusicOrderOrigin: res.userMusicOrderOrigin || [],
-        musicServices: res.musicServices || [],
+        // userMusicOrderOrigin: res.userMusicOrderOrigin || [],
+        // musicServices: res.musicServices || [],
       });
     },
   };

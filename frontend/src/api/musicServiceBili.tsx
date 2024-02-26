@@ -6,7 +6,13 @@ import {
   SearchParams,
   SearchType,
 } from '@/app/api/musicService';
-import { html2text, transformImgUrl } from '@/utils';
+import {
+  getMusicServiceConfig,
+  html2text,
+  mergeUrl,
+  proxyMusicService,
+  transformImgUrl,
+} from '@/utils';
 import { app_bili } from '@wails/go/models';
 import { settingCache } from './setting';
 import { MusicItem } from '@/app/api/music';
@@ -17,7 +23,6 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/app/components/ui/button';
 import { Switch } from '@/app/components/ui/switch';
 import { message } from '@/app/components/ui/message';
-import { Resp, request } from '@/lib/request';
 import { GetMusicPlayerUrl } from '@wails/go/app_base/App';
 
 class BiliMusicServiceConfigValue {
@@ -37,15 +42,15 @@ class BiliAction implements MusicServiceAction {
       page: page + '',
       keyword: params.keyword,
     };
-    const res = await Search(query);
-    // const {
-    //   data: { data: res },
-    // } = await request<Resp<bb_type.SearchResponse>>(`/api/search/${NAME}`, {
-    //   params: {
-    //     page: page + '',
-    //     keyword: params.keyword,
-    //   },
-    // });
+
+    const res = await proxyMusicService(NAME, {
+      proxy: {
+        url: `/api/search/${NAME}`,
+        params: query,
+      },
+      handler: async () => await Search(query),
+    });
+
     return {
       ...res,
       data: res.data.map((item) => ({
@@ -57,20 +62,23 @@ class BiliAction implements MusicServiceAction {
     };
   };
   searchItemDetail = async (item: SearchItem) => {
-    const info = await SearchDetail(item.id);
-    // const {
-    //   data: { data: info },
-    // } = await request<Resp<bb_type.SearchItem>>(`/api/search/${NAME}/${item.id}`);
+    const info = await proxyMusicService(NAME, {
+      proxy: {
+        url: `/api/search/${NAME}/${item.id}`,
+      },
+      handler: async () => await SearchDetail(item.id),
+    });
     return {
       ...info,
       type: info.type as SearchType,
     };
   };
   getMusicPlayerUrl = async (music: MusicItem) => {
-    // const setting = await settingCache.get();
+    const config = await getMusicServiceConfig(NAME);
+    if (config.proxyEnabled) {
+      return mergeUrl(config.proxyAddress, `/api/music/file/${NAME}/${music.id}`);
+    }
     const url = await GetMusicPlayerUrl(music.id, music.origin);
-    // const url = `http://localhost:9091/api/music/file/${music.origin}/${music.id}`;
-    console.log('url: ', url);
     return url || '';
   };
   download = async (music: MusicItem) => {
@@ -104,11 +112,12 @@ export class BiliMusicServiceInstance implements MusicService<BiliMusicServiceCo
       new BiliMusicServiceConfigValue()
     );
     const loadHandler = async () => {
-      // const { data:{data:res}} = await request<Resp<app_bili.Config>>(`/api/config/${NAME}`).then((res) => {
-      //   console.log('res: ', res.data.data);
-      //   setConfig(res.data.data);
-      // });
-      const res = await GetConfig();
+      const res = await proxyMusicService(NAME, {
+        proxy: {
+          url: `/api/config/${NAME}`,
+        },
+        handler: () => GetConfig(),
+      });
       setConfig(res);
       settingCache.get().then((res) => {
         if (res) {

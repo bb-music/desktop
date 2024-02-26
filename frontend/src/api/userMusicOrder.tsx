@@ -115,8 +115,6 @@ export class UserGithubMusicOrderInstance implements UserMusicOrder<GithubSyncVa
   name = NAME;
   cname = CNAME;
   ConfigElement = ({ onChange }: { onChange?: (v: GithubSyncValue) => void }) => {
-    const timerRef = useRef<NodeJS.Timeout>();
-
     const [data, setData] = useState<GithubSyncValue>({
       repo: '',
       token: '',
@@ -145,6 +143,7 @@ export class UserGithubMusicOrderInstance implements UserMusicOrder<GithubSyncVa
     };
     const savaHandler = async () => {
       await updateUserMusicOrderOriginConfig(NAME, data);
+      console.log('updateUserMusicOrderOriginConfig', data);
       onChange?.(data);
       message.success('已保存');
     };
@@ -200,5 +199,5 @@ async function updateUserMusicOrderOriginConfig(originName: string, data: any) {
       config: data,
     });
   }
-  settingCache.update('userMusicOrderOrigin', list);
+  await settingCache.update('userMusicOrderOrigin', list);
 }

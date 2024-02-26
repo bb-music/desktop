@@ -31,17 +31,12 @@ export interface MusicOrderListProps {
 
 // 歌单
 export function MusicOrder({ gotoMusicOrderDetail }: MusicOrderListProps) {
-  const setting = useSettingStore(
-    useShallow((s) => ({ userMusicOrderOrigin: s.userMusicOrderOrigin }))
-  );
   const store = useUserMusicOrderStore(
     useShallow((state) => ({ load: state.load, list: state.list }))
   );
   useEffect(() => {
-    if (setting.userMusicOrderOrigin.length) {
-      store.load();
-    }
-  }, [setting.userMusicOrderOrigin]);
+    store.load();
+  }, []);
   const modalStore = useMusicOrderFormModalStore();
 
   return (

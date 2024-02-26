@@ -22,7 +22,7 @@ export const userMusicOrderStore = create<UserMusicOrderStore>()((set, get) => {
     load: async () => {
       const res = await Promise.all(
         api.userMusicOrder.map((r) => {
-          return r.action.getList();
+          return r.action.getList().catch(() => []);
         })
       );
       const result: MusicOrderOriginItem[] = res.map((r, i) => {

@@ -6,6 +6,10 @@ export function GetConfig() {
   return window['go']['app_base']['App']['GetConfig']();
 }
 
+export function GetMusicPlayerUrl(arg1, arg2) {
+  return window['go']['app_base']['App']['GetMusicPlayerUrl'](arg1, arg2);
+}
+
 export function GetStorage(arg1) {
   return window['go']['app_base']['App']['GetStorage'](arg1);
 }

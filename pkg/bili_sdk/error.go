@@ -1,4 +1,4 @@
-package bb_client
+package bili_sdk
 
 import "fmt"
 

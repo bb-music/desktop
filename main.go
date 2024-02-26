@@ -4,10 +4,7 @@ import (
 	"context"
 	"embed"
 	"log"
-	"os"
-	"os/user"
 	"path/filepath"
-	"runtime"
 
 	"github.com/duke-git/lancet/v2/fileutil"
 	"github.com/wailsapp/wails/v2"
@@ -19,7 +16,9 @@ import (
 
 	"github.com/OpenBBMusic/desktop/app_base"
 	"github.com/OpenBBMusic/desktop/app_bili"
+	"github.com/OpenBBMusic/desktop/pkg/bb_server"
 	"github.com/OpenBBMusic/desktop/pkg/logger"
+	"github.com/OpenBBMusic/desktop/utils"
 )
 
 //go:embed all:frontend/dist
@@ -27,12 +26,12 @@ var assets embed.FS
 
 func main() {
 	// 配置文件目录
-	configDir, _ := GetConfigDir()
+	configDir, _ := utils.GetConfigDir()
 	if !fileutil.IsExist(configDir) {
 		fileutil.CreateDir(configDir)
 	}
 
-	if !IsDev() {
+	if !utils.IsDev() {
 		// 非开发环境日志使用文件存储
 		log.SetOutput(&lumberjack.Logger{
 			Filename:   filepath.Join(configDir, "logs/log.log"),
@@ -43,8 +42,18 @@ func main() {
 		})
 	}
 
-	app_base := app_base.New(configDir)
-	app_bili := app_bili.New(app_base)
+	basic := app_base.New(configDir)
+
+	musicProxyServer := bb_server.New(app_base.ProxyServer(basic.Config.ProxyServerPort, configDir), log.Println)
+	go func() {
+		log.Println("启动音乐流代理服务")
+		musicProxyServer.Run()
+	}()
+
+	// bbsrv := server.New(9091, configDir)
+	// go bbsrv.Run()
+
+	bili := app_bili.New(configDir)
 
 	err := wails.Run(&options.App{
 		Debug: options.Debug{
@@ -62,17 +71,20 @@ func main() {
 		},
 		AssetServer: &assetserver.Options{
 			Assets: assets,
-			// Handler: app.NewFileLoader(),
-			// Middleware: app.NewMiddleware(a),
+			// Handler: app_base.NewFileLoader(configDir),
+			// Middleware: app_base.NewMiddleware(configDir),
 		},
 		BackgroundColour: &options.RGBA{R: 251, G: 251, B: 251, A: 1},
 		OnStartup: func(ctx context.Context) {
-			app_base.Startup(ctx)
-			app_bili.Startup(ctx)
+			basic.Startup(ctx)
+		},
+		OnShutdown: func(ctx context.Context) {
+			// bbsrv.Close()
+			musicProxyServer.Close()
 		},
 		Bind: []interface{}{
-			app_base,
-			app_bili,
+			basic,
+			bili,
 		},
 		Logger: logger.New(),
 	})
@@ -80,35 +92,4 @@ func main() {
 	if err != nil {
 		println("Error:", err.Error())
 	}
-}
-
-// 获取配置目录
-func GetConfigDir() (string, error) {
-	var dir string
-	if runtime.GOOS == "windows" {
-		r, err := filepath.Abs("./")
-		if err != nil {
-			return "", err
-		}
-		dir = r
-	} else {
-		userDir, _ := user.Current()
-		r, err := filepath.Abs(userDir.HomeDir)
-		if err != nil {
-			return "", err
-		}
-		dir = r
-	}
-	configDir := filepath.Join(dir, ".bb_music")
-	return configDir, nil
-}
-
-func IsDev() bool {
-	args := os.Args
-	for i := 0; i < len(args); i++ {
-		if args[i] == "--development" {
-			return true
-		}
-	}
-	return false
 }

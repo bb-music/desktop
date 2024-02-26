@@ -5,6 +5,8 @@ import {context} from '../models';
 
 export function GetConfig():Promise<app_base.Config>;
 
+export function GetMusicPlayerUrl(arg1:string,arg2:string):Promise<string>;
+
 export function GetStorage(arg1:string):Promise<string>;
 
 export function OpenDirectoryDialog(arg1:string):Promise<string>;

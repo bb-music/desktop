@@ -20,8 +20,8 @@ export namespace app_base {
 export namespace app_bili {
 	
 	export class Config {
-	    sign_data: bb_client.SignData;
-	    spi_data: bb_client.SpiData;
+	    sign_data: bili_sdk.SignData;
+	    spi_data: bili_sdk.SpiData;
 	
 	    static createFrom(source: any = {}) {
 	        return new Config(source);
@@ -29,8 +29,8 @@ export namespace app_bili {
 	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.sign_data = this.convertValues(source["sign_data"], bb_client.SignData);
-	        this.spi_data = this.convertValues(source["spi_data"], bb_client.SpiData);
+	        this.sign_data = this.convertValues(source["sign_data"], bili_sdk.SignData);
+	        this.spi_data = this.convertValues(source["spi_data"], bili_sdk.SpiData);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
@@ -51,6 +51,11 @@ export namespace app_bili {
 		    return a;
 		}
 	}
+
+}
+
+export namespace bb_type {
+	
 	export class DownloadMusicParams {
 	    id: string;
 	    origin: string;
@@ -179,6 +184,20 @@ export namespace app_bili {
 		    return a;
 		}
 	}
+	export class SearchParams {
+	    keyword: string;
+	    page: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new SearchParams(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.keyword = source["keyword"];
+	        this.page = source["page"];
+	    }
+	}
 	export class SearchResponse {
 	    current: number;
 	    total: number;
@@ -218,22 +237,8 @@ export namespace app_bili {
 
 }
 
-export namespace bb_client {
+export namespace bili_sdk {
 	
-	export class SearchParams {
-	    keyword: string;
-	    page: string;
-	
-	    static createFrom(source: any = {}) {
-	        return new SearchParams(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.keyword = source["keyword"];
-	        this.page = source["page"];
-	    }
-	}
 	export class SignData {
 	    img_key: string;
 	    sub_key: string;

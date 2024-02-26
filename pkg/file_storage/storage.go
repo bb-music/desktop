@@ -37,7 +37,12 @@ func (a *FileStorage) GetStorage(key string) (string, error) {
 func (a *FileStorage) SetStorage(key string, value string) error {
 	dir := a.Dir
 	p := filepath.Join(dir, key)
+
 	if !fileutil.IsExist(p) {
+		parentPath := filepath.Dir(p)
+		if !fileutil.IsExist(parentPath) {
+			fileutil.CreateDir(parentPath)
+		}
 		fileutil.CreateFile(p)
 	}
 	return fileutil.WriteStringToFile(p, value, false)

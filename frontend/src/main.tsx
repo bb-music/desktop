@@ -11,17 +11,15 @@ const container = document.getElementById('root');
 const root = createRoot(container!);
 
 function Root() {
-  const [initLoading, setInitLoading] = useState(true);
+  const [initLoading, setInitLoading] = useState(false);
 
   const init = async () => {
     setInitLoading(true);
-    // const res = await settingCache.get();
-    // if (!res?.signData?.imgKey || !res?.signData?.subKey) {
-    //   await apiInstance.setting.updateSignData();
-    // }
-    // if (!res?.spiData?.uuid_v3 || !res?.spiData?.uuid_v4) {
-    //   await apiInstance.setting.updateSpiData();
-    // }
+    try {
+      await Promise.all(apiInstance.musicServices.map((s) => s.hooks?.init?.()));
+    } catch (error) {
+      console.log('error: ', error);
+    }
     setInitLoading(false);
   };
 

@@ -18,7 +18,7 @@ export interface OpenMusicOrderProps {
   gotoMusicOrderDetail: (opt: MusicOrderDetailProps) => void;
 }
 
-export function OpenMusicOrder({ gotoMusicOrderDetail }: OpenMusicOrderProps) {
+export function OpenMusicOrderComp({ gotoMusicOrderDetail }: OpenMusicOrderProps) {
   const store = useOpenMusicOrderStore();
   const origins = useSettingStore(useShallow((state) => state.openMusicOrderOrigin));
 

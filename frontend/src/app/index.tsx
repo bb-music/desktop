@@ -4,6 +4,10 @@ import { GlobalStoreState, useGlobalStore } from './store/global';
 import { Api, registerApiInstance } from './api';
 
 export * from './api';
+export * from './components';
+export * from './interface';
+export * from './modules';
+export * from './store/global';
 
 export interface BBMusicAppConfigProps extends GlobalStoreState {
   /** api */

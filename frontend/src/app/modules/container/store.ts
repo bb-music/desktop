@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { OpenMusicOrder, OpenMusicOrderProps } from '../openMusicOrder';
+import { OpenMusicOrderComp, OpenMusicOrderProps } from '../openMusicOrder';
 import { MusicOrderDetail, MusicOrderDetailProps } from '../musicOrderDetail';
 import { Search, SearchProps } from '../search';
 import { Setting, SettingProps } from '../setting';
@@ -20,7 +20,7 @@ export const PageViewMap = new Map([
   [
     PageView.OpenMusicOrder,
     {
-      Component: OpenMusicOrder,
+      Component: OpenMusicOrderComp,
       label: '广场',
       props: {
         gotoMusicOrderDetail,

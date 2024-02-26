@@ -26,17 +26,8 @@ export function Setting() {
       style={{ '--input-default-width': '460px' } as any}
     >
       <MainSetting />
-
-      <div className={styles.divider}></div>
-
       <ServiceSetting />
-
-      <div className={styles.divider}></div>
-
       <OpenSetting />
-
-      <div className={styles.divider}></div>
-
       <MusicOrderSetting />
     </div>
   );
@@ -60,12 +51,14 @@ export function ServiceSetting() {
           </div>
         );
       })}
+      <div className={styles.divider}></div>
     </>
   );
 }
 
 export function MainSetting() {
   const store = useSettingStore();
+  if (!api.setting.updateDownloadDir && !store.proxyServerPort) return null;
 
   return (
     <>
@@ -101,6 +94,7 @@ export function MainSetting() {
           value={store.proxyServerPort?.toString() || ''}
         />
       </SettingItem>
+      <div className={styles.divider}></div>
     </>
   );
 }
@@ -143,6 +137,7 @@ export function OpenSetting() {
           </SettingItem>
         );
       })}
+      <div className={styles.divider}></div>
       <Modal
         title={
           <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>

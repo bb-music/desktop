@@ -28,7 +28,7 @@ func New(configDir string) *App {
 	fileStorage := file_storage.New(configDir)
 	port := 56592
 	if utils.IsDev() {
-		port = 56593
+		port = 56599
 	}
 
 	return &App{

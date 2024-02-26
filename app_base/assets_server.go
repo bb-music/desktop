@@ -23,8 +23,6 @@ func NewFileLoader(configDir string) *FileLoader {
 }
 
 func (h *FileLoader) ServeHTTP(res http.ResponseWriter, req *http.Request) {
-	fmt.Println("Path: ", req.URL.Path)
-
 	// 视频资源代理服务
 	if strings.HasPrefix(req.URL.Path, "/music/file") {
 		musicProxyServer(h.configDir, res, req)
@@ -50,9 +48,9 @@ func musicProxyServer(configDir string, w http.ResponseWriter, r *http.Request) 
 	origin := arr[3]                    // 源
 	id := strings.Split(arr[4], ".")[0] // 歌曲 ID
 
-	fmt.Println("============== 音乐流转发 ===============")
-	fmt.Println("Origin: ", origin)
-	fmt.Println("ID: ", id)
+	// fmt.Println("============== 音乐流转发 ===============")
+	// fmt.Println("Origin: ", origin)
+	// fmt.Println("ID: ", id)
 
 	if origin == "bili" {
 		biliConfigStorage := app_bili.NewConfigStorage(configDir)

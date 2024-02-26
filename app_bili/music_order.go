@@ -25,9 +25,7 @@ func (a *App) GetOpenMusicOrderList(originUrl string) ([]bb_type.MusicOrderItem,
 		result := []bb_type.MusicOrderItem{}
 		if err := json.Unmarshal(body, &result); err != nil {
 			return []bb_type.MusicOrderItem{}, err
-
 		}
-		// fmt.Printf("resp%v\n", result)
 
 		return result, nil
 	}

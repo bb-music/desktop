@@ -2,7 +2,6 @@ package bb_server
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
@@ -16,10 +15,8 @@ type Server struct {
 }
 
 func (s *Server) Run() {
-	fmt.Println("")
 	go func() {
 		// 服务连接
-
 		if err := s.srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			s.Println("Err | 服务启动失败:", "err", err)
 			panic(err)

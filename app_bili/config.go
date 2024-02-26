@@ -3,7 +3,6 @@ package app_bili
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"time"
 
@@ -66,8 +65,6 @@ func (a *App) InitConfig() error {
 	a.config.SpiData = spiData
 	a.client.SignData = signData
 	a.client.SpiData = spiData
-
-	fmt.Printf("AppConfig: %+v\n", a.config)
 
 	return nil
 }

@@ -3,6 +3,8 @@ import styles from './theme/dark.module.scss';
 import { GlobalStoreState, useGlobalStore } from './store/global';
 import { Api, registerApiInstance } from './api';
 
+export * from './api';
+
 export interface BBMusicAppConfigProps extends GlobalStoreState {
   /** api */
   apiInstance: Api;

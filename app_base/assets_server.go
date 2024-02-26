@@ -4,28 +4,30 @@ package app_base
 import (
 	"fmt"
 	"net/http"
-	"net/http/httputil"
-	"net/url"
 	"os"
 	"strings"
 
+	"github.com/OpenBBMusic/desktop/app_bili"
 	"github.com/OpenBBMusic/desktop/pkg/bili_sdk"
 )
 
 type FileLoader struct {
 	http.Handler
+	configDir string
 }
 
-func NewFileLoader() *FileLoader {
-	return &FileLoader{}
+func NewFileLoader(configDir string) *FileLoader {
+	return &FileLoader{
+		configDir: configDir,
+	}
 }
 
 func (h *FileLoader) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	fmt.Println("Path: ", req.URL.Path)
 
 	// 视频资源代理服务
-	if strings.HasPrefix(req.URL.Path, "/video/proxy") {
-		videoProxyServer(res, req)
+	if strings.HasPrefix(req.URL.Path, "/music/file") {
+		musicProxyServer(h.configDir, res, req)
 	} else {
 		var err error
 		path := strings.TrimPrefix(req.URL.Path, "/")
@@ -39,58 +41,54 @@ func (h *FileLoader) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func videoProxyServer(w http.ResponseWriter, r *http.Request) {
-	query := r.URL.Query()
-	aid := query.Get("aid")
-	bvid := query.Get("bvid")
-	cid := query.Get("cid")
+// /music/file/:origin/:id.music
+func musicProxyServer(configDir string, w http.ResponseWriter, r *http.Request) {
+	path := r.URL.Path
+	// 字符串分割
+	arr := strings.Split(path, "/")
 
-	uuid_v3 := query.Get("uuid_v3")
-	uuid_v4 := query.Get("uuid_v4")
-	img_key := query.Get("img_key")
-	sub_key := query.Get("sub_key")
-	// uuid_v3 := auth.UuidV3
-	// uuid_v4 := auth.UuidV4
-	// img_key := auth.ImgKey
-	// sub_key := auth.SubKey
-	fmt.Printf("Auth: %+v\n", auth)
+	origin := arr[3]                    // 源
+	id := strings.Split(arr[4], ".")[0] // 歌曲 ID
 
-	client := bili_sdk.Client{
-		SpiData: bili_sdk.SpiData{
-			UUID_V3: uuid_v3,
-			UUID_V4: uuid_v4,
-		},
-		SignData: bili_sdk.SignData{
-			ImgKey: img_key,
-			SubKey: sub_key,
-		},
-	}
-	// fmt.Printf("client: %+v\n", client)
-	// 取出播放地址
-	resp, err := client.GetVideoUrl(aid, bvid, cid)
-	if err != nil {
-		fmt.Printf("err: %+v\n", err)
-	}
-	// fmt.Printf("resp: %+v\n", resp)
-	// FLV / MP4 格式 直接代理请求
-	if len(resp.Durl) > 0 {
-		originURL := resp.Durl[0].Url
-		u, _ := url.Parse(originURL)
+	fmt.Println("============== 音乐流转发 ===============")
+	fmt.Println("Origin: ", origin)
+	fmt.Println("ID: ", id)
 
-		proxy := httputil.NewSingleHostReverseProxy(u)
-		proxy.Director = func(r *http.Request) {
-			r.Header.Set("Referer", "https://www.bilibili.com/")
-			r.Header.Set("Cookie", "")
-			r.Header.Set("User-Agent", bili_sdk.UserAgent)
+	if origin == "bili" {
+		biliConfigStorage := app_bili.NewConfigStorage(configDir)
+		cacheConfig := biliConfigStorage.Get()
+
+		client := bili_sdk.Client{
+			SpiData: bili_sdk.SpiData{
+				UUID_V3: cacheConfig.SpiData.UUID_V3,
+				UUID_V4: cacheConfig.SpiData.UUID_V4,
+			},
+			SignData: bili_sdk.SignData{
+				ImgKey: cacheConfig.SignData.ImgKey,
+				SubKey: cacheConfig.SignData.SubKey,
+			},
 		}
-		proxy.ModifyResponse = func(resp *http.Response) error {
-			return nil
+		proxy, req, err := app_bili.ProxyMusicFile(id, &client)
+		if err != nil {
+			w.Write([]byte(""))
 		}
-
-		req, _ := http.NewRequest("GET", resp.Durl[0].Url, nil)
-
 		proxy.ServeHTTP(w, req)
-	} else {
-		w.Write([]byte(resp.Result))
+		return
+	}
+	r.Response.Status = "500"
+	w.Write([]byte(""))
+}
+
+func NewMiddleware(configDir string) func(next http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			// 文件请求
+			if strings.HasPrefix(r.URL.Path, "/music/file") {
+				musicProxyServer(configDir, w, r)
+				return
+			}
+
+			next.ServeHTTP(w, r)
+		})
 	}
 }

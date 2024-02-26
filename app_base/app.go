@@ -7,6 +7,7 @@ import (
 	"net"
 
 	"github.com/OpenBBMusic/desktop/pkg/file_storage"
+	"github.com/OpenBBMusic/desktop/utils"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -23,9 +24,13 @@ type App struct {
 }
 
 func New(configDir string) *App {
-	fmt.Println("================ AppBase 启动 ==============")
+	fmt.Println("================ 应用基础服务启动 ==============")
 	fileStorage := file_storage.New(configDir)
 	port := 56592
+	if utils.IsDev() {
+		port = 56593
+	}
+
 	return &App{
 		Config: &Config{
 			ConfigDir:       configDir,
@@ -38,7 +43,6 @@ func New(configDir string) *App {
 func (a *App) Startup(ctx context.Context) {
 	a.ctx = ctx
 	// 启动一个代理服务
-	ProxyServer(a.Config.ProxyServerPort, a.FileStorage)
 }
 
 // 打开文件夹选择器
@@ -55,7 +59,9 @@ func (a *App) GetConfig() (Config, error) {
 
 // 获取播放地址
 func (a *App) GetMusicPlayerUrl(id string, origin string) (string, error) {
-	path := "/video/proxy/" + origin + "/" + id
+	// path := "/music/file/" + origin + "/" + id + ".mp4"
+	// return path, nil
+	path := "/music/file/" + origin + "/" + id
 	port := a.Config.ProxyServerPort
 	return fmt.Sprintf("http://localhost:%+v%+v", port, path), nil
 }

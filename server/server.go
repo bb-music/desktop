@@ -1,20 +1,16 @@
 package server
 
 import (
-	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
-	"os"
-	"os/signal"
 	"strconv"
-	"time"
 
 	"github.com/OpenBBMusic/desktop/app_bili"
+	"github.com/OpenBBMusic/desktop/pkg/bb_server"
 	"github.com/OpenBBMusic/desktop/pkg/bb_type"
 	"github.com/OpenBBMusic/desktop/server/middlewares"
 	"github.com/OpenBBMusic/desktop/server/resp"
@@ -30,39 +26,7 @@ type OriginService interface {
 	DownloadMusic(params bb_type.DownloadMusicParams) (string, error)
 }
 
-type BBServer struct {
-	router *gin.Engine
-	srv    *http.Server
-}
-
-func (s *BBServer) Run() {
-	go func() {
-		// 服务连接
-		if err := s.srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Println("服务启动失败:", "err", err)
-			panic(err)
-		}
-	}()
-
-	// 等待中断信号以优雅地关闭服务器（设置 5 秒的超时时间）
-	quit := make(chan os.Signal)
-	signal.Notify(quit, os.Interrupt)
-	<-quit
-	fmt.Println("服务关闭中...")
-
-	s.Close()
-}
-func (s *BBServer) Close() {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-	if err := s.srv.Shutdown(ctx); err != nil {
-		log.Println("服务关闭失败:", "err", err)
-		panic(err)
-	}
-	fmt.Println("服务已退出")
-}
-
-func New(port int, cacheDir string) BBServer {
+func New(port int, cacheDir string) *bb_server.Server {
 	log.Println("======= 服务启动 =======")
 	log.Println("端口:", port)
 	log.Println("缓存目录:", cacheDir)
@@ -183,12 +147,8 @@ func New(port int, cacheDir string) BBServer {
 		proxy.ServeHTTP(ctx.Writer, req)
 	})
 
-	// r.Run(fmt.Sprintf(":%d", port))
-
-	return BBServer{
-		srv: &http.Server{
-			Addr:    ":" + strconv.Itoa(port),
-			Handler: r,
-		},
-	}
+	return bb_server.New(&http.Server{
+		Addr:    ":" + strconv.Itoa(port),
+		Handler: r,
+	}, log.Println)
 }

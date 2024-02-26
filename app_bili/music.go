@@ -15,28 +15,7 @@ import (
 
 // 获取歌曲文件
 func (a *App) GetMusicFile(id string) (*httputil.ReverseProxy, *http.Request, error) {
-	biliid, _ := UnicodeBiliId(id)
-
-	resp, _ := a.client.GetVideoUrl(biliid.Aid, biliid.Bvid, biliid.Cid)
-
-	if len(resp.Durl) > 0 {
-		originURL := resp.Durl[0].Url
-		u, _ := url.Parse(originURL)
-
-		proxy := httputil.NewSingleHostReverseProxy(u)
-
-		proxy.Director = func(r *http.Request) {
-			// 设置必须得请求头
-			r.Header.Set("Referer", "https://www.bilibili.com/")
-			r.Header.Set("Cookie", "")
-			r.Header.Set("User-Agent", bili_sdk.UserAgent)
-		}
-
-		req, _ := http.NewRequest("GET", resp.Durl[0].Url, nil)
-
-		return proxy, req, nil
-	}
-	return nil, nil, fmt.Errorf("Durl")
+	return ProxyMusicFile(id, a.client)
 }
 
 // 下载
@@ -49,7 +28,9 @@ func (a *App) DownloadMusic(params bb_type.DownloadMusicParams) (string, error) 
 		return "", err
 	}
 	resp, err := a.client.GetVideoUrl(biliid.Aid, biliid.Bvid, biliid.Cid)
-
+	if err != nil {
+		return "", errors.New("sdk 获取歌曲播放地址失败")
+	}
 	if err := DownloadBiliMusic(params.ID, params.Name, params.DownloadDir, resp); err != nil {
 		return "", err
 	}
@@ -99,4 +80,35 @@ func DownloadUrl(path string, url string) error {
 	}
 
 	return nil
+}
+
+// 使用代理的方式获取歌曲的播放流
+func ProxyMusicFile(id string, client *bili_sdk.Client) (*httputil.ReverseProxy, *http.Request, error) {
+	biliid, err := UnicodeBiliId(id)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	resp, err := client.GetVideoUrl(biliid.Aid, biliid.Bvid, biliid.Cid)
+	if err != nil {
+		return nil, nil, errors.New("sdk 获取歌曲播放地址失败")
+	}
+	if len(resp.Durl) > 0 {
+		originURL := resp.Durl[0].Url
+		u, _ := url.Parse(originURL)
+
+		proxy := httputil.NewSingleHostReverseProxy(u)
+
+		proxy.Director = func(r *http.Request) {
+			// 设置必须得请求头
+			r.Header.Set("Referer", "https://www.bilibili.com/")
+			r.Header.Set("Cookie", "")
+			r.Header.Set("User-Agent", bili_sdk.UserAgent)
+		}
+
+		req, _ := http.NewRequest("GET", resp.Durl[0].Url, nil)
+
+		return proxy, req, nil
+	}
+	return nil, nil, fmt.Errorf("Durl")
 }

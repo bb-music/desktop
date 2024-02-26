@@ -7,10 +7,10 @@ import {
   SearchType,
 } from '@/app/api/musicService';
 import { html2text, transformImgUrl } from '@/utils';
-import { app_bili, bb_type } from '@wails/go/models';
+import { app_bili } from '@wails/go/models';
 import { settingCache } from './setting';
 import { MusicItem } from '@/app/api/music';
-import { DownloadMusic, GetConfig, Search, InitConfig, SearchDetail } from '@wails/go/app_bili/App';
+import { DownloadMusic, Search, InitConfig, SearchDetail, GetConfig } from '@wails/go/app_bili/App';
 import { SettingItem } from '@/app/modules/setting';
 import { Input } from '@/app/components/ui/input';
 import { useEffect, useState } from 'react';
@@ -18,6 +18,7 @@ import { Button } from '@/app/components/ui/button';
 import { Switch } from '@/app/components/ui/switch';
 import { message } from '@/app/components/ui/message';
 import { Resp, request } from '@/lib/request';
+import { GetMusicPlayerUrl } from '@wails/go/app_base/App';
 
 class BiliMusicServiceConfigValue {
   enabled = true;
@@ -32,14 +33,19 @@ const CNAME = '哔哩哔哩';
 class BiliAction implements MusicServiceAction {
   searchList = async (params: SearchParams) => {
     const page = params.current || 1;
-    const {
-      data: { data: res },
-    } = await request<Resp<bb_type.SearchResponse>>(`/api/search/${NAME}`, {
-      params: {
-        page: page + '',
-        keyword: params.keyword,
-      },
-    });
+    const query = {
+      page: page + '',
+      keyword: params.keyword,
+    };
+    const res = await Search(query);
+    // const {
+    //   data: { data: res },
+    // } = await request<Resp<bb_type.SearchResponse>>(`/api/search/${NAME}`, {
+    //   params: {
+    //     page: page + '',
+    //     keyword: params.keyword,
+    //   },
+    // });
     return {
       ...res,
       data: res.data.map((item) => ({
@@ -51,20 +57,19 @@ class BiliAction implements MusicServiceAction {
     };
   };
   searchItemDetail = async (item: SearchItem) => {
-    // const info = await SearchDetail(item.id);
-    const {
-      data: { data: info },
-    } = await request<Resp<bb_type.SearchItem>>(`/api/search/${NAME}/${item.id}`);
+    const info = await SearchDetail(item.id);
+    // const {
+    //   data: { data: info },
+    // } = await request<Resp<bb_type.SearchItem>>(`/api/search/${NAME}/${item.id}`);
     return {
       ...info,
       type: info.type as SearchType,
     };
   };
   getMusicPlayerUrl = async (music: MusicItem) => {
-    console.log('music: ', music);
-    const setting = await settingCache.get();
-    // const url = `await GetMusicPlayerUrl(music.id, music.origin)`;
-    const url = `http://localhost:9091/api/music/file/${music.origin}/${music.id}`;
+    // const setting = await settingCache.get();
+    const url = await GetMusicPlayerUrl(music.id, music.origin);
+    // const url = `http://localhost:9091/api/music/file/${music.origin}/${music.id}`;
     console.log('url: ', url);
     return url || '';
   };
@@ -98,11 +103,13 @@ export class BiliMusicServiceInstance implements MusicService<BiliMusicServiceCo
     const [data, setData] = useState<BiliMusicServiceConfigValue>(
       new BiliMusicServiceConfigValue()
     );
-    const loadHandler = () => {
-      request<Resp<app_bili.Config>>(`/api/config/${NAME}`).then((res) => {
-        console.log('res: ', res.data.data);
-        setConfig(res.data.data);
-      });
+    const loadHandler = async () => {
+      // const { data:{data:res}} = await request<Resp<app_bili.Config>>(`/api/config/${NAME}`).then((res) => {
+      //   console.log('res: ', res.data.data);
+      //   setConfig(res.data.data);
+      // });
+      const res = await GetConfig();
+      setConfig(res);
       settingCache.get().then((res) => {
         if (res) {
           const c = res.musicServices.find((m) => m.name === NAME)?.config;

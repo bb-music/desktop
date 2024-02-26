@@ -4,6 +4,9 @@
   "version": "0.0.1",
   "type": "module",
   "main": "./frontend/src/app/index.tsx",
+  "files": [
+    "frontend"
+  ],
   "exports": {
     "app": "./frontend/src/app"
   },

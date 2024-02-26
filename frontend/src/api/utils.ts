@@ -1,4 +1,4 @@
-import { Utils } from '@/app/api/utils';
+import { Utils } from 'bb-music-ui/app/api';
 import { transformImgUrl } from '@/utils';
 
 export class UtilsInstance implements Utils {

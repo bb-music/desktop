@@ -5,7 +5,10 @@ import {
   SearchItem,
   SearchParams,
   SearchType,
-} from '@/app/api/musicService';
+  MusicItem,
+} from 'bb-music-ui/app/api';
+import { SettingItem } from 'bb-music-ui/app/modules';
+import { Input, Button, Switch, message } from 'bb-music-ui/app/components';
 import {
   getMusicServiceConfig,
   html2text,
@@ -15,14 +18,8 @@ import {
 } from '@/utils';
 import { app_bili } from '@wails/go/models';
 import { settingCache } from './setting';
-import { MusicItem } from '@/app/api/music';
 import { DownloadMusic, Search, InitConfig, SearchDetail, GetConfig } from '@wails/go/app_bili/App';
-import { SettingItem } from '@/app/modules/setting';
-import { Input } from '@/app/components/ui/input';
 import { useEffect, useState } from 'react';
-import { Button } from '@/app/components/ui/button';
-import { Switch } from '@/app/components/ui/switch';
-import { message } from '@/app/components/ui/message';
 import { GetMusicPlayerUrl } from '@wails/go/app_base/App';
 
 class BiliMusicServiceConfigValue {

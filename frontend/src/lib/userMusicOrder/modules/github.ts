@@ -1,8 +1,7 @@
 import { isJson } from '@/utils';
 import { UserMusicOrderOrigin } from '../common';
 import axios from 'axios';
-import { MusicItem, MusicOrderItem } from '@/app/api/music';
-import { UserMusicOrderAction } from '@/app/api/userMusicOrder';
+import { MusicItem, MusicOrderItem, UserMusicOrderAction } from 'bb-music-ui/app/api';
 import dayjs from 'dayjs';
 import { nanoid } from 'nanoid';
 import { Base64 } from 'js-base64';

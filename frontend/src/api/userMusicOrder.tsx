@@ -1,19 +1,21 @@
 import { JsonCacheStorage } from '@/lib/cacheStorage';
-import { MusicItem, MusicOrderItem } from '@/app/api/music';
+import {
+  MusicItem,
+  MusicOrderItem,
+  UserMusicOrder,
+  UserMusicOrderAction,
+} from 'bb-music-ui/app/api';
 import {
   GithubUserMusicOrderAction,
   UserMusicOrderOrigin,
   UserMusicOrderOriginType,
 } from '@/lib/userMusicOrder';
-import { Input } from '@/app/components/ui/input';
-import { SettingItem } from '@/app/modules/setting';
-import { useEffect, useRef, useState } from 'react';
+import { SettingItem } from 'bb-music-ui/app/modules';
+import { useEffect, useState } from 'react';
 import { nanoid } from 'nanoid';
 import dayjs from 'dayjs';
-import { UserMusicOrder, UserMusicOrderAction } from '@/app/api/userMusicOrder';
 import { settingCache } from './setting';
-import { Button } from '@/app/components/ui/button';
-import { message } from '@/app/components/ui/message';
+import { Button, message, Input } from 'bb-music-ui/app/components';
 
 const NAME = UserMusicOrderOriginType.Github;
 const CNAME = 'Github 歌单';

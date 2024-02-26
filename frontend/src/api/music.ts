@@ -1,4 +1,4 @@
-import { AudioInstance, Music } from '@/app/api/music';
+import { AudioInstance, Music } from 'bb-music-ui/app/api';
 
 class PlayerAudio implements AudioInstance {
   ctx = new Audio();

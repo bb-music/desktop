@@ -26,6 +26,9 @@ dependencies:
   axios:
     specifier: ^1.6.7
     version: 1.6.7
+  bb-music-ui:
+    specifier: github:OpenBBMusic/ui-core
+    version: github.com/OpenBBMusic/ui-core/09c07b9aabc8596137226c5e3ebe9221bc2376fc(@types/react-dom@18.0.6)(@types/react@18.0.17)(react-dom@18.2.0)
   dayjs:
     specifier: ^1.11.10
     version: 1.11.10
@@ -1922,4 +1925,27 @@ packages:
       '@types/react': 18.0.17
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
+    dev: false
+
+  github.com/OpenBBMusic/ui-core/09c07b9aabc8596137226c5e3ebe9221bc2376fc(@types/react-dom@18.0.6)(@types/react@18.0.17)(react-dom@18.2.0):
+    resolution: {tarball: https://codeload.github.com/OpenBBMusic/ui-core/tar.gz/09c07b9aabc8596137226c5e3ebe9221bc2376fc}
+    id: github.com/OpenBBMusic/ui-core/09c07b9aabc8596137226c5e3ebe9221bc2376fc
+    name: bb-music-ui
+    version: 0.0.3
+    dependencies:
+      '@icon-park/react': 1.4.2(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-aspect-ratio': 1.0.3(@types/react-dom@18.0.6)(@types/react@18.0.17)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-context-menu': 2.1.5(@types/react-dom@18.0.6)(@types/react@18.0.17)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-switch': 1.0.3(@types/react-dom@18.0.6)(@types/react@18.0.17)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-toast': 1.1.5(@types/react-dom@18.0.6)(@types/react@18.0.17)(react-dom@18.2.0)(react@18.2.0)
+      axios: 1.6.7
+      dayjs: 1.11.10
+      react: 18.2.0
+      zustand: 4.5.0(@types/react@18.0.17)(react@18.2.0)
+    transitivePeerDependencies:
+      - '@types/react'
+      - '@types/react-dom'
+      - debug
+      - immer
+      - react-dom
     dev: false

@@ -1,4 +1,4 @@
-import { MusicOrderItem } from '@/app/api/music';
+import { MusicOrderItem } from 'bb-music-ui/app/api';
 
 export const enum UserMusicOrderOriginType {
   ExtendClass = 'ExtendClass', // https://extendsclass.com/

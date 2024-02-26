@@ -7,12 +7,12 @@ import (
 	"log"
 	"time"
 
-	"github.com/OpenBBMusic/desktop/pkg/bb_client"
+	"github.com/OpenBBMusic/desktop/pkg/bili_sdk"
 )
 
 type Config struct {
-	SignData bb_client.SignData `json:"sign_data"`
-	SpiData  bb_client.SpiData  `json:"spi_data"`
+	SignData bili_sdk.SignData `json:"sign_data"`
+	SpiData  bili_sdk.SpiData  `json:"spi_data"`
 }
 
 type CacheConfig struct {
@@ -24,8 +24,8 @@ var ConfigCacheKey = "bili-config.json"
 
 // 初始化配置信息
 func (a *App) InitConfig() error {
-	var signData bb_client.SignData
-	var spiData bb_client.SpiData
+	var signData bili_sdk.SignData
+	var spiData bili_sdk.SpiData
 	// 读缓存
 	// 读缓存
 	cacheConfigStr, _ := a.cacheStorage.GetStorage(ConfigCacheKey)

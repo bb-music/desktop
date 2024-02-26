@@ -9,7 +9,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/OpenBBMusic/desktop/pkg/bb_client"
+	"github.com/OpenBBMusic/desktop/pkg/bili_sdk"
 	"github.com/OpenBBMusic/desktop/pkg/file_storage"
 )
 
@@ -48,12 +48,12 @@ func ProxyServer(port int, fileStorage *file_storage.FileStorage) {
 			img_key := cacheConfig.SignData.ImgKey
 			sub_key := cacheConfig.SignData.SubKey
 
-			client := bb_client.Client{
-				SpiData: bb_client.SpiData{
+			client := bili_sdk.Client{
+				SpiData: bili_sdk.SpiData{
 					UUID_V3: uuid_v3,
 					UUID_V4: uuid_v4,
 				},
-				SignData: bb_client.SignData{
+				SignData: bili_sdk.SignData{
 					ImgKey: img_key,
 					SubKey: sub_key,
 				},
@@ -74,7 +74,7 @@ func ProxyServer(port int, fileStorage *file_storage.FileStorage) {
 				proxy.Director = func(r *http.Request) {
 					r.Header.Set("Referer", "https://www.bilibili.com/")
 					r.Header.Set("Cookie", "")
-					r.Header.Set("User-Agent", bb_client.UserAgent)
+					r.Header.Set("User-Agent", bili_sdk.UserAgent)
 				}
 				proxy.ModifyResponse = func(resp *http.Response) error {
 					return nil
@@ -95,8 +95,8 @@ func ProxyServer(port int, fileStorage *file_storage.FileStorage) {
 }
 
 type CacheConfig struct {
-	SignData bb_client.SignData `json:"sign_data"`
-	SpiData  bb_client.SpiData  `json:"spi_data"`
+	SignData bili_sdk.SignData `json:"sign_data"`
+	SpiData  bili_sdk.SpiData  `json:"spi_data"`
 }
 
 func GetBiliCacheConfig(fileStorage *file_storage.FileStorage) *CacheConfig {

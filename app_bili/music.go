@@ -9,8 +9,8 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/OpenBBMusic/desktop/pkg/bb_client"
 	"github.com/OpenBBMusic/desktop/pkg/bb_type"
+	"github.com/OpenBBMusic/desktop/pkg/bili_sdk"
 )
 
 // 获取歌曲文件
@@ -29,7 +29,7 @@ func (a *App) GetMusicFile(id string) (*httputil.ReverseProxy, *http.Request, er
 			// 设置必须得请求头
 			r.Header.Set("Referer", "https://www.bilibili.com/")
 			r.Header.Set("Cookie", "")
-			r.Header.Set("User-Agent", bb_client.UserAgent)
+			r.Header.Set("User-Agent", bili_sdk.UserAgent)
 		}
 
 		req, _ := http.NewRequest("GET", resp.Durl[0].Url, nil)
@@ -57,7 +57,7 @@ func (a *App) DownloadMusic(params bb_type.DownloadMusicParams) (string, error) 
 	return "", nil
 }
 
-func DownloadBiliMusic(id string, fileName string, downloadDir string, resp bb_client.VideoUrlResponse) error {
+func DownloadBiliMusic(id string, fileName string, downloadDir string, resp bili_sdk.VideoUrlResponse) error {
 	durlLen := len(resp.Durl)
 	if durlLen > 0 {
 		if durlLen == 1 {
@@ -80,7 +80,7 @@ func DownloadUrl(path string, url string) error {
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("Referer", "https://www.bilibili.com/")
 	req.Header.Set("Cookie", "")
-	req.Header.Set("User-Agent", bb_client.UserAgent)
+	req.Header.Set("User-Agent", bili_sdk.UserAgent)
 
 	resp, errA := http.DefaultClient.Do(req)
 	if errA != nil {

@@ -1,4 +1,4 @@
-package bb_client
+package bili_sdk
 
 type BiliResponse[T any] struct {
 	Code    int16  `json:"code"`

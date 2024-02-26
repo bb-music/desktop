@@ -9,7 +9,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/OpenBBMusic/desktop/pkg/bb_client"
+	"github.com/OpenBBMusic/desktop/pkg/bili_sdk"
 )
 
 type FileLoader struct {
@@ -55,12 +55,12 @@ func videoProxyServer(w http.ResponseWriter, r *http.Request) {
 	// sub_key := auth.SubKey
 	fmt.Printf("Auth: %+v\n", auth)
 
-	client := bb_client.Client{
-		SpiData: bb_client.SpiData{
+	client := bili_sdk.Client{
+		SpiData: bili_sdk.SpiData{
 			UUID_V3: uuid_v3,
 			UUID_V4: uuid_v4,
 		},
-		SignData: bb_client.SignData{
+		SignData: bili_sdk.SignData{
 			ImgKey: img_key,
 			SubKey: sub_key,
 		},
@@ -81,7 +81,7 @@ func videoProxyServer(w http.ResponseWriter, r *http.Request) {
 		proxy.Director = func(r *http.Request) {
 			r.Header.Set("Referer", "https://www.bilibili.com/")
 			r.Header.Set("Cookie", "")
-			r.Header.Set("User-Agent", bb_client.UserAgent)
+			r.Header.Set("User-Agent", bili_sdk.UserAgent)
 		}
 		proxy.ModifyResponse = func(resp *http.Response) error {
 			return nil

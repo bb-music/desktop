@@ -1,7 +1,7 @@
 /**
  * 签名相关
  **/
-package bb_client
+package bili_sdk
 
 import (
 	"strings"

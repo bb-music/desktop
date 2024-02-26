@@ -6,15 +6,15 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/OpenBBMusic/desktop/pkg/bb_client"
 	"github.com/OpenBBMusic/desktop/pkg/bb_type"
+	"github.com/OpenBBMusic/desktop/pkg/bili_sdk"
 	"github.com/duke-git/lancet/v2/slice"
 )
 
 // 搜索视频
 func (a *App) Search(params bb_type.SearchParams) (bb_type.SearchResponse, error) {
 	result := bb_type.SearchResponse{}
-	raw, err := a.client.Search(bb_client.SearchParams{
+	raw, err := a.client.Search(bili_sdk.SearchParams{
 		Keyword: params.Keyword,
 		Page:    params.Page,
 	})

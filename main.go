@@ -50,9 +50,6 @@ func main() {
 		musicProxyServer.Run()
 	}()
 
-	// bbsrv := server.New(9091, configDir)
-	// go bbsrv.Run()
-
 	bili := app_bili.New(configDir)
 
 	err := wails.Run(&options.App{

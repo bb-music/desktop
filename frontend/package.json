@@ -1,12 +1,12 @@
 {
-  "name": "frontend",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "author": "阿炸克斯 <975794403@qq.com>",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "dev": "umi dev",
+    "build": "umi build",
+    "postinstall": "umi setup",
+    "setup": "umi setup",
+    "start": "npm run dev"
   },
   "dependencies": {
     "@bb-music/web-app": "github:bb-music/ui-core",
@@ -18,15 +18,13 @@
     "nanoid": "^5.0.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "umi": "^4.1.2",
     "zustand": "^4.5.1"
   },
   "devDependencies": {
     "@types/node": "^20.11.20",
     "@types/react": "^18.2.59",
     "@types/react-dom": "^18.2.19",
-    "@vitejs/plugin-react": "^2.2.0",
-    "sass": "^1.71.1",
-    "typescript": "^4.9.5",
-    "vite": "^3.2.8"
+    "typescript": "^5.3.3"
   }
 }

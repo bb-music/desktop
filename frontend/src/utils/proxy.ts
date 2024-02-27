@@ -43,8 +43,11 @@ export async function musicServiceEnabledProxy(origin: string) {
 // 获取源服务的配置信息
 export async function getMusicServiceConfig<T>(name: string) {
   const setting = await settingCache.get();
-  const s = setting?.musicServices.find((s) => s.name === name);
-  return s?.config as ProxyConfig & T;
+  if (!Array.isArray(setting?.musicServices)) {
+    return {};
+  }
+  const s = setting?.musicServices?.find((s) => s.name === name);
+  return (s?.config as ProxyConfig & T) || {};
 }
 
 export function mergeUrl(a: string, b: string) {

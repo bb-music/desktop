@@ -2,7 +2,7 @@ import { Api } from '@bb-music/web-app';
 import { SettingInstance } from './setting';
 import { MusicInstance } from './music';
 import { OpenMusicOrderInstance } from './openMusicOrder';
-import { cacheStorage } from '@/lib/cacheStorage';
+import { cacheStorage } from '../lib/cacheStorage';
 import { UtilsInstance } from './utils';
 import { BiliMusicServiceInstance } from './musicServiceBili';
 import { UserLocalMusicOrderInstance } from './userLocalMusicOrder';

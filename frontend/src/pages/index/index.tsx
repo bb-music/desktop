@@ -1,15 +1,11 @@
 import { BBMusicApp, PcContainer } from '@bb-music/web-app';
-import { apiInstance } from './api';
+import { apiInstance } from '../../api';
 import { useEffect, useState } from 'react';
-import { createRoot } from 'react-dom/client';
 import { Close, Minus } from '@icon-park/react';
-import { Quit, WindowMinimise } from '@wails/runtime';
-import './style.scss';
+import { Quit, WindowMinimise } from '../../../wailsjs/runtime';
+import '../../style.scss';
 
-const container = document.getElementById('root');
-const root = createRoot(container!);
-
-function Root() {
+export default function Root() {
   const [initLoading, setInitLoading] = useState(false);
 
   const init = async () => {
@@ -64,5 +60,3 @@ function Root() {
     </div>
   );
 }
-
-root.render(<Root />);

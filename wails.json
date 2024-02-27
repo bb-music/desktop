@@ -5,7 +5,7 @@
   "frontend:install": "pnpm install",
   "frontend:build": "npm run build",
   "frontend:dev:watcher": "npm run dev",
-  "frontend:dev:serverUrl": "auto",
+  "frontend:dev:serverUrl": "http://localhost:34111",
   "author": {
     "name": "lvyueyang",
     "email": "975794403@qq.com"

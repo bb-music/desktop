@@ -1,4 +1,4 @@
-import { isJson } from '@/utils';
+import { isJson } from '../utils';
 import { GetStorage, RemoveStorage, SetStorage } from '@wails/go/app_base/App';
 import { StateStorage } from 'zustand/middleware';
 

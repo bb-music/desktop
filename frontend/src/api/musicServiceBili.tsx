@@ -124,8 +124,8 @@ export class BiliMusicServiceInstance implements BiliMusicServiceApi {
       });
       setConfig(res);
       settingCache.get().then((res) => {
-        if (res) {
-          const c = res.musicServices.find((m) => m.name === NAME)?.config;
+        if (Array.isArray(res?.musicServices)) {
+          const c = res.musicServices?.find((m) => m.name === NAME)?.config;
           setData(c);
         }
       });

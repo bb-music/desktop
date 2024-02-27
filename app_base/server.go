@@ -53,7 +53,7 @@ func ProxyServer(port int, configDir string) *http.Server {
 			}
 			proxy, req, err := app_bili.ProxyMusicFile(id, &client)
 			if err != nil {
-				w.Write([]byte(""))
+				w.Write([]byte(err.Error()))
 			}
 			proxy.ServeHTTP(w, req)
 			return

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -91,6 +92,10 @@ func ProxyMusicFile(id string, client *bili_sdk.Client) (*httputil.ReverseProxy,
 
 	resp, err := client.GetVideoUrl(biliid.Aid, biliid.Bvid, biliid.Cid)
 	if err != nil {
+		log.Println("歌曲播放地址获取失败")
+		log.Printf("Response: %+v\n", resp)
+		log.Printf("Error: %+v\n", err)
+		log.Printf("biliid: %+v\n", biliid)
 		return nil, nil, errors.New("sdk 获取歌曲播放地址失败")
 	}
 	if len(resp.Durl) > 0 {

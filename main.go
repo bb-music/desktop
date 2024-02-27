@@ -14,11 +14,11 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
 	"gopkg.in/natefinch/lumberjack.v2"
 
-	"github.com/OpenBBMusic/desktop/app_base"
-	"github.com/OpenBBMusic/desktop/app_bili"
-	"github.com/OpenBBMusic/desktop/pkg/bb_server"
-	"github.com/OpenBBMusic/desktop/pkg/logger"
-	"github.com/OpenBBMusic/desktop/utils"
+	"github.com/bb-music/desktop/app_base"
+	"github.com/bb-music/desktop/app_bili"
+	"github.com/bb-music/desktop/pkg/bb_server"
+	"github.com/bb-music/desktop/pkg/logger"
+	"github.com/bb-music/desktop/utils"
 )
 
 //go:embed all:frontend/dist

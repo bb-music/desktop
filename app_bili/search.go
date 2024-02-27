@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/OpenBBMusic/desktop/pkg/bb_type"
-	"github.com/OpenBBMusic/desktop/pkg/bili_sdk"
+	"github.com/bb-music/desktop/pkg/bb_type"
+	"github.com/bb-music/desktop/pkg/bili_sdk"
 	"github.com/duke-git/lancet/v2/slice"
 )
 

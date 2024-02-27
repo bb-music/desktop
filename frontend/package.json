@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "bb-music-ui": "github:OpenBBMusic/ui-core",
+    "bb-music-ui": "github:bb-music/ui-core",
     "@icon-park/react": "^1.4.2",
     "@radix-ui/react-aspect-ratio": "^1.0.3",
     "@radix-ui/react-context-menu": "^2.1.5",

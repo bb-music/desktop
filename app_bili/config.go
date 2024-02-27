@@ -6,8 +6,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/OpenBBMusic/desktop/pkg/bili_sdk"
-	"github.com/OpenBBMusic/desktop/pkg/file_storage"
+	"github.com/bb-music/desktop/pkg/bili_sdk"
+	"github.com/bb-music/desktop/pkg/file_storage"
 )
 
 type Config struct {

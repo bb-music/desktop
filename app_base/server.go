@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/OpenBBMusic/desktop/app_bili"
-	"github.com/OpenBBMusic/desktop/pkg/bili_sdk"
-	"github.com/OpenBBMusic/desktop/pkg/file_storage"
+	"github.com/bb-music/desktop/app_bili"
+	"github.com/bb-music/desktop/pkg/bili_sdk"
+	"github.com/bb-music/desktop/pkg/file_storage"
 )
 
 type AuthInfo struct {

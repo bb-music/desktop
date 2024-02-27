@@ -9,11 +9,11 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/OpenBBMusic/desktop/app_bili"
-	"github.com/OpenBBMusic/desktop/pkg/bb_server"
-	"github.com/OpenBBMusic/desktop/pkg/bb_type"
-	"github.com/OpenBBMusic/desktop/server/middlewares"
-	"github.com/OpenBBMusic/desktop/server/resp"
+	"github.com/bb-music/desktop/app_bili"
+	"github.com/bb-music/desktop/pkg/bb_server"
+	"github.com/bb-music/desktop/pkg/bb_type"
+	"github.com/bb-music/desktop/server/middlewares"
+	"github.com/bb-music/desktop/server/resp"
 	"github.com/gin-gonic/gin"
 )
 

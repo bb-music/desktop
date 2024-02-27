@@ -1,4 +1,4 @@
-module github.com/OpenBBMusic/desktop
+module github.com/bb-music/desktop
 
 go 1.18
 

@@ -1,7 +1,7 @@
 package app_bili
 
 import (
-	"github.com/OpenBBMusic/desktop/pkg/bili_sdk"
+	"github.com/bb-music/desktop/pkg/bili_sdk"
 )
 
 type App struct {

@@ -9,8 +9,8 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/OpenBBMusic/desktop/pkg/bb_type"
-	"github.com/OpenBBMusic/desktop/pkg/bili_sdk"
+	"github.com/bb-music/desktop/pkg/bb_type"
+	"github.com/bb-music/desktop/pkg/bili_sdk"
 )
 
 // 获取歌曲文件

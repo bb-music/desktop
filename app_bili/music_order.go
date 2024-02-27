@@ -5,7 +5,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/OpenBBMusic/desktop/pkg/bb_type"
+	"github.com/bb-music/desktop/pkg/bb_type"
 )
 
 // 获取歌单源数据

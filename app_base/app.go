@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/OpenBBMusic/desktop/pkg/file_storage"
-	"github.com/OpenBBMusic/desktop/utils"
+	"github.com/bb-music/desktop/pkg/file_storage"
+	"github.com/bb-music/desktop/utils"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )

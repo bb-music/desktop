@@ -1,14 +1,15 @@
 import {
-  MusicService,
-  MusicServiceAction,
-  MusicServiceHooks,
-  SearchItem,
-  SearchParams,
+  MusicServiceApi,
+  MusicServiceApiAction,
+  MusicServiceApiHooks,
   SearchType,
-  MusicItem,
-} from 'bb-music-ui/app/api';
-import { SettingItem } from 'bb-music-ui/app/modules';
-import { Input, Button, Switch, message } from 'bb-music-ui/app/components';
+  SettingItem,
+  Input,
+  Button,
+  Switch,
+  message,
+  MusicInter,
+} from '@bb-music/web-app';
 import {
   getMusicServiceConfig,
   html2text,
@@ -22,6 +23,10 @@ import { DownloadMusic, Search, InitConfig, SearchDetail, GetConfig } from '@wai
 import { useEffect, useState } from 'react';
 import { GetMusicPlayerUrl } from '@wails/go/app_base/App';
 
+type SearchItem = MusicInter.SearchItem;
+type SearchParams = MusicInter.SearchParams;
+type MusicItem = MusicInter.MusicItem;
+
 class BiliMusicServiceConfigValue {
   enabled = true;
   proxyEnabled = false;
@@ -32,8 +37,8 @@ class BiliMusicServiceConfigValue {
 const NAME = 'bili';
 const CNAME = '哔哩哔哩';
 
-class BiliAction implements MusicServiceAction {
-  searchList = async (params: SearchParams) => {
+class BiliAction implements MusicServiceApiAction {
+  searchList: MusicServiceApiAction['searchList'] = async (params) => {
     const page = params.current || 1;
     const query = {
       page: page + '',
@@ -58,7 +63,7 @@ class BiliAction implements MusicServiceAction {
       })),
     };
   };
-  searchItemDetail = async (item: SearchItem) => {
+  searchItemDetail: MusicServiceApiAction['searchItemDetail'] = async (item) => {
     const info = await proxyMusicService(NAME, {
       proxy: {
         url: `/api/search/${NAME}/${item.id}`,
@@ -70,7 +75,7 @@ class BiliAction implements MusicServiceAction {
       type: info.type as SearchType,
     };
   };
-  getMusicPlayerUrl = async (music: MusicItem) => {
+  getMusicPlayerUrl: MusicServiceApiAction['getMusicPlayerUrl'] = async (music) => {
     const config = await getMusicServiceConfig(NAME);
     if (config.proxyEnabled) {
       return mergeUrl(config.proxyAddress, `/api/music/file/${NAME}/${music.id}`);
@@ -78,7 +83,7 @@ class BiliAction implements MusicServiceAction {
     const url = await GetMusicPlayerUrl(music.id, music.origin);
     return url || '';
   };
-  download = async (music: MusicItem) => {
+  download: MusicServiceApiAction['download'] = async (music) => {
     const setting = await settingCache.get();
     const dir = setting?.downloadDir;
 
@@ -94,16 +99,18 @@ class BiliAction implements MusicServiceAction {
     });
   };
 }
-class BiliHooks implements MusicServiceHooks {
+class BiliHooks implements MusicServiceApiHooks {
   init = async () => {
     await InitConfig();
   };
 }
 
-export class BiliMusicServiceInstance implements MusicService<BiliMusicServiceConfigValue> {
+type BiliMusicServiceApi = MusicServiceApi<BiliMusicServiceConfigValue>;
+
+export class BiliMusicServiceInstance implements BiliMusicServiceApi {
   name = NAME;
   cname = CNAME;
-  ConfigElement = ({ onChange }: { onChange?: (v: BiliMusicServiceConfigValue) => void }) => {
+  ConfigElement: BiliMusicServiceApi['ConfigElement'] = ({ onChange }) => {
     const [config, setConfig] = useState<app_bili.Config>();
     const [data, setData] = useState<BiliMusicServiceConfigValue>(
       new BiliMusicServiceConfigValue()

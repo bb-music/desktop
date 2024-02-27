@@ -1,11 +1,12 @@
-import { Api } from 'bb-music-ui/app/api';
+import { Api } from '@bb-music/web-app';
 import { SettingInstance } from './setting';
 import { MusicInstance } from './music';
 import { OpenMusicOrderInstance } from './openMusicOrder';
-import { UserGithubMusicOrderInstance, UserLocalMusicOrderInstance } from './userMusicOrder';
 import { cacheStorage } from '@/lib/cacheStorage';
 import { UtilsInstance } from './utils';
 import { BiliMusicServiceInstance } from './musicServiceBili';
+import { UserLocalMusicOrderInstance } from './userLocalMusicOrder';
+import { UserGithubMusicOrderInstance } from './userGithubMusicOrder';
 
 export const apiInstance: Api = {
   utils: new UtilsInstance(),

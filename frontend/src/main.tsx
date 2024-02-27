@@ -1,5 +1,4 @@
-import { BBMusicApp } from 'bb-music-ui/app';
-import { PcContainer } from 'bb-music-ui/app/modules';
+import { BBMusicApp, PcContainer } from '@bb-music/web-app';
 import { apiInstance } from './api';
 import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';

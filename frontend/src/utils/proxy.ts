@@ -1,7 +1,11 @@
 import { settingCache } from '@/api/setting';
-import { Resp } from '@/lib/request';
 import axios, { AxiosRequestConfig } from 'axios';
 
+export interface Resp<T = any> {
+  code: number;
+  message: string;
+  data: T;
+}
 export class ProxyConfig {
   enabled = true;
   proxyEnabled = false;

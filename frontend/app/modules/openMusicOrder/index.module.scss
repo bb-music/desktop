@@ -1,0 +1,61 @@
+.musicOrderList {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 16px 30px;
+  gap: 16px 16px;
+}
+.orderItem {
+  --w: 140px;
+  width: var(--w);
+  &:hover {
+    color: rgb(var(--font-active-color));
+    cursor: pointer;
+  }
+  .cover {
+    position: relative;
+    width: 100%;
+    margin-bottom: 8px;
+    .coverImg {
+      width: var(--w);
+      height: var(--w);
+      border-radius: 4px;
+      background-color: rgba(0, 0, 0, 3);
+    }
+    .total {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      opacity: 0.3;
+      small {
+        font-size: 0.7em;
+        vertical-align: bottom;
+      }
+    }
+    .author {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 8px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      line-height: 1;
+      gap: 4px;
+    }
+  }
+  .name {
+    padding: 0 4px;
+  }
+  &:hover {
+    .total {
+      opacity: 1;
+    }
+  }
+}

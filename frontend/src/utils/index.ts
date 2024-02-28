@@ -1,5 +1,5 @@
 export * from './proxy';
-export { isJson, html2text } from '@bb-music/web-app/src/utils';
+export { cls, isJson } from '../../app/utils';
 
 export function transformImgUrl(url: string) {
   let r = url;
@@ -7,4 +7,18 @@ export function transformImgUrl(url: string) {
     r = 'http:' + r;
   }
   return `https://image.baidu.com/search/down?url=${r}`;
+}
+
+/**
+ * mm:ss 转为 秒
+ */
+export function mmss2seconds(str: string) {
+  const [m, s] = str.split(':').map(Number);
+  return m * 60 + s;
+}
+
+export function html2text(str: string) {
+  const html = document.createElement('div');
+  html.innerHTML = str;
+  return html.innerText;
 }

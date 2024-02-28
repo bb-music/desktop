@@ -1,0 +1,59 @@
+.btn {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  border: 1px var(--button-border-style) var(--button-border-color);
+  height: var(--button-height);
+  width: var(--button-width);
+  border-radius: var(--button-radius);
+  background: var(--button-bg);
+  color: var(--button-font-color);
+  outline: none;
+  cursor: pointer;
+  padding: var(--button-padding);
+  font-size: var(--button-font-size);
+  box-sizing: border-box;
+
+  &:hover {
+    background: var(--button-hover-bg);
+  }
+
+  &.primary {
+    color: var(--button-primary-font-color);
+    background: var(--button-primary-bg);
+    border: 1px var(--button-primary-border-style) var(--button-primary-border-color);
+    &:hover {
+      background: var(--button-primary-hover-bg);
+    }
+  }
+
+  &.link {
+    border-radius: 0;
+    background: transparent;
+    color: var(--button-link-font-color);
+    border: none;
+    padding: var(--button-link-padding);
+    &:hover {
+      color: var(--button-link-hover-color);
+      background: none;
+      text-decoration: underline;
+    }
+  }
+
+  &.text {
+    border-radius: 0;
+    background: transparent;
+    color: var(--button-text-font-color);
+    border: none;
+    padding: var(--button-text-padding);
+    &:hover {
+      color: var(--button-text-hover-color);
+      background: none;
+    }
+  }
+  :global {
+    .i-icon {
+      margin-right: 2px;
+    }
+  }
+}

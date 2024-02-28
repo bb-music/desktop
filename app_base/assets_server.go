@@ -54,7 +54,7 @@ func musicProxyServer(configDir string, w http.ResponseWriter, r *http.Request) 
 
 	if origin == "bili" {
 		biliConfigStorage := app_bili.NewConfigStorage(configDir)
-		cacheConfig := biliConfigStorage.Get()
+		cacheConfig, _ := biliConfigStorage.Get()
 
 		client := bili_sdk.Client{
 			SpiData: bili_sdk.SpiData{

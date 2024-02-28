@@ -1,0 +1,33 @@
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: var(--table-font-color);
+  td,
+  th {
+    text-align: left;
+    font-weight: 400;
+    padding: 10px 0;
+    font-size: 12px;
+  }
+  td {
+    &:hover {
+      color: var(--table-font-active-color);
+    }
+  }
+  tr {
+    &:nth-child(2n-1) {
+      td {
+        background-color: var(--table-item-bg);
+      }
+    }
+    &:hover {
+      td {
+        background-color: var(--table-item-hover-bg);
+      }
+    }
+  }
+  .active {
+    background-color: var(--table-item-active-bg);
+  }
+}

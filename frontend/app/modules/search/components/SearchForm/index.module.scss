@@ -1,0 +1,40 @@
+.searchForm {
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto 0;
+  gap: 10px;
+  padding: 20px 40px 20px;
+  border-radius: 4px;
+  display: flex;
+  gap: 10px;
+  input {
+    flex: 1;
+  }
+}
+.searchHistory {
+  margin: 0 36px 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 10px;
+  .item {
+    position: relative;
+    padding: 4px 8px;
+    border: 0.5px solid #ccc;
+    border-radius: 1.2em;
+    font-size: 12px;
+    cursor: pointer;
+    .close {
+      position: absolute;
+      top: -8px;
+      top: -8px;
+      font-size: 16px;
+      color: rgb(var(--main-color));
+      display: none;
+    }
+    &:hover {
+      .close {
+        display: inline-flex;
+      }
+    }
+  }
+}

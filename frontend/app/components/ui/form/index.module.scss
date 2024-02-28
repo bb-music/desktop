@@ -1,0 +1,20 @@
+.formItem {
+  display: flex;
+  margin-bottom: 10px;
+  flex-direction: column;
+  :global {
+    .ui-form-item-label {
+      color: rgb(var(--font-color));
+      font-size: 12px;
+    }
+    .ui-form-item-content {
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      flex: 1;
+      input {
+        width: 100%;
+      }
+    }
+  }
+}

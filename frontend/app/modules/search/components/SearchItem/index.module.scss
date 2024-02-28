@@ -1,0 +1,87 @@
+.searchItem {
+  position: relative;
+  width: 100%;
+  padding: 10px 36px;
+  gap: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: var(--font-color);
+
+  &:nth-child(2n) {
+    background-color: var(--search-item-bg);
+  }
+  &:hover {
+    background: var(--search-item-hover-bg);
+  }
+  .cover {
+    flex: 0 0 45px;
+    width: 45px;
+    height: 45px;
+    border-radius: 4px;
+    border: none;
+  }
+  .info {
+    flex: 1;
+    overflow: hidden;
+  }
+  .title {
+    white-space: nowrap;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    :global {
+      * {
+        font-style: normal;
+      }
+    }
+  }
+  .duration,
+  .author {
+    font-size: 12px;
+    color: #666;
+  }
+  .author {
+    flex: 10em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .tags {
+    font-size: 12px;
+    gap: 12px;
+    display: flex;
+    align-items: center;
+  }
+  .loading {
+    display: flex;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+  }
+  .operate {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    gap: 20px;
+    font-size: 14px;
+    &.show {
+      display: flex;
+    }
+  }
+}

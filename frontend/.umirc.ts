@@ -11,7 +11,11 @@ export default defineConfig({
   },
   alias: {
     '@wails': path.resolve('./wailsjs'),
+    '@bb-music/web-app': path.resolve('./app'),
   },
-  extraBabelIncludes: ['@bb-music/web-app'],
-  // mfsu: false,
+  extraBabelIncludes: [
+    path.join(__dirname, './app'),
+    // '@bb-music/web-app'
+  ],
+  mfsu: false,
 });

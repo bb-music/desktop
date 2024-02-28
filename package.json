@@ -1,0 +1,16 @@
+{
+  "name": "@bb-music-ui",
+  "private": true,
+  "version": "0.0.5",
+  "type": "module",
+  "main": "./frontend/app",
+  "dependencies": {
+    "@icon-park/react": "^1.4.2",
+    "@radix-ui/react-context-menu": "^2.1.5",
+    "@radix-ui/react-switch": "^1.0.3",
+    "@radix-ui/react-toast": "^1.1.5",
+    "dayjs": "^1.11.10",
+    "react-dom": "^18.2.0",
+    "zustand": "^4.5.0"
+  }
+}

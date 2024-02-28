@@ -1,0 +1,20 @@
+.searchList {
+  margin: 0 auto;
+  padding-bottom: 100px;
+}
+.pagination {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  gap: 2em;
+  padding: 10px 0;
+  background-color: var(--search-item-bg);
+  span {
+    padding: 8px 12px;
+    cursor: pointer;
+    &:hover {
+      color: rgba(var(--main-color));
+    }
+  }
+}

@@ -13,5 +13,5 @@ export default defineConfig({
     '@wails': path.resolve('./wailsjs'),
   },
   extraBabelIncludes: ['@bb-music/web-app'],
-  mfsu: false,
+  // mfsu: false,
 });

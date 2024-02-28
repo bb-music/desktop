@@ -33,8 +33,8 @@ func main() {
 	// 日志输出
 	svcLogger := NewSvcLogger()
 	// 代理服务端口
-	proxyServerPort := 56599
-	// 开发环境
+	var proxyServerPort = 56599
+	// 生产环境
 	if !utils.IsDev() {
 		proxyServerPort = 56592
 		// 非开发环境日志使用文件存储
@@ -46,6 +46,8 @@ func main() {
 			Compress:   false, // 是否压缩/归档旧文件
 		})
 	}
+	log.Println("开发环境:", utils.IsDev())
+	log.Println("代理端口:", proxyServerPort)
 
 	// 基础应用服务
 	basic := app_base.New(configDir, proxyServerPort)

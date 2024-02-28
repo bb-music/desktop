@@ -12,18 +12,24 @@ type SignData struct {
 	SubKey string `json:"sub_key"`
 }
 
-func (c *Client) getWbiKeysApi() (SignData, error) {
-	result := BiliResponse[WbiKeysResult]{}
+type SpiData struct {
+	UUID_V3 string `json:"b_3"`
+	UUID_V4 string `json:"b_4"`
+}
+
+// 获取认证秘钥
+func (c *Client) GetSignData() (*SignData, error) {
+	result := BiliResponse[BiliWbiKeysResult]{}
 
 	_, err := c.Request().SetResult(&result).Get("https://api.bilibili.com/x/web-interface/nav")
 	if err != nil {
-		return SignData{}, err
+		return nil, err
 	}
 
 	// 这里不能先根据 code 来判断返回结果了
 	if result.Data.WbiImg.ImgUrl == "" || result.Data.WbiImg.SubUrl == "" {
 		if err := ValidateResp(result); err != nil {
-			return SignData{}, err
+			return nil, err
 		}
 	}
 
@@ -33,38 +39,24 @@ func (c *Client) getWbiKeysApi() (SignData, error) {
 	imgKey := strings.Split(strings.Split(imgURL, "/")[len(strings.Split(imgURL, "/"))-1], ".")[0]
 	subKey := strings.Split(strings.Split(subURL, "/")[len(strings.Split(subURL, "/"))-1], ".")[0]
 
-	return SignData{
+	data := SignData{
 		imgKey,
 		subKey,
-	}, err
-}
-
-type SpiData struct {
-	UUID_V3 string `json:"b_3"`
-	UUID_V4 string `json:"b_4"`
+	}
+	return &data, err
 }
 
 // 获取 spi
-func (c *Client) GetSpiData() (SpiData, error) {
+func (c *Client) GetSpiData() (*SpiData, error) {
 	result := BiliResponse[SpiData]{}
 	_, err := c.Request().SetResult(&result).Get("https://api.bilibili.com/x/frontend/finger/spi")
 	if err != nil {
-		return SpiData{}, err
+		return nil, err
 	}
 	if err := ValidateResp(result); err != nil {
-		return SpiData{}, err
+		return nil, err
 	}
-	return result.Data, nil
-
-}
-
-// 获取 key
-func (c *Client) GetSignData() (SignData, error) {
-	if data, err := c.getWbiKeysApi(); err != nil {
-		return SignData{}, err
-	} else {
-		return data, nil
-	}
+	return &result.Data, nil
 }
 
 // 对参数进行签名

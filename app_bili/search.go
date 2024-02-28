@@ -7,19 +7,18 @@ import (
 	"strings"
 
 	"github.com/bb-music/desktop/pkg/bb_type"
-	"github.com/bb-music/desktop/pkg/bili_sdk"
 	"github.com/duke-git/lancet/v2/slice"
 )
 
 // 搜索视频
-func (a *App) Search(params bb_type.SearchParams) (bb_type.SearchResponse, error) {
-	result := bb_type.SearchResponse{}
-	raw, err := a.client.Search(bili_sdk.SearchParams{
+func (a *App) Search(params bb_type.SearchParams) (*bb_type.SearchResponse, error) {
+	raw, err := a.client.Search(bb_type.SearchParams{
 		Keyword: params.Keyword,
 		Page:    params.Page,
 	})
 	if err != nil {
-		return result, err
+		a.logger.Error("搜索歌曲失败", fmt.Sprintf("params=%+v", params), fmt.Sprintf("err=%+v", err))
+		return nil, err
 	}
 
 	res := bb_type.SearchResponse{
@@ -30,8 +29,8 @@ func (a *App) Search(params bb_type.SearchParams) (bb_type.SearchResponse, error
 	}
 
 	for _, item := range raw.Result {
+		// 类型为 ketang 的去掉
 		if !slice.Contain([]string{"ketang"}, item.Type) {
-			// 类型为 ketang 的去掉
 			value := bb_type.SearchItem{
 				ID:       DecodeBiliSearchItemId(item.Aid, item.Bvid),
 				Cover:    item.Pic,
@@ -44,17 +43,22 @@ func (a *App) Search(params bb_type.SearchParams) (bb_type.SearchResponse, error
 			res.Data = append(res.Data, value)
 		}
 	}
-	return res, nil
+	return &res, nil
 }
 
 // 详情
-func (a *App) SearchDetail(id string) (bb_type.SearchItem, error) {
+func (a *App) SearchDetail(id string) (*bb_type.SearchItem, error) {
 	biliid, err := UnicodeBiliId(id)
 	if err != nil {
-		return bb_type.SearchItem{}, err
+		a.logger.Error("歌曲 ID 解码失败", fmt.Sprintf("id=%+v", id), fmt.Sprintf("err=%+v", err))
+		return nil, err
 	}
 
 	info, err := a.client.GetVideoDetail(biliid.Aid, biliid.Bvid)
+	if err != nil {
+		a.logger.Error("获取歌曲详情失败", fmt.Sprintf("id=%+v", id), fmt.Sprintf("err=%+v", err))
+		return nil, err
+	}
 
 	result := bb_type.SearchItem{
 		ID:       DecodeBiliMusicItemId(info.Aid, info.Bvid, info.Cid),
@@ -81,7 +85,7 @@ func (a *App) SearchDetail(id string) (bb_type.SearchItem, error) {
 		}
 	}
 
-	return result, err
+	return &result, err
 }
 
 // 将 mm:ss 格式的时间转换为 秒

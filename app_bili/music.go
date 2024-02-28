@@ -26,31 +26,34 @@ func (a *App) DownloadMusic(params bb_type.DownloadMusicParams) (string, error) 
 	}
 	biliid, err := UnicodeBiliId(params.ID)
 	if err != nil {
+		a.logger.Error("歌曲 ID 解码失败", fmt.Sprintf("params=%+v", params), fmt.Sprintf("err=%+v", err))
 		return "", err
 	}
 	resp, err := a.client.GetVideoUrl(biliid.Aid, biliid.Bvid, biliid.Cid)
 	if err != nil {
+		a.logger.Error("获取歌曲播放地址失败", fmt.Sprintf("params=%+v", params), fmt.Sprintf("err=%+v", err))
 		return "", errors.New("sdk 获取歌曲播放地址失败")
 	}
-	if err := DownloadBiliMusic(params.ID, params.Name, params.DownloadDir, resp); err != nil {
+	if err := DownloadBiliMusic(resp, params.ID, params.Name, params.DownloadDir); err != nil {
+		a.logger.Error("下载歌曲失败", fmt.Sprintf("params=%+v", params), fmt.Sprintf("err=%+v", err))
 		return "", err
 	}
 
 	return "", nil
 }
 
-func DownloadBiliMusic(id string, fileName string, downloadDir string, resp bili_sdk.VideoUrlResponse) error {
+func DownloadBiliMusic(resp *bili_sdk.BiliVideoUrlResponse, musicID string, fileName string, downloadDir string) error {
 	durlLen := len(resp.Durl)
 	if durlLen > 0 {
 		if durlLen == 1 {
-			p := fmt.Sprintf("%+v/%+v_%+v.%+v", downloadDir, fileName, id, resp.Format)
+			p := fmt.Sprintf("%+v/%+v_%+v.%+v", downloadDir, fileName, musicID, resp.Format)
 			if e := DownloadUrl(p, resp.Durl[0].Url); e != nil {
 				fmt.Printf("error%+v\n", e)
 				return e
 			}
 		} else {
 			for i := 0; i < durlLen; i++ {
-				p := fmt.Sprintf("%+v/%+v_%+v/%+v.%+v", downloadDir, fileName, id, i+1, resp.Format)
+				p := fmt.Sprintf("%+v/%+v_%+v/%+v.%+v", downloadDir, fileName, musicID, i+1, resp.Format)
 				go DownloadUrl(p, resp.Durl[0].Url)
 			}
 		}
@@ -83,6 +86,7 @@ func DownloadUrl(path string, url string) error {
 	return nil
 }
 
+// TODO 目前只处理了一个 durl
 // 使用代理的方式获取歌曲的播放流
 func ProxyMusicFile(id string, client *bili_sdk.Client) (*httputil.ReverseProxy, *http.Request, error) {
 	biliid, err := UnicodeBiliId(id)

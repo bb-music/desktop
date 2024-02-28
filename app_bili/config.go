@@ -3,7 +3,7 @@ package app_bili
 
 import (
 	"encoding/json"
-	"log"
+	"fmt"
 	"time"
 
 	"github.com/bb-music/desktop/pkg/bili_sdk"
@@ -33,19 +33,21 @@ func (a *App) InitConfig() error {
 
 	// 校验
 	if configStorage.Validate(cacheConfig) {
-		log.Println("bili 缓存配置已过期")
+		a.logger.Info("bili 缓存配置已过期")
 		// 获取秘钥配置
 		if data, err := a.client.GetSignData(); err != nil {
+			a.logger.Error("获取 SignData 失败", fmt.Sprintf("err=%+v", err))
 			return err
 		} else {
-			signData = data
+			signData = *data
 		}
 
 		// 获取 Spi 配置
 		if data, err := a.client.GetSpiData(); err != nil {
+			a.logger.Error("获取 SpiData 失败", fmt.Sprintf("err=%+v", err))
 			return err
 		} else {
-			spiData = data
+			spiData = *data
 		}
 
 		// 结构体转换为 json 字符串
@@ -84,24 +86,28 @@ type ConfigStorage struct {
 }
 
 // 获取缓存的配置信息
-func (c *ConfigStorage) Get() CacheConfig {
+func (c *ConfigStorage) Get() *CacheConfig {
 	// 读缓存
 	cacheConfigStr, _ := c.storage.GetStorage(ConfigCacheKey)
 	cacheConfig := &CacheConfig{}
 	// 序列化为 json
 	if err := json.Unmarshal([]byte(cacheConfigStr), cacheConfig); err != nil {
-		log.Printf("bili 缓存配置不存在 | %+v\n", err)
+		return nil
 	}
-	return *cacheConfig
+	return cacheConfig
 }
 
 func (c *ConfigStorage) Set(config CacheConfig) error {
 	cacheConfigStr, _ := json.Marshal(config)
 	// 写缓存
-	return c.storage.SetStorage(ConfigCacheKey, string(cacheConfigStr))
+	err := c.storage.SetStorage(ConfigCacheKey, string(cacheConfigStr))
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-func (c *ConfigStorage) Validate(config CacheConfig) bool {
+func (c *ConfigStorage) Validate(config *CacheConfig) bool {
 	return config.CreatedAt.Add(time.Hour * 24).Before(time.Now())
 }
 

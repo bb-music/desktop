@@ -1,7 +1,6 @@
 package app_base
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,17 +8,7 @@ import (
 
 	"github.com/bb-music/desktop/app_bili"
 	"github.com/bb-music/desktop/pkg/bili_sdk"
-	"github.com/bb-music/desktop/pkg/file_storage"
 )
-
-type AuthInfo struct {
-	UuidV3 string
-	UuidV4 string
-	ImgKey string
-	SubKey string
-}
-
-var auth = AuthInfo{}
 
 func ProxyServer(port int, configDir string) *http.Server {
 	mux := http.NewServeMux()
@@ -53,6 +42,7 @@ func ProxyServer(port int, configDir string) *http.Server {
 			}
 			proxy, req, err := app_bili.ProxyMusicFile(id, &client)
 			if err != nil {
+				log.Println("AppBase | 音乐流代理失败", fmt.Sprintf("origin=%+v;id=%+v", origin, id), fmt.Sprintf("err=%+v", err))
 				w.Write([]byte(err.Error()))
 			}
 			proxy.ServeHTTP(w, req)
@@ -61,23 +51,5 @@ func ProxyServer(port int, configDir string) *http.Server {
 		w.Write([]byte(""))
 	})
 
-	// s.ListenAndServe()
 	return s
-}
-
-type CacheConfig struct {
-	SignData bili_sdk.SignData `json:"sign_data"`
-	SpiData  bili_sdk.SpiData  `json:"spi_data"`
-}
-
-func GetBiliCacheConfig(fileStorage *file_storage.FileStorage) *CacheConfig {
-	// 读缓存
-	cacheConfigStr, _ := fileStorage.GetStorage(app_bili.ConfigCacheKey)
-	cacheConfig := &CacheConfig{}
-	// 序列化为 json
-	if err := json.Unmarshal([]byte(cacheConfigStr), cacheConfig); err != nil {
-		log.Printf("bili 缓存配置不存在 | %+v\n", err)
-	}
-
-	return cacheConfig
 }

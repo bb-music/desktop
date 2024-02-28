@@ -1,17 +1,14 @@
 package bili_sdk
 
-type SearchParams struct {
-	Keyword string `json:"keyword"`
-	Page    string `json:"page"`
-}
+import "github.com/bb-music/desktop/pkg/bb_type"
 
 type SearchResponse struct {
-	Pagination
-	Result []SearchResultItem `json:"result"`
+	BiliPagination
+	Result []BiliSearchResultItem `json:"result"`
 }
 
 // 搜索
-func (c *Client) Search(params SearchParams) (SearchResponse, error) {
+func (c *Client) Search(params bb_type.SearchParams) (*SearchResponse, error) {
 	query := c.sign(map[string]string{
 		"search_type": "video",
 		"keyword":     params.Keyword,
@@ -22,10 +19,10 @@ func (c *Client) Search(params SearchParams) (SearchResponse, error) {
 	_, err := c.Request().SetQueryParams(query).SetResult(&result).Get(url)
 
 	if err != nil {
-		return SearchResponse{}, err
+		return nil, err
 	}
 	if err := ValidateResp(result); err != nil {
-		return SearchResponse{}, err
+		return nil, err
 	}
-	return result.Data, nil
+	return &result.Data, nil
 }

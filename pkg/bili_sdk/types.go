@@ -7,17 +7,17 @@ type BiliResponse[T any] struct {
 	Data    T      `json:"data"`
 }
 
-type WbiKeysData struct {
+type BiliWbiKeysData struct {
 	ImgUrl string `json:"img_url"`
 	SubUrl string `json:"sub_url"`
 }
 
-type WbiKeysResult struct {
-	IsLogin bool        `json:"isLogin"`
-	WbiImg  WbiKeysData `json:"wbi_img"`
+type BiliWbiKeysResult struct {
+	IsLogin bool            `json:"isLogin"`
+	WbiImg  BiliWbiKeysData `json:"wbi_img"`
 }
 
-type Pagination struct {
+type BiliPagination struct {
 	Page       uint `json:"page"`       // 当前页码
 	PageSize   uint `json:"pagesize"`   // 每页条数（固定20）
 	NumResults uint `json:"numResults"` // 总条数
@@ -25,7 +25,7 @@ type Pagination struct {
 }
 
 /** 搜索结果 */
-type SearchResultItem struct {
+type BiliSearchResultItem struct {
 	Type             string   `json:"type"`
 	Id               int      `json:"id"`
 	Author           string   `json:"author"`
@@ -76,7 +76,7 @@ type SearchResultItem struct {
 }
 
 /** 视频详情 */
-type VideoDetailResponse struct {
+type BiliVideoDetailResponse struct {
 	Bvid      string            `json:"bvid"`
 	Aid       int               `json:"aid"`
 	Videos    int               `json:"videos"`     // 视频数
@@ -88,29 +88,29 @@ type VideoDetailResponse struct {
 	Pubdate   int               `json:"pubdate"`    // 稿件发布时间
 	Ctime     int               `json:"ctime"`      // 用户投稿时间
 	Desc      string            `json:"desc"`       // 描述
-	DescV2    []Descv2          `json:"desc_v2"`    // 描述 v2
+	DescV2    []descv2          `json:"desc_v2"`    // 描述 v2
 	State     int               `json:"state"`      // 状态
 	Duration  int               `json:"duration"`   // 时长
-	Rights    Rights            `json:"rights"`     // 视频属性标志
-	Owner     Owner             `json:"owner"`      // 视频UP主信息
-	ArgueInfo Argueinfo         `json:"argue_info"` // 争议/警告信息
+	Rights    rights            `json:"rights"`     // 视频属性标志
+	Owner     owner             `json:"owner"`      // 视频UP主信息
+	ArgueInfo argueinfo         `json:"argue_info"` // 争议/警告信息
 	Dynamic   string            `json:"dynamic"`    // 视频同步发布的的动态的文字内容
 	Cid       int               `json:"cid"`        // 视频1P cid
-	Dimension Dimension         `json:"dimension"`  // 视频1P分辨率
-	Pages     []VideoDetailPage `json:"pages"`      // part列表
-	Subtitle  Subtitle          `json:"subtitle"`
+	Dimension dimension         `json:"dimension"`  // 视频1P分辨率
+	Pages     []videoDetailPage `json:"pages"`      // part列表
+	Subtitle  subtitle          `json:"subtitle"`
 }
 
 // Define other structs with tags as required
 
-type Descv2 struct {
+type descv2 struct {
 	RawText string `json:"raw_text"`
 	Type    int8   `json:"type"`
 	BizId   int8   `json:"biz_id"`
 }
 
 /** 视频属性标志 **/
-type Rights struct {
+type rights struct {
 	BP            int `json:"bp"`
 	Elec          int `json:"elec"`
 	Download      int `json:"download"`
@@ -131,19 +131,19 @@ type Rights struct {
 	FreeWatch     int `json:"free_watch"`
 }
 
-type Owner struct {
+type owner struct {
 	Mid  int    `json:"mid"`
 	Name string `json:"name"`
 	Face string `json:"face"`
 }
 
-type Argueinfo struct {
+type argueinfo struct {
 	ArgueMsg  string `json:"argue_msg"`
 	ArgueType int    `json:"argue_type"`
 	ArgueLink string `json:"argue_link"`
 }
 
-type VideoDetailPage struct {
+type videoDetailPage struct {
 	Cid        int       `json:"cid"`
 	Page       int       `json:"page"`
 	From       string    `json:"from"`
@@ -151,22 +151,22 @@ type VideoDetailPage struct {
 	Duration   int       `json:"duration"`
 	Vid        string    `json:"vid"`
 	Weblink    string    `json:"weblink"`
-	Dimension  Dimension `json:"dimension"`
+	Dimension  dimension `json:"dimension"`
 	FirstFrame string    `json:"first_frame"`
 }
 
-type Dimension struct {
+type dimension struct {
 	Width  int `json:"width"`
 	Height int `json:"height"`
 	Rotate int `json:"rotate"`
 }
 
-type Subtitle struct {
+type subtitle struct {
 	AllowSubmit bool
 	List        []interface{}
 }
 
-type VideoUrlResponse struct {
+type BiliVideoUrlResponse struct {
 	From              string          `json:"from"`
 	Result            string          `json:"result"`
 	Message           string          `json:"message"`
@@ -179,14 +179,14 @@ type VideoUrlResponse struct {
 	VideoCodecid      int             `json:"video_codecid"`
 	SeekParam         string          `json:"seek_param"`
 	SeekType          string          `json:"seek_type"`
-	Durl              []Durl          `json:"durl"`
-	SupportFormats    []Supportformat `json:"support_formats"`
+	Durl              []durl          `json:"durl"`
+	SupportFormats    []supportformat `json:"support_formats"`
 	HighFormat        interface{}     `json:"high_format,omitempty"`
 	LastPlayTime      int             `json:"last_play_time"`
 	LastPlayCid       int             `json:"last_play_cid"`
 }
 
-type Supportformat struct {
+type supportformat struct {
 	Quality        int         `json:"quality"`
 	Format         string      `json:"format"`
 	NewDescription string      `json:"new_description"`
@@ -195,7 +195,7 @@ type Supportformat struct {
 	Codecs         interface{} `json:"codecs,omitempty"`
 }
 
-type Durl struct {
+type durl struct {
 	Order     int      `json:"order"`
 	Length    int      `json:"length"`
 	Size      int      `json:"size"`

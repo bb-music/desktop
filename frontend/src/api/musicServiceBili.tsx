@@ -8,7 +8,6 @@ import {
   Button,
   Switch,
   message,
-  MusicInter,
 } from '@bb-music/web-app';
 import {
   getMusicServiceConfig,
@@ -22,10 +21,6 @@ import { settingCache } from './setting';
 import { DownloadMusic, Search, InitConfig, SearchDetail, GetConfig } from '@wails/go/app_bili/App';
 import { useEffect, useState } from 'react';
 import { GetMusicPlayerUrl } from '@wails/go/app_base/App';
-
-type SearchItem = MusicInter.SearchItem;
-type SearchParams = MusicInter.SearchParams;
-type MusicItem = MusicInter.MusicItem;
 
 class BiliMusicServiceConfigValue {
   enabled = true;

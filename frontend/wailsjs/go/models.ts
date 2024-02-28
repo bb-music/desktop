@@ -96,50 +96,6 @@ export namespace bb_type {
 	        this.origin = source["origin"];
 	    }
 	}
-	export class MusicOrderItem {
-	    id: string;
-	    name: string;
-	    cover: string;
-	    desc: string;
-	    author: string;
-	    musicList: MusicItem[];
-	    created_at: string;
-	    updated_at: string;
-	
-	    static createFrom(source: any = {}) {
-	        return new MusicOrderItem(source);
-	    }
-	
-	    constructor(source: any = {}) {
-	        if ('string' === typeof source) source = JSON.parse(source);
-	        this.id = source["id"];
-	        this.name = source["name"];
-	        this.cover = source["cover"];
-	        this.desc = source["desc"];
-	        this.author = source["author"];
-	        this.musicList = this.convertValues(source["musicList"], MusicItem);
-	        this.created_at = source["created_at"];
-	        this.updated_at = source["updated_at"];
-	    }
-	
-		convertValues(a: any, classs: any, asMap: boolean = false): any {
-		    if (!a) {
-		        return a;
-		    }
-		    if (a.slice) {
-		        return (a as any[]).map(elem => this.convertValues(elem, classs));
-		    } else if ("object" === typeof a) {
-		        if (asMap) {
-		            for (const key of Object.keys(a)) {
-		                a[key] = new classs(a[key]);
-		            }
-		            return a;
-		        }
-		        return new classs(a);
-		    }
-		    return a;
-		}
-	}
 	export class SearchItem {
 	    id: string;
 	    cover: string;

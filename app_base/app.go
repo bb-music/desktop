@@ -4,10 +4,10 @@ package app_base
 import (
 	"context"
 	"fmt"
+	"log"
 	"net"
 
 	"github.com/bb-music/desktop/pkg/file_storage"
-	"github.com/bb-music/desktop/utils"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -23,13 +23,8 @@ type App struct {
 	ctx         context.Context
 }
 
-func New(configDir string) *App {
-	fmt.Println("================ 应用基础服务启动 ==============")
+func New(configDir string, port int) *App {
 	fileStorage := file_storage.New(configDir)
-	port := 56592
-	if utils.IsDev() {
-		port = 56599
-	}
 
 	return &App{
 		Config: &Config{
@@ -47,9 +42,14 @@ func (a *App) Startup(ctx context.Context) {
 
 // 打开文件夹选择器
 func (a *App) OpenDirectoryDialog(title string) (string, error) {
-	return runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
+	d, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
 		Title: title,
 	})
+	if err != nil {
+		log.Println("AppBase | 打开文件夹管理器失败", fmt.Sprintf("title=%+v", title), fmt.Sprintf("err=%+v", err))
+		return "", err
+	}
+	return d, err
 }
 
 // 获取配置信息

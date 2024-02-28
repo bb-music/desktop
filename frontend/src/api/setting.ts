@@ -6,13 +6,12 @@ export const settingCache = new JsonCacheStorage<SettingInfo>('bb-setting');
 
 export class SettingInstance implements SettingApi {
   getInfo = async () => {
-    const config = (await settingCache.get()) || {
+    const config = await settingCache.get();
+    const res = await GetConfig();
+    return {
       openMusicOrderOrigin: [],
       userMusicOrderOrigin: [],
       musicServices: [],
-    };
-    const res = await GetConfig();
-    return {
       ...config,
       proxyServerPort: res.proxy_server_port,
     };

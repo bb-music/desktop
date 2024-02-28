@@ -12,7 +12,7 @@ export function GetConfig():Promise<any>;
 
 export function GetMusicFile(arg1:string):Promise<httputil.ReverseProxy>;
 
-export function GetOpenMusicOrderList(arg1:string):Promise<Array<bb_type.MusicOrderItem>>;
+export function GetOpenMusicOrderList(arg1:string):Promise<any>;
 
 export function InitConfig():Promise<void>;
 

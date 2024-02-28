@@ -29,10 +29,10 @@ func (a *App) InitConfig() error {
 
 	// 获取
 	configStorage := NewConfigStorage(a.cacheDir)
-	cacheConfig := configStorage.Get()
+	cacheConfig, err := configStorage.Get()
 
 	// 校验
-	if configStorage.Validate(cacheConfig) {
+	if err != nil || configStorage.Validate(cacheConfig) {
 		a.logger.Info("bili 缓存配置已过期")
 		// 获取秘钥配置
 		if data, err := a.client.GetSignData(); err != nil {
@@ -86,15 +86,18 @@ type ConfigStorage struct {
 }
 
 // 获取缓存的配置信息
-func (c *ConfigStorage) Get() *CacheConfig {
+func (c *ConfigStorage) Get() (*CacheConfig, error) {
 	// 读缓存
-	cacheConfigStr, _ := c.storage.GetStorage(ConfigCacheKey)
+	cacheConfigStr, err := c.storage.GetStorage(ConfigCacheKey)
+	if err != nil {
+		return nil, err
+	}
 	cacheConfig := &CacheConfig{}
 	// 序列化为 json
 	if err := json.Unmarshal([]byte(cacheConfigStr), cacheConfig); err != nil {
-		return nil
+		return nil, err
 	}
-	return cacheConfig
+	return cacheConfig, nil
 }
 
 func (c *ConfigStorage) Set(config CacheConfig) error {
@@ -108,6 +111,9 @@ func (c *ConfigStorage) Set(config CacheConfig) error {
 }
 
 func (c *ConfigStorage) Validate(config *CacheConfig) bool {
+	if config == nil {
+		return false
+	}
 	return config.CreatedAt.Add(time.Hour * 24).Before(time.Now())
 }
 

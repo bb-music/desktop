@@ -28,7 +28,10 @@ func ProxyServer(port int, configDir string) *http.Server {
 
 		if origin == "bili" {
 			biliConfigStorage := app_bili.NewConfigStorage(configDir)
-			cacheConfig := biliConfigStorage.Get()
+			cacheConfig, err := biliConfigStorage.Get()
+			if err != nil {
+				log.Println("AppBase | 音乐流代理失败, 读取签名配置失败", fmt.Sprintf("origin=%+v;id=%+v,cacheConfig=%+v", origin, id, cacheConfig), fmt.Sprintf("err=%+v", err))
+			}
 
 			client := bili_sdk.Client{
 				SpiData: bili_sdk.SpiData{

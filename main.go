@@ -108,13 +108,13 @@ func NewSvcLogger() *SvcLogger {
 }
 
 func (l *SvcLogger) Info(message ...string) {
-	log.Panicln("BiliSvc Info | ", message)
+	log.Println("BiliSvc Info | ", message)
 }
 func (l *SvcLogger) Warn(message ...string) {
-	log.Panicln("BiliSvc Warn | ", message)
+	log.Println("BiliSvc Warn | ", message)
 }
 func (l *SvcLogger) Error(message ...string) {
-	log.Panicln("BiliSvc Err | ", message)
+	log.Println("BiliSvc Err | ", message)
 }
 
 // wails log

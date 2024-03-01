@@ -11,6 +11,12 @@ dependencies:
   '@radix-ui/react-context-menu':
     specifier: ^2.1.5
     version: 2.1.5(@types/react-dom@18.2.19)(@types/react@18.2.59)(react-dom@18.2.0)(react@18.2.0)
+  '@radix-ui/react-popover':
+    specifier: ^1.0.7
+    version: 1.0.7(@types/react-dom@18.2.19)(@types/react@18.2.59)(react-dom@18.2.0)(react@18.2.0)
+  '@radix-ui/react-slider':
+    specifier: ^1.1.2
+    version: 1.1.2(@types/react-dom@18.2.19)(@types/react@18.2.59)(react-dom@18.2.0)(react@18.2.0)
   '@radix-ui/react-switch':
     specifier: ^1.0.3
     version: 1.0.3(@types/react-dom@18.2.19)(@types/react@18.2.59)(react-dom@18.2.0)(react@18.2.0)
@@ -846,6 +852,12 @@ packages:
       fastq: 1.17.1
     dev: true
 
+  /@radix-ui/number@1.0.1:
+    resolution: {integrity: sha512-T5gIdVO2mmPW3NNhjNgEP3cqMXjXL9UbO0BzWcXfvdBs+BohbQxvd/K5hSVKmn9/lbTdsQVKbUcP5WLCwvUbBg==}
+    dependencies:
+      '@babel/runtime': 7.23.6
+    dev: false
+
   /@radix-ui/primitive@1.0.1:
     resolution: {integrity: sha512-yQ8oGX2GVsEYMWGxcovu1uGWPCxV5BFfeeYxqPmuAzUyLT9qmaMXSAhXpb0WrspIeqYzdJpkh2vHModJPgRIaw==}
     dependencies:
@@ -1080,6 +1092,41 @@ packages:
       react-remove-scroll: 2.5.5(@types/react@18.2.59)(react@18.2.0)
     dev: false
 
+  /@radix-ui/react-popover@1.0.7(@types/react-dom@18.2.19)(@types/react@18.2.59)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-shtvVnlsxT6faMnK/a7n0wptwBD23xc1Z5mdrtKLwVEfsEMXodS0r5s0/g5P0hX//EKYZS2sxUjqfzlg52ZSnQ==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.23.6
+      '@radix-ui/primitive': 1.0.1
+      '@radix-ui/react-compose-refs': 1.0.1(@types/react@18.2.59)(react@18.2.0)
+      '@radix-ui/react-context': 1.0.1(@types/react@18.2.59)(react@18.2.0)
+      '@radix-ui/react-dismissable-layer': 1.0.5(@types/react-dom@18.2.19)(@types/react@18.2.59)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-focus-guards': 1.0.1(@types/react@18.2.59)(react@18.2.0)
+      '@radix-ui/react-focus-scope': 1.0.4(@types/react-dom@18.2.19)(@types/react@18.2.59)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-id': 1.0.1(@types/react@18.2.59)(react@18.2.0)
+      '@radix-ui/react-popper': 1.1.3(@types/react-dom@18.2.19)(@types/react@18.2.59)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-portal': 1.0.4(@types/react-dom@18.2.19)(@types/react@18.2.59)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-presence': 1.0.1(@types/react-dom@18.2.19)(@types/react@18.2.59)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.19)(@types/react@18.2.59)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-slot': 1.0.2(@types/react@18.2.59)(react@18.2.0)
+      '@radix-ui/react-use-controllable-state': 1.0.1(@types/react@18.2.59)(react@18.2.0)
+      '@types/react': registry.npmjs.org/@types/react@18.2.59
+      '@types/react-dom': registry.npmjs.org/@types/react-dom@18.2.19
+      aria-hidden: 1.2.3
+      react: registry.npmjs.org/react@18.2.0
+      react-dom: registry.npmjs.org/react-dom@18.2.0(react@18.2.0)
+      react-remove-scroll: 2.5.5(@types/react@18.2.59)(react@18.2.0)
+    dev: false
+
   /@radix-ui/react-popper@1.1.3(@types/react-dom@18.2.19)(@types/react@18.2.59)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-cKpopj/5RHZWjrbF2846jBNacjQVwkP068DfmgrNJXpvVWrOvlAmE9xSiy5OqeE+Gi8D9fP+oDhUnPqNMY8/5w==}
     peerDependencies:
@@ -1197,6 +1244,37 @@ packages:
       '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.19)(@types/react@18.2.59)(react-dom@18.2.0)(react@18.2.0)
       '@radix-ui/react-use-callback-ref': 1.0.1(@types/react@18.2.59)(react@18.2.0)
       '@radix-ui/react-use-controllable-state': 1.0.1(@types/react@18.2.59)(react@18.2.0)
+      '@types/react': registry.npmjs.org/@types/react@18.2.59
+      '@types/react-dom': registry.npmjs.org/@types/react-dom@18.2.19
+      react: registry.npmjs.org/react@18.2.0
+      react-dom: registry.npmjs.org/react-dom@18.2.0(react@18.2.0)
+    dev: false
+
+  /@radix-ui/react-slider@1.1.2(@types/react-dom@18.2.19)(@types/react@18.2.59)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-NKs15MJylfzVsCagVSWKhGGLNR1W9qWs+HtgbmjjVUB3B9+lb3PYoXxVju3kOrpf0VKyVCtZp+iTwVoqpa1Chw==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0
+      react-dom: ^16.8 || ^17.0 || ^18.0
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+    dependencies:
+      '@babel/runtime': 7.23.6
+      '@radix-ui/number': 1.0.1
+      '@radix-ui/primitive': 1.0.1
+      '@radix-ui/react-collection': 1.0.3(@types/react-dom@18.2.19)(@types/react@18.2.59)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-compose-refs': 1.0.1(@types/react@18.2.59)(react@18.2.0)
+      '@radix-ui/react-context': 1.0.1(@types/react@18.2.59)(react@18.2.0)
+      '@radix-ui/react-direction': 1.0.1(@types/react@18.2.59)(react@18.2.0)
+      '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.19)(@types/react@18.2.59)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-use-controllable-state': 1.0.1(@types/react@18.2.59)(react@18.2.0)
+      '@radix-ui/react-use-layout-effect': 1.0.1(@types/react@18.2.59)(react@18.2.0)
+      '@radix-ui/react-use-previous': 1.0.1(@types/react@18.2.59)(react@18.2.0)
+      '@radix-ui/react-use-size': 1.0.1(@types/react@18.2.59)(react@18.2.0)
       '@types/react': registry.npmjs.org/@types/react@18.2.59
       '@types/react-dom': registry.npmjs.org/@types/react-dom@18.2.19
       react: registry.npmjs.org/react@18.2.0
@@ -2663,7 +2741,6 @@ packages:
     hasBin: true
     dependencies:
       js-tokens: 4.0.0
-    dev: false
 
   /lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
@@ -3440,6 +3517,10 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /tslib@1.14.1:
+    resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
+    dev: true
+
   /tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
 
@@ -3910,7 +3991,7 @@ packages:
     dependencies:
       '@babel/helper-validator-identifier': registry.npmjs.org/@babel/helper-validator-identifier@7.22.20
       chalk: registry.npmjs.org/chalk@2.4.2
-      js-tokens: registry.npmjs.org/js-tokens@4.0.0
+      js-tokens: 4.0.0
     dev: true
 
   registry.npmjs.org/@babel/parser@7.23.9:
@@ -4616,7 +4697,7 @@ packages:
       is-glob: registry.npmjs.org/is-glob@4.0.3
       open: registry.npmjs.org/open@9.1.0
       picocolors: registry.npmjs.org/picocolors@1.0.0
-      tslib: registry.npmjs.org/tslib@2.6.2
+      tslib: 2.6.2
     dev: true
 
   registry.npmjs.org/@sinclair/typebox@0.27.8:
@@ -5142,7 +5223,7 @@ packages:
     name: '@umijs/babel-preset-umi'
     version: 4.1.2
     dependencies:
-      '@babel/runtime': registry.npmjs.org/@babel/runtime@7.23.6
+      '@babel/runtime': 7.23.6
       '@bloomberg/record-tuple-polyfill': registry.npmjs.org/@bloomberg/record-tuple-polyfill@0.0.4
       '@umijs/bundler-utils': registry.npmjs.org/@umijs/bundler-utils@4.1.2
       '@umijs/utils': registry.npmjs.org/@umijs/utils@4.1.2
@@ -8014,7 +8095,7 @@ packages:
     name: invariant
     version: 2.2.4
     dependencies:
-      loose-envify: registry.npmjs.org/loose-envify@1.4.0
+      loose-envify: 1.4.0
     dev: true
 
   registry.npmjs.org/is-arguments@1.1.1:
@@ -9957,7 +10038,7 @@ packages:
     name: prop-types
     version: 15.8.1
     dependencies:
-      loose-envify: registry.npmjs.org/loose-envify@1.4.0
+      loose-envify: 1.4.0
       object-assign: registry.npmjs.org/object-assign@4.1.1
       react-is: registry.npmjs.org/react-is@16.13.1
     dev: true
@@ -10066,7 +10147,7 @@ packages:
     peerDependencies:
       react: ^18.1.0
     dependencies:
-      loose-envify: registry.npmjs.org/loose-envify@1.4.0
+      loose-envify: 1.4.0
       react: registry.npmjs.org/react@18.1.0
       scheduler: registry.npmjs.org/scheduler@0.22.0
     dev: true
@@ -10210,7 +10291,7 @@ packages:
     version: 18.1.0
     engines: {node: '>=0.10.0'}
     dependencies:
-      loose-envify: registry.npmjs.org/loose-envify@1.4.0
+      loose-envify: 1.4.0
     dev: true
 
   registry.npmjs.org/react@18.2.0:
@@ -10494,7 +10575,7 @@ packages:
     name: scheduler
     version: 0.22.0
     dependencies:
-      loose-envify: registry.npmjs.org/loose-envify@1.4.0
+      loose-envify: 1.4.0
     dev: true
 
   registry.npmjs.org/scheduler@0.23.0:
@@ -11081,12 +11162,6 @@ packages:
       is-number: registry.npmjs.org/is-number@7.0.0
     dev: true
 
-  registry.npmjs.org/tslib@1.14.1:
-    resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==, registry: https://registry.npmmirror.com/, tarball: https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz}
-    name: tslib
-    version: 1.14.1
-    dev: true
-
   registry.npmjs.org/tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==, registry: https://registry.npmmirror.com/, tarball: https://registry.npmjs.org/tslib/-/tslib-2.6.2.tgz}
     name: tslib
@@ -11102,7 +11177,7 @@ packages:
     peerDependencies:
       typescript: '>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta'
     dependencies:
-      tslib: registry.npmjs.org/tslib@1.14.1
+      tslib: 1.14.1
       typescript: registry.npmjs.org/typescript@5.3.3
     dev: true
 

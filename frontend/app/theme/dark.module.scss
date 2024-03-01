@@ -105,6 +105,21 @@
   --message-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
     hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
 
+  // popover
+  --popover-bg: rgb(54, 54, 54);
+  --popover-shadow: rgba(135, 135, 135, 0.2);
+  --popover-padding: 8px 10px;
+  --popover-radius: 4px;
+  --popover-color: rgb(var(--font-color));
+  --popover-font-size: 14px;
+
+  // 滑块 slider
+  --slider-bg: rgb(0, 0, 0);
+  --slider-active-bg: rgb(var(--main-color));
+  --slider-thumb-bg: rgb(251, 251, 251);
+  --slider-thumb-hover-color: rgba(252, 82, 69, 0.4);
+  --slider-thumb-focus-color: rgba(252, 82, 69, 0.4);
+
   /* 隐藏滚动条 */
   ::-webkit-scrollbar {
     width: 8px;

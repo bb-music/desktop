@@ -8,3 +8,5 @@ export * from './ui/modal';
 export * from './ui/message';
 export * from './ui/switch';
 export * from './ui/table';
+export * from './ui/popover';
+export * from './ui/slider';

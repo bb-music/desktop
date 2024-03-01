@@ -289,7 +289,6 @@ export const playerStore = create<PlayerStore>()((set, get) => {
 
 let timer: NodeJS.Timeout;
 playerStore.subscribe((state, preState) => {
-  console.log('state: ', state);
   clearTimeout(timer);
   timer = setTimeout(() => {
     api.cacheStorage.setItem(

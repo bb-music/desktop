@@ -12,6 +12,10 @@ export interface PlayerAudioAddEventListener {
 }
 
 export abstract class AudioInstance {
+  /** 获取音量 */
+  abstract getVolume(): number;
+  /** 设置音量 */
+  abstract setVolume(volume: number): void;
   /** 设置播放地址 */
   abstract setSrc(src: string): void;
   /** 设置播放进度 */

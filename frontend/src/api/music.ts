@@ -70,6 +70,12 @@ class PlayerAudio implements AudioInstance {
   pause(): void {
     this.ctx.pause();
   }
+  getVolume(): number {
+    return this.ctx.volume;
+  }
+  setVolume(volume: number): void {
+    this.ctx.volume = volume;
+  }
   addEventListener: PlayerAudioAddEventListener = (event, callback) => {
     this.ctx.addEventListener(event, callback as any);
   };

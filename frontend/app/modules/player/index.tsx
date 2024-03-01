@@ -12,12 +12,13 @@ import {
   RightOne,
   ShuffleOne,
   SortAmountDown,
+  VolumeNotice,
 } from '@icon-park/react';
 import { usePlayerStore } from './store';
 import { cls } from '../../utils';
 import { PlayerMode, PlayerModeMap, PlayerStatus } from './constants';
 import { useEffect, useRef, useState } from 'react';
-import { Table, message } from '../../components';
+import { Popover, Slider, Table, message } from '../../components';
 import { useShallow } from 'zustand/react/shallow';
 import { api } from '../../api';
 import { ContextMenu } from '../../components';
@@ -167,6 +168,8 @@ export function Player() {
         />
       </div>
       <div className={styles.operate}>
+        <PlayerVolume />
+
         <div
           className={cls(styles.modeIcon, styles.icon)}
           onClick={() => player.togglePlayerMode()}
@@ -348,5 +351,54 @@ function PlayerProgress({ progress }: { progress: number }) {
         <div className={styles.dot}></div>
       </div>
     </div>
+  );
+}
+
+const VolumeCacheKey = 'BBPlayerVolume';
+
+function PlayerVolume() {
+  const [volume, setVolume] = useState(1);
+  const player = usePlayerStore((s) => ({ audio: s.audio }));
+  const timer = useRef<NodeJS.Timeout>();
+
+  useEffect(() => {
+    (async () => {
+      const v = await api.cacheStorage.getItem(VolumeCacheKey);
+      const num = Number(v);
+      if (isNaN(num)) return;
+      setVolume(num);
+      player.audio?.setVolume(num);
+    })();
+  }, []);
+  return (
+    <Popover
+      content={
+        <div style={{ padding: '10px 0' }}>
+          <Slider
+            orientation='vertical'
+            value={[volume]}
+            onValueChange={([v]) => {
+              setVolume(v);
+              player.audio?.setVolume(volume);
+              clearTimeout(timer.current);
+              timer.current = setTimeout(() => {
+                api.cacheStorage.setItem(VolumeCacheKey, v + '');
+              }, 500);
+            }}
+            min={0}
+            max={1}
+            step={0.1}
+          />
+        </div>
+      }
+      asChild
+    >
+      <button
+        className={cls(styles.modeIcon, styles.icon)}
+        title='调节音量'
+      >
+        <VolumeNotice strokeWidth={2} />
+      </button>
+    </Popover>
   );
 }

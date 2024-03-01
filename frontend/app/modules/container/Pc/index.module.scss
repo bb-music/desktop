@@ -74,12 +74,21 @@
     font-size: 16px;
   }
   .operate {
+    height: 100%;
     flex: 0 0 300px;
     display: flex;
     align-content: center;
     justify-content: flex-end;
     font-size: 18px;
-    gap: 16px;
+    gap: 12px;
+    padding: 10px 0;
+    &>span {
+      padding: 0 10px;
+      border-radius: 4px;
+      &:hover {
+        background-color: rgb(var(--main-color));
+      }
+    }
   }
   .btnIcon {
     cursor: pointer;

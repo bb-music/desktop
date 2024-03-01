@@ -94,6 +94,10 @@
   .play {
     font-size: 40px;
   }
+  .loading {
+    animation: rotateLoop 1.2s linear infinite;
+    opacity: 0.8;
+  }
   .icon {
     cursor: pointer;
   }
@@ -203,5 +207,14 @@
         padding-right: 16px;
       }
     }
+  }
+}
+
+@keyframes rotateLoop {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }

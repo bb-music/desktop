@@ -1,10 +1,9 @@
 import { Button, message, Input, SettingItem, UserMusicOrderApi } from '@bb-music/web-app';
-import { userMusicOrderOrigin } from '@bb-music/web-app';
+import { userMusicOrderOrigin, UserMusicOrderOrigin } from '@bb-music/web-app';
 import { useEffect, useState } from 'react';
 import { settingCache } from './setting';
 
-const { GithubUserMusicOrderAction, UserMusicOrderOrigin, UserMusicOrderOriginType } =
-  userMusicOrderOrigin;
+const { GithubUserMusicOrderAction, UserMusicOrderOriginType } = userMusicOrderOrigin;
 const NAME = UserMusicOrderOriginType.Github;
 const CNAME = 'Github 歌单';
 

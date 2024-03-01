@@ -72,6 +72,7 @@ class BiliAction implements MusicServiceApiAction {
   };
   getMusicPlayerUrl: MusicServiceApiAction['getMusicPlayerUrl'] = async (music) => {
     const config = await getMusicServiceConfig(NAME);
+    // return '/api/music/file/123123';
     if (config.proxyEnabled) {
       return mergeUrl(config.proxyAddress, `/api/music/file/${NAME}/${music.id}`);
     }

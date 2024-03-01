@@ -3,6 +3,7 @@ import styles from './index.module.scss';
 import {
   GoEnd,
   GoStart,
+  Loading,
   MusicList,
   PauseOne,
   Play,
@@ -16,7 +17,7 @@ import { usePlayerStore } from './store';
 import { cls } from '../../utils';
 import { PlayerMode, PlayerModeMap, PlayerStatus } from './constants';
 import { useEffect, useRef, useState } from 'react';
-import { Table } from '../../components';
+import { Table, message } from '../../components';
 import { useShallow } from 'zustand/react/shallow';
 import { api } from '../../api';
 import { ContextMenu } from '../../components';
@@ -44,6 +45,7 @@ export function Player() {
       setProgress(t);
       player.audio?.setCurrentTime(t);
     })();
+    // 监听播放进度
     player.audio.addEventListener('timeupdate', async (e) => {
       const d = player.audio?.getCurrentTime() || 0;
       setProgress(d);
@@ -53,10 +55,38 @@ export function Player() {
         progressTimer.current = Date.now();
       }
     });
+    player.audio?.addEventListener('pause', () => {
+      // console.log('暂停播放');
+      player.setPlayerStatus(PlayerStatus.Pause);
+    });
+    player.audio?.addEventListener('play', (e) => {
+      // console.log('开始播放', e);
+      player.setPlayerLoading(player.audio?.getReadyState() !== 4);
+      player.setPlayerStatus(PlayerStatus.Play);
+    });
     player.audio?.addEventListener('ended', () => {
+      // console.log('播放结束, 下一首');
+      setProgress(0);
       player.endNext();
     });
-    const handler = (e: MouseEvent) => {
+    player.audio?.addEventListener('error', (err) => {
+      // console.log('播放失败 error: ', err);
+      message.error('播放失败');
+      setProgress(0);
+      player.endNext();
+    });
+    player.audio?.addEventListener('canplay', (e) => {
+      // console.log('可以播放: ', e);
+      player.setPlayerLoading(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        player.play();
+      }
+    });
+
+    // 播放列表的显示与隐藏
+    const handler = () => {
       setListShow(false);
     };
     document.addEventListener('click', handler);
@@ -88,37 +118,49 @@ export function Player() {
       <div className={styles.playerOperate}>
         <GoStart
           strokeWidth={3}
-          className={cls(styles.icon, styles.prev)}
+          className={cls(styles.icon)}
           title='上一首'
           onClick={() => {
             player.prev();
           }}
         />
-        {player.playerStatus === PlayerStatus.Play ? (
-          <PauseOne
+        {player.playerLoading ? (
+          <Loading
             theme='filled'
+            title='加载中'
             strokeWidth={2}
-            className={cls(styles.icon, styles.play)}
-            title='暂停'
-            onClick={() => {
-              player.pause();
-            }}
+            className={cls(styles.icon, styles.play, styles.loading)}
           />
         ) : (
-          <Play
-            theme='filled'
-            strokeWidth={2}
-            title='播放'
-            className={cls(styles.icon, styles.play)}
-            onClick={() => {
-              player.play();
-            }}
-          />
+          <>
+            {player.playerStatus === PlayerStatus.Play ? (
+              <PauseOne
+                theme='filled'
+                strokeWidth={2}
+                className={cls(styles.icon, styles.play)}
+                title='暂停'
+                onClick={() => {
+                  player.pause();
+                }}
+              />
+            ) : (
+              <Play
+                theme='filled'
+                strokeWidth={2}
+                title='播放'
+                className={cls(styles.icon, styles.play)}
+                onClick={() => {
+                  player.play();
+                }}
+              />
+            )}
+          </>
         )}
+
         <GoEnd
           strokeWidth={3}
           title='下一首'
-          className={cls(styles.icon, styles.next)}
+          className={cls(styles.icon)}
           onClick={() => {
             player.next();
           }}

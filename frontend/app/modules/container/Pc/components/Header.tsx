@@ -1,4 +1,4 @@
-import { SettingTwo } from '@icon-park/react';
+import { Remind, SettingTwo } from '@icon-park/react';
 import styles from '../index.module.scss';
 import { PageView, openPage } from '../../store';
 
@@ -30,6 +30,10 @@ export function Header({ operateRender }: HeaderProps) {
         </a>
       </div>
       <div className={styles.operate}>
+        <Remind
+          title='消息通知'
+          className={styles.btnIcon}
+        />
         <SettingTwo
           title='系统配置'
           className={styles.btnIcon}

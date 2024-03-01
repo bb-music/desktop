@@ -19,11 +19,17 @@ interface PlayerStoreState {
   playerHistory: string[];
   /** 播放器状态 */
   playerStatus: PlayerStatus;
+  /** 是否加载中 */
+  playerLoading: boolean;
   /** 播放模式 */
   playerMode: PlayerMode;
 }
 interface PlayerStoreHandler {
   init: () => Promise<void>;
+  /** 设置播放状态 */
+  setPlayerStatus: (state: PlayerStatus) => void;
+  /** 设置加载状态 */
+  setPlayerLoading: (lading: boolean) => void;
   /** 播放 */
   play: (music?: MusicItem) => Promise<void>;
   /** 暂停 */
@@ -54,6 +60,7 @@ export const playerStore = create<PlayerStore>()((set, get) => {
   return {
     audio: null,
     playerStatus: PlayerStatus.Stop,
+    playerLoading: false,
     playerList: [],
     current: void 0,
     playerMode: PlayerMode.ListLoop,
@@ -73,6 +80,12 @@ export const playerStore = create<PlayerStore>()((set, get) => {
         audio,
         playerStatus: PlayerStatus.Stop,
       });
+    },
+    setPlayerStatus: (playerStatus) => {
+      set({ playerStatus });
+    },
+    setPlayerLoading: (loading) => {
+      set({ playerLoading: loading });
     },
     play: async (m) => {
       const store = get();
@@ -121,6 +134,7 @@ export const playerStore = create<PlayerStore>()((set, get) => {
     prev: () => {
       const store = get();
       if (!store.current) return;
+      store.audio?.setCurrentTime(0);
       const ind = store.playerHistory.findIndex((p) => p === store.current?.id);
       const prevId = store.playerHistory[ind - 1];
       if (prevId) {
@@ -136,6 +150,7 @@ export const playerStore = create<PlayerStore>()((set, get) => {
     next: () => {
       const store = get();
       if (!store.current) return;
+      store.audio?.setCurrentTime(0);
       if (store.playerMode === PlayerMode.Random) {
         store.endNext();
       } else {
@@ -233,7 +248,6 @@ export const playerStore = create<PlayerStore>()((set, get) => {
         playerHistory: [],
       });
     },
-
     togglePlayerMode: (mode) => {
       const store = get();
       if (mode) {

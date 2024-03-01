@@ -6,5 +6,6 @@ export * from './store/global';
 export * from './interface';
 
 import * as userMusicOrderOrigin from './lib/userMusicOrder';
+export { UserMusicOrderOrigin } from './lib/userMusicOrder';
 
 export { userMusicOrderOrigin };

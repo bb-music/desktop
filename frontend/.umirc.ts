@@ -2,6 +2,7 @@ import { defineConfig } from 'umi';
 import path from 'node:path';
 
 export default defineConfig({
+  title: '哔哔音乐',
   npmClient: 'pnpm',
   mpa: {
     // template: './template.html',

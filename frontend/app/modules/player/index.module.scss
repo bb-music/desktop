@@ -218,3 +218,15 @@
     transform: rotate(360deg);
   }
 }
+
+.playerMobile {
+  justify-content: space-between;
+  .info {
+    width: auto;
+    flex: 1;
+  }
+  .playerOperate {
+    flex: 0 0 160px;
+    justify-content: flex-end;
+  }
+}

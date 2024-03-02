@@ -1,4 +1,4 @@
-import { BBMusicApp, PcContainer } from '@bb-music/web-app';
+import { BBMusicApp, MobileContainer, PcContainer } from '@bb-music/web-app';
 import { apiInstance } from '../../api';
 import { useEffect, useState } from 'react';
 import { Close, Minus } from '@icon-park/react';
@@ -33,7 +33,7 @@ export default function Root() {
     >
       {!initLoading && (
         <BBMusicApp apiInstance={apiInstance}>
-          <PcContainer
+          {/* <PcContainer
             headerProps={{
               operateRender: (
                 <>
@@ -54,7 +54,8 @@ export default function Root() {
                 </>
               ),
             }}
-          />
+          /> */}
+          <MobileContainer />
         </BBMusicApp>
       )}
     </div>

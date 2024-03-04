@@ -65,12 +65,12 @@ func main() {
 		Debug: options.Debug{
 			OpenInspectorOnStartup: true,
 		},
-		Title: "哔哔音乐",
-		// Width:     1064,
-		// Height:    768,
-		Width:  450,
-		Height: 800,
-		// Frameless: true,
+		Title:  "哔哔音乐",
+		Width:  1064,
+		Height: 768,
+		// Width:  450,
+		// Height: 800,
+		Frameless: true,
 		Windows: &windows.Options{
 			WebviewIsTransparent: true,
 		},

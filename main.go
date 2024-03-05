@@ -53,10 +53,6 @@ func main() {
 	basic := app_base.New(configDir, proxyServerPort)
 	// 音乐流代理服务
 	musicProxyServer := bb_server.New(app_base.ProxyServer(proxyServerPort, configDir), log.Println)
-	go func() {
-		log.Println("启动音乐流代理服务")
-		musicProxyServer.Run()
-	}()
 	// 哔哩哔哩 音乐源服务
 	bili := app_bili.New(configDir, svcLogger)
 
@@ -65,12 +61,12 @@ func main() {
 		Debug: options.Debug{
 			OpenInspectorOnStartup: true,
 		},
-		Title:  "哔哔音乐",
-		Width:  1064,
-		Height: 768,
-		// Width:  450,
-		// Height: 800,
-		Frameless: true,
+		Title: "哔哔音乐",
+		// Width:  1064,
+		// Height: 768,
+		// Frameless: true,
+		Width:  450,
+		Height: 800,
 		Windows: &windows.Options{
 			WebviewIsTransparent: true,
 		},
@@ -85,6 +81,8 @@ func main() {
 		BackgroundColour: &options.RGBA{R: 251, G: 251, B: 251, A: 1},
 		OnStartup: func(ctx context.Context) {
 			basic.Startup(ctx)
+			log.Println("启动音乐流代理服务")
+			musicProxyServer.Run()
 		},
 		OnShutdown: func(ctx context.Context) {
 			// bbsrv.Close()

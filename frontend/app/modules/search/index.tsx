@@ -26,11 +26,7 @@ export function Search({ gotoMusicOrderDetail }: SearchProps) {
       <div className={styles.searchList}>
         {store.data?.map((item) => {
           return (
-            <SearchItem
-              data={item}
-              key={item.id}
-              gotoMusicOrderDetail={gotoMusicOrderDetail}
-            />
+            <SearchItem data={item} key={item.id} gotoMusicOrderDetail={gotoMusicOrderDetail} />
           );
         })}
         {store.pagination && (

@@ -1,0 +1,5 @@
+node_modules
+dist
+wailsjs
+.umi
+.umi-production

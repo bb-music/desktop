@@ -18,22 +18,19 @@ export default function SearchForm() {
     <>
       <div className={styles.searchForm}>
         <Input
-          type='text'
+          type="text"
           value={searchStore.params.keyword}
           onChange={(e) => {
             searchStore.setParams({ keyword: e.target.value });
           }}
-          placeholder='请输入要搜索的歌曲名称'
+          placeholder="请输入要搜索的歌曲名称"
           onKeyUp={(e) => {
             if (e.code === 'Enter') {
               searchHandler();
             }
           }}
         />
-        <Button
-          type='primary'
-          onClick={searchHandler}
-        >
+        <Button type="primary" onClick={searchHandler}>
           搜索
         </Button>
       </div>
@@ -56,7 +53,7 @@ export default function SearchForm() {
                   searchStore.deleteHistory(item);
                 }}
               >
-                <CloseOne theme='filled' />
+                <CloseOne theme="filled" />
               </span>
             </div>
           );

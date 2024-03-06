@@ -27,16 +27,10 @@ export function Modal({
   if (!open) return null;
   return createPortal(
     <div className={cls(styles.modalContainer, global.theme)}>
-      <div
-        className={styles.modal}
-        style={{ width }}
-      >
+      <div className={styles.modal} style={{ width }}>
         <div className={styles.header}>
           <div className={styles.title}>{title}</div>
-          <div
-            className={styles.close}
-            onClick={onClose}
-          >
+          <div className={styles.close} onClick={onClose}>
             <Close />
           </div>
         </div>
@@ -47,7 +41,7 @@ export function Modal({
           ) : (
             <>
               <Button
-                type='primary'
+                type="primary"
                 onClick={async () => {
                   try {
                     await onOk?.();
@@ -64,6 +58,6 @@ export function Modal({
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }

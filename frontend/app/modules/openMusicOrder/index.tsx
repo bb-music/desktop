@@ -32,15 +32,8 @@ export function OpenMusicOrderComp({ gotoMusicOrderDetail }: OpenMusicOrderProps
       <div className={styles.musicOrderList}>
         {store.list.map((i) => {
           return (
-            <ContextMenu
-              key={i.id + i.name}
-              items={[]}
-              asChild
-            >
-              <MusicOrderItemComp
-                data={i}
-                gotoMusicOrderDetail={gotoMusicOrderDetail}
-              />
+            <ContextMenu key={i.id + i.name} items={[]} asChild>
+              <MusicOrderItemComp data={i} gotoMusicOrderDetail={gotoMusicOrderDetail} />
             </ContextMenu>
           );
         })}
@@ -64,11 +57,7 @@ export function MusicOrderItemComp({
       }}
     >
       <div className={styles.cover}>
-        <Image
-          className={styles.coverImg}
-          mode='cover'
-          src={data.cover}
-        />
+        <Image className={styles.coverImg} mode="cover" src={data.cover} />
         {data.author && (
           <div className={styles.author}>
             <User />

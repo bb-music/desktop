@@ -22,7 +22,7 @@ export const useOpenMusicOrderStore = create<OpenMusicOrderStore>()((set, get) =
       const origins = settingStore.getState().openMusicOrderOrigin;
       const urls = origins.map((u) => u.trim()).filter((u) => !!u);
       const res = await Promise.all(
-        urls.map((url) => api.openMusicOrder.useOriginGetMusicOrder(url))
+        urls.map((url) => api.openMusicOrder.useOriginGetMusicOrder(url)),
       );
       const list: MusicOrderItem[] = [];
       res.forEach((r) => {

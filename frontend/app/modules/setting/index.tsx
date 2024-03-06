@@ -19,10 +19,7 @@ export function Setting() {
     store.load();
   }, []);
   return (
-    <div
-      className={styles.container}
-      style={{ '--input-default-width': '460px' } as any}
-    >
+    <div className={styles.container} style={{ '--input-default-width': '460px' } as any}>
       <MainSetting />
       <ServiceSetting />
       <OpenSetting />
@@ -60,16 +57,13 @@ export function MainSetting() {
 
   return (
     <>
-      <SubTitle title='系统设置' />
+      <SubTitle title="系统设置" />
       {api.setting.updateDownloadDir && (
-        <SettingItem label='下载位置'>
-          <Input
-            value={store.downloadDir}
-            disabled
-          />
+        <SettingItem label="下载位置">
+          <Input value={store.downloadDir} disabled />
           {api.setting.selectDownloadDir && (
             <Button
-              type='link'
+              type="link"
               onClick={() => {
                 api.setting.selectDownloadDir?.().then((res) => {
                   if (res) {
@@ -85,12 +79,8 @@ export function MainSetting() {
           )}
         </SettingItem>
       )}
-      <SettingItem label='视频代理服务端口'>
-        <Input
-          style={{ width: 100 }}
-          disabled
-          value={store.proxyServerPort?.toString() || ''}
-        />
+      <SettingItem label="视频代理服务端口">
+        <Input style={{ width: 100 }} disabled value={store.proxyServerPort?.toString() || ''} />
       </SettingItem>
       <div className={styles.divider}></div>
     </>
@@ -108,10 +98,10 @@ export function OpenSetting() {
   return (
     <>
       <SubTitle
-        title='歌单广场源'
+        title="歌单广场源"
         extra={
           <Button
-            type='text'
+            type="text"
             onClick={() => {
               setModal({
                 ...new OpenMusicOrderModal(),
@@ -126,12 +116,9 @@ export function OpenSetting() {
       />
       {store.openMusicOrderOrigin.map((item, index) => {
         return (
-          <SettingItem
-            label='广场源1'
-            key={index}
-          >
+          <SettingItem label="广场源1" key={index}>
             <Input value={item} />
-            <Button type='text'>删除</Button>
+            <Button type="text">删除</Button>
           </SettingItem>
         );
       })}
@@ -157,7 +144,7 @@ export function OpenSetting() {
       >
         <>
           <Input
-            placeholder='请输入地址'
+            placeholder="请输入地址"
             value={modal.value}
             style={{ width: '100%' }}
             onChange={(e) => {
@@ -178,7 +165,7 @@ export function MusicOrderSetting() {
 
   return (
     <>
-      <SubTitle title='歌单同步设置' />
+      <SubTitle title="歌单同步设置" />
       {api.userMusicOrder.map((m, index) => {
         const Comp = m.ConfigElement;
         if (!Comp) return null;

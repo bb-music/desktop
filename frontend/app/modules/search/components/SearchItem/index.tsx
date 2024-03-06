@@ -37,25 +37,18 @@ export default function SearchItem({ data, gotoMusicOrderDetail }: SearchItemPro
   };
   const name = data.name;
   return (
-    <div
-      className={styles.searchItem}
-      onClick={getDetailHandler}
-      title={name}
-    >
+    <div className={styles.searchItem} onClick={getDetailHandler} title={name}>
       <Image
         className={styles.cover}
         src={api.utils.imgUrlTransform(data.cover)}
-        alt=''
-        mode='cover'
+        alt=""
+        mode="cover"
       />
       <div className={styles.title}>
         <span>{name}</span>
         {/* <span>{data.author}</span> */}
       </div>
-      <div
-        className={styles.author}
-        title={data.author}
-      >
+      <div className={styles.author} title={data.author}>
         {data.author}
       </div>
       <div className={styles.duration}>
@@ -70,7 +63,7 @@ export default function SearchItem({ data, gotoMusicOrderDetail }: SearchItemPro
         }}
       >
         <Button
-          type='primary'
+          type="primary"
           onClick={() => {
             player.play(music!);
           }}
@@ -78,7 +71,7 @@ export default function SearchItem({ data, gotoMusicOrderDetail }: SearchItemPro
           立即播放
         </Button>
         <Button
-          type='primary'
+          type="primary"
           onClick={() => {
             musicCollect(music!);
           }}
@@ -86,7 +79,7 @@ export default function SearchItem({ data, gotoMusicOrderDetail }: SearchItemPro
           加入歌单
         </Button>
         <Button
-          type='primary'
+          type="primary"
           onClick={() => {
             player.addPlayerList(music!);
           }}
@@ -94,7 +87,7 @@ export default function SearchItem({ data, gotoMusicOrderDetail }: SearchItemPro
           添加至播放列表
         </Button>
         <Button
-          type='primary'
+          type="primary"
           onClick={() => {
             downloadMusic(music!);
           }}

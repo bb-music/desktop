@@ -9,16 +9,8 @@ export interface ImageProps extends Omit<React.ImgHTMLAttributes<HTMLImageElemen
 
 export function Image({ className, style, mode, src, alt, ...props }: ImageProps) {
   return (
-    <div
-      className={cls(styles.img, `${UIPrefix}-img`, className)}
-      style={style}
-      {...props}
-    >
-      <img
-        style={{ objectFit: mode }}
-        src={src}
-        alt={alt}
-      />
+    <div className={cls(styles.img, `${UIPrefix}-img`, className)} style={style} {...props}>
+      <img style={{ objectFit: mode }} src={src} alt={alt} />
     </div>
   );
 }

@@ -38,13 +38,7 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
   return (
     <div className={styles.container}>
       <div className={styles.headerCard}>
-        {data?.cover && (
-          <Image
-            mode='cover'
-            className={styles.cover}
-            src={data.cover}
-          />
-        )}
+        {data?.cover && <Image mode="cover" className={styles.cover} src={data.cover} />}
         <div className={styles.info}>
           <div className={styles.title}>{data?.name}</div>
           <div className={styles.desc}>
@@ -57,8 +51,8 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
           </div>
           <div className={styles.operateList}>
             <Button
-              type='primary'
-              title='替换当前播放列表'
+              type="primary"
+              title="替换当前播放列表"
               onClick={() => {
                 if (data?.musicList) {
                   player.clearPlayerList();
@@ -99,7 +93,7 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
         <div className={styles.search}>
           <Search />
           <Input
-            placeholder='搜索歌单音乐'
+            placeholder="搜索歌单音乐"
             onChange={(e) => {
               setSearchKeyword(e.target.value.trim());
             }}
@@ -205,15 +199,12 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
                   >
                     <td>{index + 1}</td>
 
-                    <td
-                      className={styles.name}
-                      title={m.name}
-                    >
+                    <td className={styles.name} title={m.name}>
                       {m.name}
                     </td>
                     <td
                       style={{ cursor: 'pointer' }}
-                      title='下载'
+                      title="下载"
                       onClick={() => {
                         downloadMusic(m);
                       }}

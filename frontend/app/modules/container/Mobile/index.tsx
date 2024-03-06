@@ -28,10 +28,7 @@ export function MobileContainer({ className, style, header, headerProps }: Mobil
     settingLoad();
   }, []);
   return (
-    <div
-      className={cls(styles.container, `${UIPrefix}-container`, className, theme)}
-      style={style}
-    >
+    <div className={cls(styles.container, `${UIPrefix}-container`, className, theme)} style={style}>
       <MessageRoot />
       <main className={styles.main}>
         {/* <Sidebar /> */}
@@ -46,18 +43,13 @@ export function MobileContainer({ className, style, header, headerProps }: Mobil
 
 function ContainerContent() {
   const { active, props } = useContainerStore(
-    useShallow((state) => ({ active: state.active, props: state.props }))
+    useShallow((state) => ({ active: state.active, props: state.props })),
   );
   const component = useMemo(() => {
     const View = PageViewMap.get(active)?.Component;
     const commonProps = PageViewMap.get(active)?.props as any;
     if (!View) return null;
-    return (
-      <View
-        {...props}
-        {...commonProps}
-      />
-    );
+    return <View {...props} {...commonProps} />;
   }, [active]);
 
   return <div className={styles.content}>{component}</div>;

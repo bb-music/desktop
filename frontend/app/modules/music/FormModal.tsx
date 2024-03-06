@@ -14,7 +14,7 @@ export function MusicFormModal() {
   if (!musicOrderId || !music) return null;
   return (
     <Modal
-      title='修改音乐信息'
+      title="修改音乐信息"
       open={store.open}
       onOk={() => {
         const newData = { ...music, name: store.form.name };
@@ -27,7 +27,7 @@ export function MusicFormModal() {
       }}
       onClose={store.close}
     >
-      <FormItem label='名称'>
+      <FormItem label="名称">
         <Input
           value={store.form.name}
           onChange={(e) => {

@@ -78,7 +78,7 @@ export class GithubUserMusicOrderAction implements UserMusicOrderApiAction {
           cover: data.cover,
         };
       },
-      (c) => `更新歌单${c.name}(${c.id})`
+      (c) => `更新歌单${c.name}(${c.id})`,
     );
   };
   public delete: UserMusicOrderApiAction['delete'] = async (data) => {
@@ -118,7 +118,7 @@ export class GithubUserMusicOrderAction implements UserMusicOrderApiAction {
           musicList: [...(newList || []), ...musics],
         };
       },
-      () => `新增歌曲`
+      () => `新增歌曲`,
     );
   };
   public updateMusic: UserMusicOrderApiAction['updateMusic'] = async (id, music) => {
@@ -142,7 +142,7 @@ export class GithubUserMusicOrderAction implements UserMusicOrderApiAction {
           musicList: newList || [],
         };
       },
-      () => `修改歌曲信息`
+      () => `修改歌曲信息`,
     );
   };
   public deleteMusic: UserMusicOrderApiAction['deleteMusic'] = async (id, musics) => {
@@ -159,7 +159,7 @@ export class GithubUserMusicOrderAction implements UserMusicOrderApiAction {
           musicList: newList || [],
         };
       },
-      () => `移除歌曲`
+      () => `移除歌曲`,
     );
   };
 
@@ -215,7 +215,7 @@ export class GithubUserMusicOrderAction implements UserMusicOrderApiAction {
     id: string,
     config: UserMusicOrderOrigin.GithubConfig,
     cb: (l: MusicOrderItem) => Partial<MusicOrderItem>,
-    message: (l: MusicOrderItem) => string
+    message: (l: MusicOrderItem) => string,
   ) {
     const { request, filePath } = this.createConfig(config);
     const res = await this.getDataAndRsa(config);

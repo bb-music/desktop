@@ -109,7 +109,7 @@ export class BiliMusicServiceInstance implements BiliMusicServiceApi {
   ConfigElement: BiliMusicServiceApi['ConfigElement'] = ({ onChange }) => {
     const [config, setConfig] = useState<app_bili.Config>();
     const [data, setData] = useState<BiliMusicServiceConfigValue>(
-      new BiliMusicServiceConfigValue()
+      new BiliMusicServiceConfigValue(),
     );
     const loadHandler = async () => {
       const res = await proxyMusicService(NAME, {
@@ -147,45 +147,33 @@ export class BiliMusicServiceInstance implements BiliMusicServiceApi {
     };
     return (
       <>
-        <SettingItem label='开启/关闭'>
+        <SettingItem label="开启/关闭">
           <Switch {...createProps('enabled', true)} />
         </SettingItem>
         <div style={{ display: data.enabled ? 'block' : 'none' }}>
-          <SettingItem label='代理开启/关闭'>
+          <SettingItem label="代理开启/关闭">
             <Switch {...createProps('proxyEnabled', true)} />
           </SettingItem>
           <div style={{ display: data.proxyEnabled ? 'block' : 'none' }}>
-            <SettingItem label='代理地址'>
+            <SettingItem label="代理地址">
               <Input {...createProps('proxyAddress')} />
             </SettingItem>
-            <SettingItem label='代理秘钥'>
+            <SettingItem label="代理秘钥">
               <Input {...createProps('proxyToken')} />
             </SettingItem>
           </div>
           <div style={{ display: !data.proxyEnabled ? 'block' : 'none' }}>
-            <SettingItem label='imgKey'>
-              <Input
-                value={config?.sign_data.img_key}
-                disabled
-              />
+            <SettingItem label="imgKey">
+              <Input value={config?.sign_data.img_key} disabled />
             </SettingItem>
-            <SettingItem label='subKey'>
-              <Input
-                value={config?.sign_data.img_key}
-                disabled
-              />
+            <SettingItem label="subKey">
+              <Input value={config?.sign_data.img_key} disabled />
             </SettingItem>
-            <SettingItem label='UUID_V3'>
-              <Input
-                value={config?.spi_data.b_3}
-                disabled
-              />
+            <SettingItem label="UUID_V3">
+              <Input value={config?.spi_data.b_3} disabled />
             </SettingItem>
-            <SettingItem label='UUID_V4'>
-              <Input
-                value={config?.spi_data.b_4}
-                disabled
-              />
+            <SettingItem label="UUID_V4">
+              <Input value={config?.spi_data.b_4} disabled />
             </SettingItem>
           </div>
         </div>
@@ -193,14 +181,16 @@ export class BiliMusicServiceInstance implements BiliMusicServiceApi {
           <Button
             style={{ display: !data.proxyEnabled ? '' : 'none' }}
             onClick={() => {
-              message.success('更新中')
-              InitConfig(true).then(() => {
-                message.success('更新成功')
-                loadHandler();
-              }).catch((e)=>{
-                console.log('e: ', e);
-                message.error('更新失败')
-              });
+              message.success('更新中');
+              InitConfig(true)
+                .then(() => {
+                  message.success('更新成功');
+                  loadHandler();
+                })
+                .catch((e) => {
+                  console.log('e: ', e);
+                  message.error('更新失败');
+                });
             }}
           >
             刷新源配置

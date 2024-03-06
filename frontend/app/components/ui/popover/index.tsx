@@ -32,10 +32,7 @@ export const Popover = ({
           className={cls(theme, styles.PopoverContent, contentProps?.className)}
         >
           <>{content}</>
-          <RadixPopover.Arrow
-            className={styles.Arrow}
-            style={{ fill: arrowColor }}
-          />
+          <RadixPopover.Arrow className={styles.Arrow} style={{ fill: arrowColor }} />
         </RadixPopover.Content>
       </RadixPopover.Portal>
     </RadixPopover.Root>

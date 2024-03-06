@@ -14,12 +14,9 @@ export function FormItem({
   style,
 }: React.PropsWithChildren<FormItemProps>) {
   return (
-    <label
-      className={cls(className, styles.formItem)}
-      style={style}
-    >
-      <div className='ui-form-item-label'>{label}</div>
-      <div className='ui-form-item-content'>{children}</div>
+    <label className={cls(className, styles.formItem)} style={style}>
+      <div className="ui-form-item-label">{label}</div>
+      <div className="ui-form-item-content">{children}</div>
     </label>
   );
 }

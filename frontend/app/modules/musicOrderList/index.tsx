@@ -32,7 +32,7 @@ export interface MusicOrderListProps {
 // 歌单
 export function MusicOrder({ gotoMusicOrderDetail }: MusicOrderListProps) {
   const store = useUserMusicOrderStore(
-    useShallow((state) => ({ load: state.load, list: state.list }))
+    useShallow((state) => ({ load: state.load, list: state.list })),
   );
   useEffect(() => {
     store.load();
@@ -47,8 +47,8 @@ export function MusicOrder({ gotoMusicOrderDetail }: MusicOrderListProps) {
             <SubTitle
               extra={
                 <Plus
-                  className='ui-icon'
-                  title='创建歌单'
+                  className="ui-icon"
+                  title="创建歌单"
                   onClick={() => {
                     const origin = getMusicOrder(m.name);
                     modalStore.openHandler(null, async (value) => {
@@ -80,9 +80,9 @@ export function SubTitle({
   children,
 }: React.PropsWithChildren<{ extra?: React.ReactNode }>) {
   return (
-    <div className='sub-title'>
-      <div className='name'>{children}</div>
-      <div className='operate'>{extra}</div>
+    <div className="sub-title">
+      <div className="name">{children}</div>
+      <div className="operate">{extra}</div>
     </div>
   );
 }
@@ -100,7 +100,7 @@ export function MusicOrderList({ list, originName, gotoMusicOrderDetail }: ListP
   const origin = getMusicOrder(originName || '');
 
   return (
-    <ul className='item-list'>
+    <ul className="item-list">
       {list.map((item) => {
         return (
           <ContextMenu
@@ -159,18 +159,15 @@ export function MusicOrderList({ list, originName, gotoMusicOrderDetail }: ListP
                 },
               },
             ]}
-            tag='li'
-            className='item'
+            tag="li"
+            className="item"
             key={item.id}
             onClick={() => {
               gotoMusicOrderDetail({ data: item, canEditMusic: true, originName });
             }}
           >
-            <MusicMenu
-              className='ui-icon'
-              strokeWidth={3}
-            />
-            <span className='name'>{item.name}</span>
+            <MusicMenu className="ui-icon" strokeWidth={3} />
+            <span className="name">{item.name}</span>
           </ContextMenu>
         );
       })}
@@ -183,7 +180,7 @@ export function MusicOrderFormModal() {
 
   return (
     <Modal
-      title='创建歌单'
+      title="创建歌单"
       open={store.open}
       onOk={() => {
         store.onOk?.(store.form);
@@ -192,7 +189,7 @@ export function MusicOrderFormModal() {
         store.closeHandler();
       }}
     >
-      <FormItem label='名称'>
+      <FormItem label="名称">
         <Input
           value={store.form.name}
           onChange={(e) => {
@@ -202,7 +199,7 @@ export function MusicOrderFormModal() {
           }}
         />
       </FormItem>
-      <FormItem label='描述'>
+      <FormItem label="描述">
         <Input
           value={store.form.desc}
           onChange={(e) => {
@@ -218,13 +215,13 @@ export function MusicOrderFormModal() {
 
 export function MusicOrderModal() {
   const musicOrderStore = useUserMusicOrderStore(
-    useShallow((state) => ({ load: state.load, list: state.list }))
+    useShallow((state) => ({ load: state.load, list: state.list })),
   );
   const store = useMusicOrderCollectModalStore();
 
   return (
     <Modal
-      title='收藏到歌单'
+      title="收藏到歌单"
       open={store.open}
       onClose={() => {
         store.close();
@@ -237,13 +234,7 @@ export function MusicOrderModal() {
             return (
               <div key={r.name}>
                 {r.list.map((item) => {
-                  return (
-                    <CollectItem
-                      key={item.id}
-                      data={item}
-                      originName={r.name}
-                    />
-                  );
+                  return <CollectItem key={item.id} data={item} originName={r.name} />;
                 })}
               </div>
             );
@@ -257,7 +248,7 @@ export function MusicOrderModal() {
 function CollectItem({ data, originName }: { data: MusicOrderItem; originName?: string }) {
   const store = useMusicOrderCollectModalStore();
   const musicOrderStore = useUserMusicOrderStore(
-    useShallow((state) => ({ load: state.load, list: state.list }))
+    useShallow((state) => ({ load: state.load, list: state.list })),
   );
   const origin = getMusicOrder(originName || '');
 
@@ -272,11 +263,7 @@ function CollectItem({ data, originName }: { data: MusicOrderItem; originName?: 
         });
       }}
     >
-      <Image
-        src={data.cover}
-        className={styles.cover}
-        mode='cover'
-      />
+      <Image src={data.cover} className={styles.cover} mode="cover" />
       <div className={styles.info}>
         <div className={styles.name}>{data.name}</div>
         <div className={styles.total}>{data.musicList?.length}首音乐</div>

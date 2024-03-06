@@ -17,7 +17,7 @@ export function PlayerVolume() {
   useEffect(() => {
     (async () => {
       const v = await api.cacheStorage.getItem(VolumeCacheKey);
-      const num = Number(v);
+      const num = Number(v || '1');
       if (isNaN(num)) return;
       setVolume(num);
       player.audio?.setVolume(num);

@@ -23,7 +23,7 @@ type CacheConfig struct {
 var ConfigCacheKey = "bili-config.json"
 
 // 初始化配置信息
-func (a *App) InitConfig() error {
+func (a *App) InitConfig(force bool) error {
 	var signData bili_sdk.SignData
 	var spiData bili_sdk.SpiData
 
@@ -32,8 +32,12 @@ func (a *App) InitConfig() error {
 	cacheConfig, err := configStorage.Get()
 
 	// 校验
-	if err != nil || configStorage.Validate(cacheConfig) {
-		a.logger.Info("bili 缓存配置已过期")
+	if err != nil || configStorage.Validate(cacheConfig) || force {
+		if force {
+			a.logger.Info("bili 缓存配置强制更新")
+		} else {
+			a.logger.Info("bili 缓存配置已过期")
+		}
 		// 获取秘钥配置
 		if data, err := a.client.GetSignData(); err != nil {
 			a.logger.Error("获取 SignData 失败", fmt.Sprintf("err=%+v", err))
@@ -114,7 +118,7 @@ func (c *ConfigStorage) Validate(config *CacheConfig) bool {
 	if config == nil {
 		return false
 	}
-	return config.CreatedAt.Add(time.Hour * 24).Before(time.Now())
+	return config.CreatedAt.Add(time.Hour * 2).Before(time.Now())
 }
 
 func NewConfigStorage(rootDir string) *ConfigStorage {

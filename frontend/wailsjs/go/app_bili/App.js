@@ -22,8 +22,8 @@ export function GetOpenMusicOrderList(arg1) {
   return window['go']['app_bili']['App']['GetOpenMusicOrderList'](arg1);
 }
 
-export function InitConfig() {
-  return window['go']['app_bili']['App']['InitConfig']();
+export function InitConfig(arg1) {
+  return window['go']['app_bili']['App']['InitConfig'](arg1);
 }
 
 export function Search(arg1) {

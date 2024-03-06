@@ -97,7 +97,7 @@ class BiliAction implements MusicServiceApiAction {
 }
 class BiliHooks implements MusicServiceApiHooks {
   init = async () => {
-    await InitConfig();
+    await InitConfig(false);
   };
 }
 
@@ -193,8 +193,13 @@ export class BiliMusicServiceInstance implements BiliMusicServiceApi {
           <Button
             style={{ display: !data.proxyEnabled ? '' : 'none' }}
             onClick={() => {
-              InitConfig().then((res) => {
+              message.success('更新中')
+              InitConfig(true).then(() => {
+                message.success('更新成功')
                 loadHandler();
+              }).catch((e)=>{
+                console.log('e: ', e);
+                message.error('更新失败')
               });
             }}
           >

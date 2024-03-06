@@ -14,7 +14,7 @@ export function GetMusicFile(arg1:string):Promise<httputil.ReverseProxy>;
 
 export function GetOpenMusicOrderList(arg1:string):Promise<any>;
 
-export function InitConfig():Promise<void>;
+export function InitConfig(arg1:boolean):Promise<void>;
 
 export function Search(arg1:bb_type.SearchParams):Promise<bb_type.SearchResponse>;
 

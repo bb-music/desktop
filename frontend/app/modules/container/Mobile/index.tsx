@@ -14,7 +14,11 @@ import { MusicFormModal } from '../../music';
 import { PlayerForMobile } from '../../player';
 
 import { OpenMusicOrderComp, OpenMusicOrderProps } from '../../openMusicOrder';
-import { MusicOrderDetail, MusicOrderDetailProps } from '../../musicOrderDetail';
+import {
+  MusicOrderDetail,
+  MusicOrderDetailForMobile,
+  MusicOrderDetailProps,
+} from '../../musicOrderDetail';
 import { SearchForMobile, SearchProps } from '../../search';
 import { Setting, SettingProps } from '../../setting';
 
@@ -42,7 +46,7 @@ const PageViewMap = new Map([
   [
     PageView.MusicOrderDetail,
     {
-      Component: MusicOrderDetail,
+      Component: MusicOrderDetailForMobile,
       label: '歌单详情',
     },
   ],

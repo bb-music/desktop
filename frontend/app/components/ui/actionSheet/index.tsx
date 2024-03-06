@@ -25,7 +25,14 @@ export interface ActionSheetProps {
   onOpenChange?: (open: boolean) => void;
 }
 
-export function ActionSheet({ open, items, cancelText, onCancel, onOpenChange }: ActionSheetProps) {
+export function ActionSheet({
+  title,
+  open,
+  items,
+  cancelText,
+  onCancel,
+  onOpenChange,
+}: ActionSheetProps) {
   const theme = useGlobalStore(useShallow((s) => s.theme));
   const closeHandler = () => {
     onOpenChange?.(false);
@@ -37,12 +44,14 @@ export function ActionSheet({ open, items, cancelText, onCancel, onOpenChange }:
         <RadixDialog.Overlay className={cls(theme, styles.DialogOverlay)} onClick={closeHandler} />
         <RadixDialog.Content className={cls(theme, styles.DialogContent)}>
           <div>
-            <RadixDialog.Title className={styles.DialogTitle}>这是标题</RadixDialog.Title>
+            {title && <RadixDialog.Title className={styles.DialogTitle}>{title}</RadixDialog.Title>}
             {items.map((item) => {
+              console.log('item: ', item);
               return (
                 <div
                   key={item.key}
                   className={styles.ActionItem}
+                  aria-disabled={!!item.disabled}
                   onClick={async (e) => {
                     if (item.disabled) return;
                     const o = await item.onClick?.(e);

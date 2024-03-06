@@ -37,6 +37,10 @@
     border-bottom-right-radius: 6px;
     border-bottom: none;
   }
+  &[aria-disabled='true'] {
+    text-decoration: line-through;
+    color: var(--action-sheet-item-disabled);
+  }
 }
 
 .CancelItem {

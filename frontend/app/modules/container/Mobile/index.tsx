@@ -1,12 +1,10 @@
-/** 适用与大屏设备的 APP 容器 */
+/** 适用于移动设备的 APP 容器 */
 import { cls } from '../../../utils';
 import styles from './index.module.scss';
 import { UIPrefix } from '../../../consts';
 import { BaseElementProps } from '../../../interface';
-import { Header, HeaderProps } from './components/Header';
-import { Sidebar } from './components/Sidebar';
 import { useGlobalStore } from '../../../store/global';
-import { PageViewMap, useContainerStore } from '../store';
+import { PageView, useContainerStore } from '../store';
 import { useEffect, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useSettingStore } from '../../setting';
@@ -15,12 +13,61 @@ import { MusicOrderModal } from '../../musicOrderList';
 import { MusicFormModal } from '../../music';
 import { PlayerForMobile } from '../../player';
 
-export interface MobileContainerProps extends BaseElementProps {
-  header?: React.ReactNode;
-  headerProps?: HeaderProps;
-}
+import { OpenMusicOrderComp, OpenMusicOrderProps } from '../../openMusicOrder';
+import { MusicOrderDetail, MusicOrderDetailProps } from '../../musicOrderDetail';
+import { SearchForMobile, SearchProps } from '../../search';
+import { Setting, SettingProps } from '../../setting';
 
-export function MobileContainer({ className, style, header, headerProps }: MobileContainerProps) {
+type PageViewProps = OpenMusicOrderProps | MusicOrderDetailProps | SearchProps | SettingProps;
+
+const gotoMusicOrderDetail = (props: MusicOrderDetailProps) => {
+  openPage(PageView.MusicOrderDetail, props);
+};
+
+/** 切换视图 */
+export function openPage(page: PageView, props?: PageViewProps) {
+  useContainerStore.getState().setActive(page, props);
+}
+const PageViewMap = new Map([
+  [
+    PageView.OpenMusicOrder,
+    {
+      Component: OpenMusicOrderComp,
+      label: '广场',
+      props: {
+        gotoMusicOrderDetail,
+      },
+    },
+  ],
+  [
+    PageView.MusicOrderDetail,
+    {
+      Component: MusicOrderDetail,
+      label: '歌单详情',
+    },
+  ],
+  [
+    PageView.Search,
+    {
+      Component: SearchForMobile,
+      label: '搜索',
+      props: {
+        gotoMusicOrderDetail,
+      },
+    },
+  ],
+  [
+    PageView.Setting,
+    {
+      Component: Setting,
+      label: '设置',
+    },
+  ],
+]);
+
+export interface MobileContainerProps extends BaseElementProps {}
+
+export function MobileContainer({ className, style }: MobileContainerProps) {
   const theme = useGlobalStore(useShallow((state) => state.theme));
   const settingLoad = useSettingStore(useShallow((state) => state.load));
 
@@ -30,10 +77,7 @@ export function MobileContainer({ className, style, header, headerProps }: Mobil
   return (
     <div className={cls(styles.container, `${UIPrefix}-container`, className, theme)} style={style}>
       <MessageRoot />
-      <main className={styles.main}>
-        {/* <Sidebar /> */}
-        <ContainerContent />
-      </main>
+      <ContainerContent />
       <PlayerForMobile />
       <MusicOrderModal />
       <MusicFormModal />
@@ -45,6 +89,7 @@ function ContainerContent() {
   const { active, props } = useContainerStore(
     useShallow((state) => ({ active: state.active, props: state.props })),
   );
+
   const component = useMemo(() => {
     const View = PageViewMap.get(active)?.Component;
     const commonProps = PageViewMap.get(active)?.props as any;
@@ -52,5 +97,5 @@ function ContainerContent() {
     return <View {...props} {...commonProps} />;
   }, [active]);
 
-  return <div className={styles.content}>{component}</div>;
+  return <div className={styles.main}>{component}</div>;
 }

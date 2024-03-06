@@ -1,10 +1,10 @@
 import { Input, Button } from '../../../../components';
 import { useSearchStore } from '../../store';
-import styles from './index.module.scss';
+import styles from '../../index.module.scss';
 import { CloseOne } from '@icon-park/react';
 import { useEffect } from 'react';
 
-export default function SearchForm() {
+export default function SearchForm({ isMobile }: { siMobile?: boolean }) {
   const searchStore = useSearchStore();
   const searchHandler = () => {
     if (!searchStore.params.keyword.trim()) return;

@@ -10,3 +10,4 @@ export * from './ui/switch';
 export * from './ui/table';
 export * from './ui/popover';
 export * from './ui/slider';
+export * from './ui/actionSheet';

@@ -14,6 +14,7 @@
   padding: var(--button-padding);
   font-size: var(--button-font-size);
   box-sizing: border-box;
+  white-space: nowrap;
 
   &:hover {
     background: var(--button-hover-bg);

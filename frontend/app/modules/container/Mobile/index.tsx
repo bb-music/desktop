@@ -7,20 +7,16 @@ import { useGlobalStore } from '../../../store/global';
 import { PageView, useContainerStore } from '../store';
 import { useEffect, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { useSettingStore } from '../../setting';
-import { MessageRoot } from '../../../components/ui/message';
-import { MusicOrderModal } from '../../musicOrderList';
+import { SettingForMobile, useSettingStore } from '../../setting';
+import { MessageRoot, setMobileEnv } from '../../../components';
+import { MusicOrderFormMobile, MusicOrderModal } from '../../musicOrderList';
 import { MusicFormModal } from '../../music';
 import { PlayerForMobile } from '../../player';
-
-import { OpenMusicOrderComp, OpenMusicOrderProps } from '../../openMusicOrder';
-import {
-  MusicOrderDetail,
-  MusicOrderDetailForMobile,
-  MusicOrderDetailProps,
-} from '../../musicOrderDetail';
+import { OpenMusicOrderProps, OpenMusicOrderViewForMobile } from '../../openMusicOrder';
+import { MusicOrderDetailForMobile, MusicOrderDetailProps } from '../../musicOrderDetail';
 import { SearchForMobile, SearchProps } from '../../search';
-import { Setting, SettingProps } from '../../setting';
+import { SettingProps } from '../../setting';
+import { Header } from './components/Header';
 
 type PageViewProps = OpenMusicOrderProps | MusicOrderDetailProps | SearchProps | SettingProps;
 
@@ -36,7 +32,17 @@ const PageViewMap = new Map([
   [
     PageView.OpenMusicOrder,
     {
-      Component: OpenMusicOrderComp,
+      Component: OpenMusicOrderViewForMobile,
+      label: '广场',
+      props: {
+        gotoMusicOrderDetail,
+      },
+    },
+  ],
+  [
+    PageView.UserMusicOrder,
+    {
+      Component: MusicOrderFormMobile,
       label: '广场',
       props: {
         gotoMusicOrderDetail,
@@ -63,7 +69,7 @@ const PageViewMap = new Map([
   [
     PageView.Setting,
     {
-      Component: Setting,
+      Component: SettingForMobile,
       label: '设置',
     },
   ],
@@ -77,13 +83,15 @@ export function MobileContainer({ className, style }: MobileContainerProps) {
 
   useEffect(() => {
     settingLoad();
+    setMobileEnv(true);
   }, []);
   return (
     <div className={cls(styles.container, `${UIPrefix}-container`, className, theme)} style={style}>
-      <MessageRoot />
+      <Header openPage={openPage} />
       <ContainerContent />
       <PlayerForMobile />
       <MusicOrderModal />
+      <MessageRoot />
       <MusicFormModal />
     </div>
   );

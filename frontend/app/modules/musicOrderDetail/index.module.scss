@@ -93,6 +93,7 @@
 }
 
 .MobileContainer {
+  width: 100%;
   .MusicOrderInfo {
     position: relative;
     height: 200px;
@@ -170,7 +171,7 @@
     }
     .Operate {
       font-size: 20px;
-      padding: 0 16px;
+      padding: 0 10px;
       cursor: pointer;
     }
   }

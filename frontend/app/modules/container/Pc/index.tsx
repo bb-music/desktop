@@ -15,7 +15,7 @@ import { MessageRoot } from '../../../components/ui/message';
 import { MusicOrderModal } from '../../musicOrderList';
 import { MusicFormModal } from '../../music';
 
-import { OpenMusicOrderComp, OpenMusicOrderProps } from '../../openMusicOrder';
+import { OpenMusicOrderView, OpenMusicOrderProps } from '../../openMusicOrder';
 import { MusicOrderDetail, MusicOrderDetailProps } from '../../musicOrderDetail';
 import { Search, SearchProps } from '../../search';
 import { Setting, SettingProps } from '../../setting';
@@ -34,7 +34,7 @@ const PageViewMap = new Map([
   [
     PageView.OpenMusicOrder,
     {
-      Component: OpenMusicOrderComp,
+      Component: OpenMusicOrderView,
       label: '广场',
       props: {
         gotoMusicOrderDetail,

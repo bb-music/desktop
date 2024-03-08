@@ -61,7 +61,6 @@ export const searchStore = create<SearchStore>()((set, get) => {
     },
     load: async () => {
       const params = get().params;
-      console.log('params: ', params);
       const origin = get().originActive;
       set({
         loading: true,

@@ -75,6 +75,13 @@ button {
     justify-content: center;
     gap: 20px;
     font-size: 16px;
+    a {
+      color: #999;
+    }
+    .active {
+      color: rgb(var(--main-color-light));
+      font-weight: 500;
+    }
   }
   .operate {
     height: 100%;

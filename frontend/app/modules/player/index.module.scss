@@ -17,7 +17,7 @@
   left: 0;
   right: 0;
   height: 2px;
-  z-index: 90;
+  z-index: 91;
   background-color: var(--player-progress-bg);
   &::after {
     position: absolute;
@@ -90,7 +90,7 @@
   justify-content: center;
   align-items: center;
   gap: 16px;
-  font-size: 30px;
+  font-size: 24px;
   color: rgb(var(--main-color));
   .play {
     font-size: 40px;
@@ -213,6 +213,101 @@
   }
 }
 
+.playerListContainerForMobile {
+  position: fixed;
+  padding-top: 20vh;
+  top: 0;
+  bottom: var(--player-height);
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+
+  .headerInfo {
+    background-color: var(--player-list-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 0.5px solid #404040;
+    font-size: 12px;
+    .title {
+      font-size: 16px;
+    }
+    .operateBtn {
+      cursor: pointer;
+    }
+    .clear {
+      color: var(--link-color);
+      cursor: pointer;
+      &:hover {
+        color: var(--link-hover-color);
+      }
+    }
+  }
+  .list {
+    background-color: var(--player-list-bg);
+    flex: 1;
+    overflow-y: auto;
+    height: 100%;
+    padding-bottom: 100px;
+    .Item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 0.5px solid #444;
+    }
+    .Active {
+      .PlayingIcon {
+        opacity: 1;
+      }
+      .Name {
+        color: rgb(var(--main-color-light));
+      }
+    }
+    .Info {
+      flex: 1;
+      overflow: hidden;
+    }
+    .PlayingIcon {
+      opacity: 0;
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgb(var(--main-color-light));
+    }
+    .OperateList {
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+    }
+    .Operate {
+      padding: 16px 10px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    .Name {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+      margin-bottom: 8px;
+    }
+    .Tags {
+      display: flex;
+      gap: 6px;
+      font-size: 12px;
+      color: #aaa;
+    }
+  }
+}
+
 @keyframes rotateLoop {
   0% {
     transform: rotate(0deg);
@@ -226,7 +321,6 @@
   justify-content: space-between;
   width: 100%;
   .info {
-    width: auto;
     flex: 1;
     overflow: hidden;
   }

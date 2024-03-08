@@ -237,7 +237,7 @@ export function MusicOrderItemCard({
           ?.filter((_, i) => i < 3)
           .map((music) => {
             return (
-              <div>
+              <div key={music.id}>
                 <span>{music.name}</span>
               </div>
             );

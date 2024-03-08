@@ -164,16 +164,16 @@ export class BiliMusicServiceInstance implements BiliMusicServiceApi {
           </div>
           <div style={{ display: !data.proxyEnabled ? 'block' : 'none' }}>
             <SettingItem label="imgKey">
-              <Input value={config?.sign_data.img_key} disabled />
+              <Input value={config?.sign_data.img_key} disabled readOnly />
             </SettingItem>
             <SettingItem label="subKey">
-              <Input value={config?.sign_data.img_key} disabled />
+              <Input value={config?.sign_data.img_key} disabled readOnly />
             </SettingItem>
             <SettingItem label="UUID_V3">
-              <Input value={config?.spi_data.b_3} disabled />
+              <Input value={config?.spi_data.b_3} disabled readOnly />
             </SettingItem>
             <SettingItem label="UUID_V4">
-              <Input value={config?.spi_data.b_4} disabled />
+              <Input value={config?.spi_data.b_4} disabled readOnly />
             </SettingItem>
           </div>
         </div>

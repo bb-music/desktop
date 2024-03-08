@@ -47,7 +47,7 @@ export function PlayerVolume() {
       asChild
     >
       <button className={cls(styles.modeIcon, styles.icon)} title="调节音量">
-        <VolumeNotice strokeWidth={2} />
+        <VolumeNotice strokeWidth={3} />
       </button>
     </Popover>
   );

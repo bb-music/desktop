@@ -25,7 +25,7 @@ const gotoMusicOrderDetail = (props: MusicOrderDetailProps) => {
 };
 
 /** 切换视图 */
-export function openPage(page: PageView, props?: PageViewProps) {
+function openPage(page: PageView, props?: PageViewProps) {
   useContainerStore.getState().setActive(page, props);
 }
 const PageViewMap = new Map([

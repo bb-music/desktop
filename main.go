@@ -63,8 +63,8 @@ func main() {
 		},
 		Title:     "哔哔音乐",
 		Frameless: true,
-		Width:     1064,
-		Height:    768,
+		Width:     800,
+		Height:    670,
 		// Width:  360,
 		// Height: 700,
 		Windows: &windows.Options{

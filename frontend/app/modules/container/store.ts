@@ -27,7 +27,7 @@ type ContainerStore = ContainerStoreState & ContainerStoreHandler;
 
 export const useContainerStore = create<ContainerStore>()((set, get) => {
   return {
-    active: PageView.UserMusicOrder,
+    active: PageView.Search,
     setActive: (active, props) => {
       if (active === PageView.MusicOrderDetail) {
         const { data, canEditMusic, originName } = (props as MusicOrderDetailProps) || {};

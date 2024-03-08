@@ -40,7 +40,7 @@ export function MainSetting() {
       <SubTitle title="系统设置" />
       {api.setting.updateDownloadDir && (
         <SettingItem label="下载位置">
-          <Input value={store.downloadDir} disabled />
+          <Input value={store.downloadDir} disabled readOnly />
           {api.setting.selectDownloadDir && (
             <Button
               type="link"
@@ -60,7 +60,12 @@ export function MainSetting() {
         </SettingItem>
       )}
       <SettingItem label="视频代理服务端口">
-        <Input style={{ width: 100 }} disabled value={store.proxyServerPort?.toString() || ''} />
+        <Input
+          style={{ width: 100 }}
+          disabled
+          readOnly
+          value={store.proxyServerPort?.toString() || ''}
+        />
       </SettingItem>
       <div className={styles.divider}></div>
     </>
@@ -97,7 +102,7 @@ export function OpenSetting() {
       {store.openMusicOrderOrigin.map((item, index) => {
         return (
           <SettingItem label="广场源1" key={index}>
-            <Input value={item} />
+            <Input value={item} readOnly />
             <Button type="text">删除</Button>
           </SettingItem>
         );

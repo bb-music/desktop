@@ -6,34 +6,26 @@ import { useEffect, useState } from 'react';
 import { usePlayer } from './hooks';
 import { PlayerCurrentInfo } from './components/PlayerCurrentInfo';
 import { NextIconButton, PlayIconButton } from './components/PlayerOperate';
-import { PlayerList } from './components/PlayerList';
+import { PlayerListForMobile } from './components/PlayerList';
 import { PlayerProgress } from './components/PlayerProgress';
+import { SwitchPlayMode } from './components/SwitchPlayerMode';
 
 export function PlayerForMobile() {
   const player = usePlayerStore((s) => ({ audio: s.audio }));
   const [listShow, setListShow] = useState(false);
   const { currentTime } = usePlayer();
-  useEffect(() => {
-    // 播放列表的显示与隐藏
-    const handler = () => {
-      setListShow(false);
-    };
-    document.addEventListener('click', handler);
-    return () => {
-      document.removeEventListener('click', handler);
-    };
-  }, []);
 
   if (!player.audio) return null;
 
   return (
     <div className={cls(styles.player, styles.playerMobile)}>
       <PlayerProgress progress={currentTime} />
-      <PlayerCurrentInfo currentTime={currentTime} />
+      <PlayerCurrentInfo currentTime={currentTime} hideCover />
 
       <div className={styles.playerOperate}>
         <PlayIconButton />
         <NextIconButton />
+        <SwitchPlayMode className={cls(styles.modeIcon, styles.icon)} />
         <MusicList
           onClick={(e) => {
             e.stopPropagation();
@@ -44,7 +36,7 @@ export function PlayerForMobile() {
           className={cls(styles.icon)}
         />
       </div>
-      <PlayerList open={listShow} />
+      <PlayerListForMobile open={listShow} onOpenChange={setListShow} />
     </div>
   );
 }

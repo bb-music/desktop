@@ -7,8 +7,6 @@ import { SearchProps } from './hooks';
 
 export function SearchForMobile({ gotoMusicOrderDetail }: SearchProps) {
   const store = useSearchStore();
-  console.log('store: ', store.data);
-
   useEffect(() => {
     store.init();
   }, []);

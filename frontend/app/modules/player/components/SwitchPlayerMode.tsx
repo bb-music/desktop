@@ -9,16 +9,19 @@ export function SwitchPlayMode({ className }: React.HTMLAttributes<HTMLDivElemen
     playerMode: s.playerMode,
   }));
 
+  const props = {
+    className,
+    strokeWidth: 3,
+    title: PlayerModeMap.get(player.playerMode)?.label,
+    onClick: () => player.togglePlayerMode(),
+  };
+
   return (
-    <div
-      className={className}
-      onClick={() => player.togglePlayerMode()}
-      title={PlayerModeMap.get(player.playerMode)?.label}
-    >
-      {player.playerMode === PlayerMode.ListLoop && <PlayCycle strokeWidth={2} />}
-      {player.playerMode === PlayerMode.SignalLoop && <PlayOnce strokeWidth={2} />}
-      {player.playerMode === PlayerMode.Random && <ShuffleOne strokeWidth={2} />}
-      {player.playerMode === PlayerMode.ListOrder && <SortAmountDown strokeWidth={2} />}
-    </div>
+    <>
+      {player.playerMode === PlayerMode.ListLoop && <PlayCycle {...props} />}
+      {player.playerMode === PlayerMode.SignalLoop && <PlayOnce {...props} />}
+      {player.playerMode === PlayerMode.Random && <ShuffleOne {...props} />}
+      {player.playerMode === PlayerMode.ListOrder && <SortAmountDown {...props} />}
+    </>
   );
 }

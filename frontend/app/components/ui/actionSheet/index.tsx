@@ -46,7 +46,6 @@ export function ActionSheet({
           <div>
             {title && <RadixDialog.Title className={styles.DialogTitle}>{title}</RadixDialog.Title>}
             {items.map((item) => {
-              console.log('item: ', item);
               return (
                 <div
                   key={item.key}
@@ -56,7 +55,6 @@ export function ActionSheet({
                     if (item.disabled) return;
                     const o = await item.onClick?.(e);
                     if (!o) {
-                      console.log('o: ', o);
                       closeHandler();
                     }
                   }}

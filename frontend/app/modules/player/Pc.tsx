@@ -43,7 +43,7 @@ export function Player() {
         <PlayerVolume />
         <SwitchPlayMode className={cls(styles.modeIcon, styles.icon)} />
         <MusicList
-          strokeWidth={2}
+          strokeWidth={3}
           className={cls(styles.icon, styles.musicListIcon)}
           onClick={(e) => {
             e.stopPropagation();

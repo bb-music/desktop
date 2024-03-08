@@ -6,15 +6,23 @@ import { Image } from '../../../components';
 import styles from '../index.module.scss';
 import { useShallow } from 'zustand/react/shallow';
 
-export function PlayerCurrentInfo({ currentTime }: { currentTime: number }) {
+export function PlayerCurrentInfo({
+  currentTime,
+  hideCover = false,
+}: {
+  currentTime: number;
+  hideCover?: boolean;
+}) {
   const player = usePlayerStore(useShallow((s) => ({ current: s.current })));
   return (
     <div className={styles.info}>
-      <Image
-        src={api.utils.imgUrlTransform(player.current?.cover || '')}
-        className={styles.cover}
-        mode="cover"
-      />
+      {player.current?.cover && !hideCover && (
+        <Image
+          src={api.utils.imgUrlTransform(player.current.cover)}
+          className={styles.cover}
+          mode="cover"
+        />
+      )}
       <div>
         <div className={styles.name}>{player.current?.name}</div>
         <div className={styles.duration}>

@@ -38,6 +38,7 @@ export function Header({ openPage }: HeaderProps) {
               onClick={() => {
                 openPage(m.key);
               }}
+              key={m.key}
             >
               {m.title}
             </a>

@@ -6,7 +6,7 @@ import { BaseElementProps } from '../../../interface';
 import { Header, HeaderProps } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { useGlobalStore } from '../../../store/global';
-import { PageViewMap, useContainerStore } from '../store';
+import { PageView, useContainerStore } from '../store';
 import { useEffect, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useSettingStore } from '../../setting';
@@ -15,9 +15,61 @@ import { MessageRoot } from '../../../components/ui/message';
 import { MusicOrderModal } from '../../musicOrderList';
 import { MusicFormModal } from '../../music';
 
+import { OpenMusicOrderView, OpenMusicOrderProps } from '../../openMusicOrder';
+import { MusicOrderDetail, MusicOrderDetailProps } from '../../musicOrderDetail';
+import { Search, SearchProps } from '../../search';
+import { Setting, SettingProps } from '../../setting';
+
+type PageViewProps = OpenMusicOrderProps | MusicOrderDetailProps | SearchProps | SettingProps;
+
+const gotoMusicOrderDetail = (props: MusicOrderDetailProps) => {
+  openPage(PageView.MusicOrderDetail, props);
+};
+
+/** 切换视图 */
+export function openPage(page: PageView, props?: PageViewProps) {
+  useContainerStore.getState().setActive(page, props);
+}
+const PageViewMap = new Map([
+  [
+    PageView.OpenMusicOrder,
+    {
+      Component: OpenMusicOrderView,
+      label: '广场',
+      props: {
+        gotoMusicOrderDetail,
+      },
+    },
+  ],
+  [
+    PageView.MusicOrderDetail,
+    {
+      Component: MusicOrderDetail,
+      label: '歌单详情',
+    },
+  ],
+  [
+    PageView.Search,
+    {
+      Component: Search,
+      label: '搜索',
+      props: {
+        gotoMusicOrderDetail,
+      },
+    },
+  ],
+  [
+    PageView.Setting,
+    {
+      Component: Setting,
+      label: '设置',
+    },
+  ],
+]);
+
 export interface PcContainerProps extends BaseElementProps {
   header?: React.ReactNode;
-  headerProps?: HeaderProps;
+  headerProps?: Omit<HeaderProps, 'openPage'>;
 }
 
 export function PcContainer({ className, style, header, headerProps }: PcContainerProps) {
@@ -28,14 +80,15 @@ export function PcContainer({ className, style, header, headerProps }: PcContain
     settingLoad();
   }, []);
   return (
-    <div
-      className={cls(styles.container, `${UIPrefix}-container`, className, theme)}
-      style={style}
-    >
+    <div className={cls(styles.container, `${UIPrefix}-container`, className, theme)} style={style}>
       <MessageRoot />
-      {!header && <Header {...headerProps} />}
+      {!header && <Header {...headerProps} openPage={openPage} />}
       <main className={styles.main}>
-        <Sidebar />
+        <Sidebar
+          gotoMusicOrderDetail={(o) => {
+            gotoMusicOrderDetail(o);
+          }}
+        />
         <ContainerContent />
       </main>
       <Player />
@@ -47,18 +100,13 @@ export function PcContainer({ className, style, header, headerProps }: PcContain
 
 function ContainerContent() {
   const { active, props } = useContainerStore(
-    useShallow((state) => ({ active: state.active, props: state.props }))
+    useShallow((state) => ({ active: state.active, props: state.props })),
   );
   const component = useMemo(() => {
     const View = PageViewMap.get(active)?.Component;
     const commonProps = PageViewMap.get(active)?.props as any;
     if (!View) return null;
-    return (
-      <View
-        {...props}
-        {...commonProps}
-      />
-    );
+    return <View {...props} {...commonProps} />;
   }, [active]);
 
   return <div className={styles.content}>{component}</div>;

@@ -1,17 +1,13 @@
 /**
  * 歌单广场
  */
-import { Image, ContextMenu } from '../../components';
 import styles from './index.module.scss';
-import { User } from '@icon-park/react';
 import { useSettingStore } from '../setting';
 import { useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useOpenMusicOrderStore } from './store';
 import { MusicOrderDetailProps } from '../musicOrderDetail';
-import { MusicInter } from '../../interface';
-
-type MusicOrderItem = MusicInter.MusicOrderItem;
+import { MusicOrderItemCard } from '../musicOrderList';
 
 export * from './store';
 
@@ -19,7 +15,7 @@ export interface OpenMusicOrderProps {
   gotoMusicOrderDetail: (opt: MusicOrderDetailProps) => void;
 }
 
-export function OpenMusicOrderComp({ gotoMusicOrderDetail }: OpenMusicOrderProps) {
+export function OpenMusicOrderView({ gotoMusicOrderDetail }: OpenMusicOrderProps) {
   const store = useOpenMusicOrderStore();
   const origins = useSettingStore(useShallow((state) => state.openMusicOrderOrigin));
 
@@ -28,57 +24,45 @@ export function OpenMusicOrderComp({ gotoMusicOrderDetail }: OpenMusicOrderProps
   }, [origins]);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.musicOrderList}>
-        {store.list.map((i) => {
-          return (
-            <ContextMenu
-              key={i.id + i.name}
-              items={[]}
-              asChild
-            >
-              <MusicOrderItemComp
-                data={i}
-                gotoMusicOrderDetail={gotoMusicOrderDetail}
-              />
-            </ContextMenu>
-          );
-        })}
-      </div>
+    <div className={styles.Container}>
+      {store.list.map((i) => {
+        return (
+          <MusicOrderItemCard
+            data={i}
+            key={i.id}
+            className={styles.Item}
+            onClick={() => {
+              gotoMusicOrderDetail({ data: i });
+            }}
+          />
+        );
+      })}
     </div>
   );
 }
 
-export function MusicOrderItemComp({
-  data,
-  gotoMusicOrderDetail,
-}: {
-  data: MusicOrderItem;
-  gotoMusicOrderDetail: OpenMusicOrderProps['gotoMusicOrderDetail'];
-}) {
-  return (
-    <div
-      className={styles.orderItem}
-      onClick={() => {
-        gotoMusicOrderDetail({ data });
-      }}
-    >
-      <div className={styles.cover}>
-        <Image
-          className={styles.coverImg}
-          mode='cover'
-          src={data.cover}
-        />
-        {data.author && (
-          <div className={styles.author}>
-            <User />
-            {data.author}
-          </div>
-        )}
+export function OpenMusicOrderViewForMobile({ gotoMusicOrderDetail }: OpenMusicOrderProps) {
+  const store = useOpenMusicOrderStore();
+  const origins = useSettingStore(useShallow((state) => state.openMusicOrderOrigin));
 
-        <div className={styles.total}>{data.musicList?.length}</div>
-      </div>
-      <div className={styles.name}>{data.name}</div>
+  useEffect(() => {
+    store.load();
+  }, [origins]);
+
+  return (
+    <div className={styles.ContainerForMobile}>
+      {store.list.map((i) => {
+        return (
+          <MusicOrderItemCard
+            data={i}
+            key={i.id}
+            className={styles.ItemForMobile}
+            onClick={() => {
+              gotoMusicOrderDetail({ data: i });
+            }}
+          />
+        );
+      })}
     </div>
   );
 }

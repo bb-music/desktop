@@ -39,14 +39,11 @@ export function ContextMenu({
   const global = useGlobalStore(
     useShallow((s) => ({
       theme: s.theme,
-    }))
+    })),
   );
   return (
     <RadixContextMenu.Root>
-      <RadixContextMenu.Trigger
-        {...props}
-        style={{ ...props.style, zIndex: 9999 }}
-      >
+      <RadixContextMenu.Trigger {...props} style={{ ...props.style, zIndex: 9999 }}>
         {children}
       </RadixContextMenu.Trigger>
       <RadixContextMenu.Portal>
@@ -55,12 +52,7 @@ export function ContextMenu({
           style={{ zIndex: 9999 }}
         >
           {items.map((item) => {
-            return (
-              <MenuItem
-                item={item}
-                key={item.key}
-              />
-            );
+            return <MenuItem item={item} key={item.key} />;
           })}
         </RadixContextMenu.Content>
       </RadixContextMenu.Portal>
@@ -72,16 +64,11 @@ export function MenuItem({ item }: { item: MenuItem }) {
   const global = useGlobalStore(
     useShallow((s) => ({
       theme: s.theme,
-    }))
+    })),
   );
   if (item.hide) return null;
   if (item.type === 'divider') {
-    return (
-      <RadixContextMenu.Separator
-        key={item.key}
-        className={styles.divider}
-      />
-    );
+    return <RadixContextMenu.Separator key={item.key} className={styles.divider} />;
   }
   if (item.children?.length) {
     return (
@@ -96,12 +83,7 @@ export function MenuItem({ item }: { item: MenuItem }) {
             alignOffset={-5}
           >
             {item.children.map((c) => {
-              return (
-                <MenuItem
-                  item={c}
-                  key={c.key}
-                />
-              );
+              return <MenuItem item={c} key={c.key} />;
             })}
           </RadixContextMenu.SubContent>
         </RadixContextMenu.Portal>
@@ -109,11 +91,7 @@ export function MenuItem({ item }: { item: MenuItem }) {
     );
   }
   return (
-    <RadixContextMenu.Item
-      className={styles.item}
-      key={item.key}
-      onClick={item.onClick}
-    >
+    <RadixContextMenu.Item className={styles.item} key={item.key} onClick={item.onClick}>
       {item.label}
     </RadixContextMenu.Item>
   );

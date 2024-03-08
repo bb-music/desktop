@@ -9,7 +9,7 @@ export function PlayerProgress({ progress }: { progress: number }) {
     useShallow((state) => ({
       current: state.current,
       audio: state.audio,
-    }))
+    })),
   );
   const duration = player.current?.duration || 0;
   const [width, setWidth] = useState(0);
@@ -45,10 +45,7 @@ export function PlayerProgress({ progress }: { progress: number }) {
         }
       }}
     >
-      <div
-        className={styles.loaded}
-        style={{ width: `${width}%` }}
-      >
+      <div className={styles.loaded} style={{ width: `${width}%` }}>
         <div className={styles.dot}></div>
       </div>
     </div>

@@ -1,0 +1,86 @@
+.DialogOverlay {
+  background-color: var(--action-sheet-overlay);
+  position: fixed;
+  inset: 0;
+  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.DialogContent {
+  padding-top: 20px;
+  border-radius: 6px;
+  box-shadow: var(--action-sheet-shadow);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 85vh;
+  padding: 0 15px 15px;
+  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 100;
+  color: var(--action-sheet-color);
+}
+.DialogContent:focus {
+  outline: none;
+}
+.ActionItem {
+  background-color: var(--action-sheet-bg);
+  text-align: center;
+  padding: var(--action-sheet-item-padding);
+  border-bottom: 1px solid var(--action-sheet-item-border-color);
+  cursor: pointer;
+  &:first-child {
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+  }
+  &:last-child {
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-bottom: none;
+  }
+  &[aria-disabled='true'] {
+    text-decoration: line-through;
+    color: var(--action-sheet-item-disabled);
+  }
+}
+
+.CancelItem {
+  margin-top: 15px;
+}
+.DialogTitle {
+  padding: var(--action-sheet-item-padding);
+  background-color: var(--action-sheet-bg);
+  text-align: center;
+  padding: 20px 15px;
+  color: var(--action-sheet-title-color);
+  border-bottom: 1px solid var(--action-sheet-item-border-color);
+  margin: 0;
+  font-weight: 500;
+  font-size: 17px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.DialogDescription {
+  margin: 10px 0 20px;
+  color: var(--mauve-11);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+@keyframes overlayShow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes contentShow {
+  from {
+    transform: translate(0, 200%) scale(0.96);
+  }
+  to {
+    transform: translate(0, 0%) scale(1);
+  }
+}

@@ -28,7 +28,7 @@ export function PlayerVolume() {
       content={
         <div style={{ padding: '10px 0' }}>
           <Slider
-            orientation='vertical'
+            orientation="vertical"
             value={[volume]}
             onValueChange={([v]) => {
               setVolume(v);
@@ -46,10 +46,7 @@ export function PlayerVolume() {
       }
       asChild
     >
-      <button
-        className={cls(styles.modeIcon, styles.icon)}
-        title='调节音量'
-      >
+      <button className={cls(styles.modeIcon, styles.icon)} title="调节音量">
         <VolumeNotice strokeWidth={2} />
       </button>
     </Popover>

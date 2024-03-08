@@ -20,7 +20,7 @@ interface ProxyServiceOptions<T> {
 
 export async function proxyMusicService<T = any>(
   origin: string,
-  { proxy, handler }: ProxyServiceOptions<T>
+  { proxy, handler }: ProxyServiceOptions<T>,
 ) {
   const config = (await getMusicServiceConfig(origin)) as ProxyConfig;
   if (!config.proxyEnabled) {

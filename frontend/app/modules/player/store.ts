@@ -298,7 +298,7 @@ playerStore.subscribe((state, preState) => {
         playerMode: state.playerMode,
         current: state.current,
         playerHistory: state.playerHistory,
-      })
+      }),
     );
   }, 200);
 });

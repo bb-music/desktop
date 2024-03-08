@@ -95,10 +95,7 @@ export function PlayerList({ open }: { open: boolean }) {
                       className={cls(styles.name, player.current?.id === item.id && styles.active)}
                     >
                       <div className={styles.icon}>
-                        <RightOne
-                          theme='filled'
-                          strokeWidth={2}
-                        />
+                        <RightOne theme="filled" strokeWidth={2} />
                       </div>
                       <span className={styles.nameText}>{item.name}</span>
                     </td>

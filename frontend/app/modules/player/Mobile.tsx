@@ -39,7 +39,7 @@ export function PlayerForMobile() {
             e.stopPropagation();
             setListShow(!listShow);
           }}
-          title='播放列表'
+          title="播放列表"
           strokeWidth={3}
           className={cls(styles.icon)}
         />

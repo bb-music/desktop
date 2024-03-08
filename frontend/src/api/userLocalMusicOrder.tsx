@@ -9,7 +9,7 @@ const NAME = 'Local';
 const CNAME = '本地歌单';
 
 export const userLocalMusicOrderCache = new JsonCacheStorage<MusicOrderItem[]>(
-  'bb-music-local-order'
+  'bb-music-local-order',
 );
 
 export class UserLocalMusicOrderAction implements UserMusicOrderApiAction {
@@ -93,7 +93,7 @@ export class UserLocalMusicOrderAction implements UserMusicOrderApiAction {
           };
         }
         return l;
-      })
+      }),
     );
   };
 }

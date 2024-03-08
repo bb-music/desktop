@@ -66,6 +66,7 @@
   .cover {
     width: 40px;
     height: 40px;
+    flex: 0 0 40px;
     background-color: #eee;
     border-radius: 4px;
   }
@@ -169,7 +170,7 @@
         max-width: 300px;
       }
       &.active {
-        color: rgb(var(--main-color));
+        color: rgb(var(--main-color-light));
         .icon {
           span {
             display: flex;
@@ -192,6 +193,8 @@
       }
     }
     tr {
+      cursor: pointer;
+
       td {
         background-color: transparent;
       }
@@ -221,12 +224,15 @@
 
 .playerMobile {
   justify-content: space-between;
+  width: 100%;
   .info {
     width: auto;
     flex: 1;
+    overflow: hidden;
   }
   .playerOperate {
-    flex: 0 0 160px;
+    flex: 0 0 135px;
     justify-content: flex-end;
+    gap: 10px;
   }
 }

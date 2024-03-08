@@ -1,31 +1,41 @@
 .dark {
-  --header-height: 54px;
-  --player-height: 64px;
-  --sidebar-width: 190px;
-
+  // 通用
   --bg-color: 32, 32, 32; // 主背景色
+  --content-bg: 38, 38, 38; // 内容区域背景色
+  --link-color: rgb(134, 106, 183);
+  --link-hover-color: rgb(147, 126, 183);
+  --border-color: rgb(48, 48, 48); // 边框颜色
+  --scroll-bar-color: rgb(65, 65, 65); // 滚动条颜色
+  --font-color: 213, 213, 213; // 字体颜色
+  --font-active-color: 251, 251, 251; // 字体高亮色
+  --font-light-color: rgb(135, 135, 135); // 字体浅色
+  --main-color: 103, 58, 183; // 主色
+  --main-color-light: 134, 106, 183; // 主色浅一些
+  --main-color-hover: rgba(103, 58, 183, 0.2); // 主色悬浮
+
+  // 顶栏
+  --header-height: 54px;
+  --header-height-for-mobile: 45px;
+  --header-font-color: rgb(140, 138, 138);
+  --header-menu-active-color: rgb(251, 251, 251);
   --header-bg: 32, 32, 32; // 顶栏背景色
+  --header-font-size-for-mobile: 14px;
+  --header-border-color: linear-gradient(
+    to right,
+    rgba(var(--main-color), 0.7),
+    rgba(var(--main-color), 0.7),
+    rgba(var(--main-color), 1),
+    rgba(var(--main-color), 1),
+    rgba(var(--main-color), 1),
+    rgba(var(--main-color), 0.7),
+    rgba(var(--main-color), 0.7)
+  );
+
+  // 侧边栏
+  --sidebar-width: 190px;
   --sidebar-bg: 32, 32, 32; // 侧边栏背景色
   --sidebar-active-bg: 32, 32, 32; // 侧边栏条目选中时背景色
   --sidebar-icon-color: 120, 120, 120; // 侧边栏图标颜色
-  --content-bg: 38, 38, 38; // 内容区域背景色
-  --link-color: rgb(133, 185, 230);
-  --link-hover-color: rgb(112, 222, 255);
-
-  --border-color: rgb(48, 48, 48); // 边框颜色
-
-  --scroll-bar-color: rgb(65, 65, 65); // 滚动条颜色
-
-  // 字体颜色
-  --font-color: 213, 213, 213;
-  // 字体高亮色
-  --font-active-color: 251, 251, 251;
-  // 字体浅色
-  --font-light-color: rgb(135, 135, 135);
-
-  --main-color: 211, 58, 49; // 主色
-  --main-color-light: 252, 82, 69; // 主色浅一些
-  --main-color-hover: rgba(211, 58, 49, 0.2); // 主色悬浮
 
   // input
   --input-bg-color: 52, 52, 52;
@@ -33,7 +43,7 @@
   --input-font-color: 184, 184, 184;
   --input-radius: 4px;
   --input-padding: 4px 8px;
-  --input-default-width: 320px;
+  --input-default-width: auto;
   --input-default-height: 34px;
   --input-font-size: 14px;
 
@@ -95,6 +105,7 @@
   --menu-item-hover-bg: rgb(58, 58, 58);
 
   // 播放器
+  --player-height: 64px;
   --player-bg: rgb(37, 37, 37);
   --player-progress-bg: rgb(30, 30, 30);
   --player-list-bg: rgb(54, 54, 54);
@@ -119,6 +130,17 @@
   --slider-thumb-bg: rgb(251, 251, 251);
   --slider-thumb-hover-color: rgba(252, 82, 69, 0.4);
   --slider-thumb-focus-color: rgba(252, 82, 69, 0.4);
+
+  // actionSheet
+  --action-sheet-overlay: rgba(251, 251, 251, 0.2);
+  --action-sheet-bg: rgb(0, 0, 0);
+  --action-sheet-color: rgb(251, 251, 251);
+  --action-sheet-item-padding: 16px;
+  --action-sheet-item-disabled: #777;
+  --action-sheet-title-color: #aaa;
+  --action-sheet-item-border-color: rgba(251, 251, 251, 0.2);
+  --action-sheet-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
+    hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
 
   /* 隐藏滚动条 */
   ::-webkit-scrollbar {

@@ -26,7 +26,7 @@ export const userMusicOrderStore = create<UserMusicOrderStore>()((set, get) => {
       const res = await Promise.all(
         api.userMusicOrder.map((r) => {
           return r.action.getList().catch(() => []);
-        })
+        }),
       );
       const result: MusicOrderOriginItem[] = res.map((r, i) => {
         return {
@@ -56,7 +56,7 @@ interface MusicOrderFormModalState {
 interface MusicOrderFormModalHandler {
   openHandler: (
     item?: MusicOrderItem | null,
-    onOk?: (value: MusicOrderFormModalState['form']) => Promise<void>
+    onOk?: (value: MusicOrderFormModalState['form']) => Promise<void>,
   ) => void;
   closeHandler: () => void;
   onOk?: (value: MusicOrderFormModalState['form']) => Promise<void>;

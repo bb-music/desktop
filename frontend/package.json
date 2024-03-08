@@ -6,11 +6,13 @@
     "build": "umi build",
     "postinstall": "umi setup",
     "setup": "umi setup",
-    "start": "npm run dev"
+    "start": "npm run dev",
+    "prettier": "prettier --write ./**/*.ts[x]"
   },
   "dependencies": {
     "@icon-park/react": "^1.4.2",
     "@radix-ui/react-context-menu": "^2.1.5",
+    "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-popover": "^1.0.7",
     "@radix-ui/react-slider": "^1.1.2",
     "@radix-ui/react-switch": "^1.0.3",
@@ -28,6 +30,7 @@
     "@types/node": "^20.11.20",
     "@types/react": "^18.2.59",
     "@types/react-dom": "^18.2.19",
+    "prettier": "^3.2.5",
     "sass": "^1.71.1",
     "typescript": "^5.3.3",
     "umi": "^4.1.2"

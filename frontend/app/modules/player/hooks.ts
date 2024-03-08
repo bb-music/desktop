@@ -16,7 +16,7 @@ export function usePlayer() {
       setPlayerLoading: s.setPlayerLoading,
       endNext: s.endNext,
       play: s.play,
-    }))
+    })),
   );
   const [currentTime, setCurrentTime] = useState(0);
   const progressTimer = useRef<number>(0);

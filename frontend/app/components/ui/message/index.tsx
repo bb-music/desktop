@@ -35,7 +35,7 @@ export function MessageRoot() {
     };
   }, []);
   return (
-    <Toast.Provider swipeDirection='up'>
+    <Toast.Provider swipeDirection="up">
       {items.map((item) => {
         return <MessageItem {...item}></MessageItem>;
       })}

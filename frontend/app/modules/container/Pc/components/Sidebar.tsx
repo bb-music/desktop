@@ -1,15 +1,15 @@
-import { PageView, openPage } from '../../store';
 import styles from '../index.module.scss';
 import { MusicOrder } from '../../../musicOrderList';
+import { MusicOrderDetailProps } from 'modules';
 
-export function Sidebar() {
+export function Sidebar({
+  gotoMusicOrderDetail,
+}: {
+  gotoMusicOrderDetail: (opt: MusicOrderDetailProps) => void;
+}) {
   return (
     <div className={styles.sidebar}>
-      <MusicOrder
-        gotoMusicOrderDetail={(opt) => {
-          openPage(PageView.MusicOrderDetail, opt);
-        }}
-      />
+      <MusicOrder gotoMusicOrderDetail={gotoMusicOrderDetail} />
     </div>
   );
 }

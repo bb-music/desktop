@@ -1,4 +1,4 @@
-import { BBMusicApp, PcContainer } from '@bb-music/web-app';
+import { BBMusicApp, MobileContainer, PcContainer } from '@bb-music/web-app';
 import { apiInstance } from '../../api';
 import { useEffect, useState } from 'react';
 import { Close, Minus } from '@icon-park/react';
@@ -38,14 +38,14 @@ export default function Root() {
               operateRender: (
                 <>
                   <Minus
-                    title='最小化'
+                    title="最小化"
                     onClick={() => {
                       WindowMinimise();
                     }}
                     style={{ cursor: 'pointer' }}
                   />
                   <Close
-                    title='退出'
+                    title="退出"
                     onClick={() => {
                       Quit();
                     }}

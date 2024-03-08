@@ -50,7 +50,7 @@ export class UserGithubMusicOrderInstance implements GithubMusicOrder {
     };
     return (
       <>
-        <SettingItem label='仓库地址'>
+        <SettingItem label="仓库地址">
           <Input
             value={data.repo}
             onChange={(e) => {
@@ -58,7 +58,7 @@ export class UserGithubMusicOrderInstance implements GithubMusicOrder {
             }}
           />
         </SettingItem>
-        <SettingItem label='token'>
+        <SettingItem label="token">
           <Input
             value={data.token}
             onChange={(e) => {

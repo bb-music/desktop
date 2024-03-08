@@ -5,6 +5,12 @@ import { cls } from '../../../utils';
 import { useGlobalStore } from '../../../store/global';
 import { Button } from '../button';
 
+let isMobileEnv = false;
+
+export function setMobileEnv(isMobile: boolean) {
+  isMobileEnv = isMobile;
+}
+
 interface ModalProps {
   title?: React.ReactNode;
   footer?: React.ReactNode;
@@ -25,18 +31,20 @@ export function Modal({
 }: React.PropsWithChildren<ModalProps>) {
   const global = useGlobalStore();
   if (!open) return null;
+  console.log('isMobileEnv: ', isMobileEnv);
+
   return createPortal(
-    <div className={cls(styles.modalContainer, global.theme)}>
-      <div
-        className={styles.modal}
-        style={{ width }}
-      >
+    <div
+      className={cls(
+        styles.modalContainer,
+        global.theme,
+        isMobileEnv ? styles.modalContainerForMobile : '',
+      )}
+    >
+      <div className={styles.modal} style={{ width }}>
         <div className={styles.header}>
           <div className={styles.title}>{title}</div>
-          <div
-            className={styles.close}
-            onClick={onClose}
-          >
+          <div className={styles.close} onClick={onClose}>
             <Close />
           </div>
         </div>
@@ -47,7 +55,7 @@ export function Modal({
           ) : (
             <>
               <Button
-                type='primary'
+                type="primary"
                 onClick={async () => {
                   try {
                     await onOk?.();
@@ -64,6 +72,6 @@ export function Modal({
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }

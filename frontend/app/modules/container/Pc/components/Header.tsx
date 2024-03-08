@@ -1,17 +1,15 @@
 import { Remind, SettingTwo } from '@icon-park/react';
 import styles from '../index.module.scss';
-import { PageView, openPage } from '../../store';
+import { PageView } from '../../store';
 
 export interface HeaderProps {
   operateRender?: React.ReactNode;
+  openPage: (p: PageView) => void;
 }
 
-export function Header({ operateRender }: HeaderProps) {
+export function Header({ operateRender, openPage }: HeaderProps) {
   return (
-    <div
-      className={styles.header}
-      style={{ '--wails-draggable': 'drag' } as any}
-    >
+    <div className={styles.header} style={{ '--wails-draggable': 'drag' } as any}>
       <div className={styles.logo}>哔哔音乐</div>
       <div className={styles.menu}>
         <a
@@ -30,12 +28,9 @@ export function Header({ operateRender }: HeaderProps) {
         </a>
       </div>
       <div className={styles.operate}>
-        <Remind
-          title='消息通知'
-          className={styles.btnIcon}
-        />
+        <Remind title="消息通知 （开发中）" className={styles.btnIcon} />
         <SettingTwo
-          title='系统配置'
+          title="系统配置"
           className={styles.btnIcon}
           onClick={() => {
             openPage(PageView.Setting);

@@ -22,6 +22,7 @@ export function SearchItem({ data, gotoMusicOrderDetail }: SearchItemProps) {
   });
 
   const name = data.name;
+  console.log('data: ', data);
   return (
     <div className={styles.searchItem} onClick={getDetailHandler} title={name}>
       <Image

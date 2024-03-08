@@ -53,7 +53,6 @@ class BiliAction implements MusicServiceApiAction {
       data: res.data.map((item) => ({
         ...item,
         name: html2text(item.name),
-        cover: transformImgUrl(item.cover),
         type: item.type as SearchType,
       })),
     };

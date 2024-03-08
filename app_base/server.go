@@ -2,6 +2,7 @@ package app_base
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"strings"
@@ -52,6 +53,33 @@ func ProxyServer(port int, configDir string) *http.Server {
 			return
 		}
 		w.Write([]byte(""))
+	})
+
+	// 图片代理服务 /image/proxy?url=图片url
+	mux.HandleFunc("/image/proxy", func(w http.ResponseWriter, r *http.Request) {
+		url := r.URL.Query().Get("url")
+		resp, err := http.Get(url)
+		if err != nil {
+			log.Println("Error fetching image:", err)
+			return
+		}
+		defer resp.Body.Close()
+		// 检查响应状态码
+		if resp.StatusCode != http.StatusOK {
+			fmt.Println("Image fetching failed, status code:", resp.StatusCode)
+			return
+		}
+
+		// 读取图片内容
+		imageBytes, err := io.ReadAll(resp.Body)
+		if err != nil {
+			fmt.Println("Error reading image:", err)
+			return
+		}
+
+		w.Header().Set("Content-Type", "image/jpeg")
+		w.WriteHeader(http.StatusOK)
+		w.Write(imageBytes)
 	})
 
 	return s

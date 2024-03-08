@@ -33,19 +33,19 @@ export default function Root() {
     >
       {!initLoading && (
         <BBMusicApp apiInstance={apiInstance}>
-          {/* <PcContainer
+          <PcContainer
             headerProps={{
               operateRender: (
                 <>
                   <Minus
-                    title='最小化'
+                    title="最小化"
                     onClick={() => {
                       WindowMinimise();
                     }}
                     style={{ cursor: 'pointer' }}
                   />
                   <Close
-                    title='退出'
+                    title="退出"
                     onClick={() => {
                       Quit();
                     }}
@@ -54,8 +54,8 @@ export default function Root() {
                 </>
               ),
             }}
-          /> */}
-          <MobileContainer />
+          />
+          {/* <MobileContainer /> */}
         </BBMusicApp>
       )}
     </div>

@@ -14,6 +14,7 @@ import { deleteMusic, downloadMusic } from '../music';
 import { updateMusicInfo } from '../music';
 import { seconds2mmss } from '../../utils';
 import { MusicOrderDetailProps, useMusicOrderDetail } from '.';
+import { api } from '../../api';
 
 export function MusicOrderDetail({}: MusicOrderDetailProps) {
   const player = usePlayerStore();
@@ -22,7 +23,13 @@ export function MusicOrderDetail({}: MusicOrderDetailProps) {
   return (
     <div className={styles.container}>
       <div className={styles.headerCard}>
-        {data?.cover && <Image mode="cover" className={styles.cover} src={data.cover} />}
+        {data?.cover && (
+          <Image
+            mode="cover"
+            className={styles.cover}
+            src={api.utils.imgUrlTransform(data.cover || '')}
+          />
+        )}
         <div className={styles.info}>
           <div className={styles.title}>{data?.name}</div>
           <div className={styles.desc}>

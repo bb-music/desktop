@@ -170,7 +170,7 @@
         max-width: 300px;
       }
       &.active {
-        color: rgb(var(--main-color));
+        color: rgb(var(--main-color-light));
         .icon {
           span {
             display: flex;
@@ -193,6 +193,8 @@
       }
     }
     tr {
+      cursor: pointer;
+
       td {
         background-color: transparent;
       }

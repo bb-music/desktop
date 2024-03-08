@@ -69,7 +69,7 @@ const PageViewMap = new Map([
 
 export interface PcContainerProps extends BaseElementProps {
   header?: React.ReactNode;
-  headerProps?: HeaderProps;
+  headerProps?: Omit<HeaderProps, 'openPage'>;
 }
 
 export function PcContainer({ className, style, header, headerProps }: PcContainerProps) {

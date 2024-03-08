@@ -28,7 +28,7 @@ export function Header({ operateRender, openPage }: HeaderProps) {
         </a>
       </div>
       <div className={styles.operate}>
-        <Remind title="消息通知" className={styles.btnIcon} />
+        <Remind title="消息通知 （开发中）" className={styles.btnIcon} />
         <SettingTwo
           title="系统配置"
           className={styles.btnIcon}

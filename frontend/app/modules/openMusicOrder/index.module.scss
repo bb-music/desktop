@@ -3,6 +3,10 @@
   flex-wrap: wrap;
   padding: 16px 30px;
   gap: 16px 20px;
+  .Item {
+    flex: 0 0 256px;
+    margin: 0;
+  }
 }
 .ContainerForMobile {
   display: flex;

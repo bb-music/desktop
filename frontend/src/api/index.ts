@@ -1,4 +1,4 @@
-import { Api } from '@bb-music/web-app';
+import { Api } from '@bb-music/app';
 import { SettingInstance } from './setting';
 import { MusicInstance } from './music';
 import { OpenMusicOrderInstance } from './openMusicOrder';

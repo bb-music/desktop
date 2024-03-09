@@ -1,5 +1,5 @@
 import { JsonCacheStorage } from '@/lib/cacheStorage';
-import { MusicInter, UserMusicOrderApiAction, UserMusicOrderApi } from '@bb-music/web-app';
+import { MusicInter, UserMusicOrderApiAction, UserMusicOrderApi } from '@bb-music/app';
 import { nanoid } from 'nanoid';
 import dayjs from 'dayjs';
 

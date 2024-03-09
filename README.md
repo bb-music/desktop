@@ -1,4 +1,7 @@
-# 基于 B 站作为歌曲源开发的音乐播放器-桌面客户端
+# 哔哔音乐-桌面客户端
+
+使用 B 站作为歌曲源开发的音乐播放器
+![](./doc/pc-preview.png)
 
 ## 实现思路
 
@@ -17,10 +20,8 @@
   - [ ] 进度拖动
 - [x] 搜索
   - [x] 视频名称关键字搜索
-  - [ ] 按 UP 主搜索
-  - [ ] 按 B 站 URL 搜索
 - [x] 歌单
-- [ ] 歌单同步
+- [x] 歌单同步
 - [x] 歌单广场（由用户贡献分享自己的歌单）
 
 ## 技术栈
@@ -35,6 +36,12 @@
 create-dmg --volname 哔哔音乐 --window-size 400 200 --icon-size 100 --icon 哔哔音乐 30 70 --app-drop-link 200 70  build/bin/哔哔音乐.dmg build/bin/哔哔音乐.app
 ```
 
+## 警告
+
+此项目仅供个人学习使用，请勿用于商业用途，否则后果自负。
+
 ## 鸣谢致敬
 
 1. [SocialSisterYi](https://github.com/SocialSisterYi/bilibili-API-collect) 感谢这个库的作者和相关贡献者
+2. [wails](https://wails.io/zh-Hans/) 使用 Go 构建漂亮的跨平台应用程序
+3. 感谢广大 B 站网友们提供的视频资源

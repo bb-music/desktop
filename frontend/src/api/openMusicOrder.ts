@@ -1,4 +1,4 @@
-import { OpenMusicOrderApi } from '@bb-music/web-app';
+import { OpenMusicOrderApi } from '@bb-music/app';
 import { GetOpenMusicOrderList } from '@wails/go/app_bili/App';
 
 export class OpenMusicOrderInstance implements OpenMusicOrderApi {

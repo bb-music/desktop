@@ -1,5 +1,5 @@
-import { Button, message, Input, SettingItem, UserMusicOrderApi } from '@bb-music/web-app';
-import { userMusicOrderOrigin, UserMusicOrderOrigin } from '@bb-music/web-app';
+import { Button, message, Input, SettingItem, UserMusicOrderApi } from '@bb-music/app';
+import { userMusicOrderOrigin, UserMusicOrderOrigin } from '@bb-music/app';
 import { useEffect, useState } from 'react';
 import { settingCache } from './setting';
 

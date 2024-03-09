@@ -3,7 +3,6 @@
   "compilerOptions": {
     "paths": {
       "@/*": ["./src/*"],
-      "@bb-music/web-app": ["./app"],
       "@wails/*": ["./wailsjs/*"]
     }
   }

@@ -1,9 +1,4 @@
-import {
-  AudioInstance,
-  MusicApi,
-  PlayerAudioAddEventListener,
-  playerStore,
-} from '@bb-music/web-app';
+import { AudioInstance, MusicApi, PlayerAudioAddEventListener, playerStore } from '@bb-music/app';
 
 class PlayerAudio implements AudioInstance {
   ctx = new Audio();

@@ -1,4 +1,4 @@
-import { BBMusicApp, MobileContainer, PcContainer } from '@bb-music/web-app';
+import { BBMusicApp, MobileContainer, PcContainer } from '@bb-music/app';
 import { apiInstance } from '../../api';
 import { useEffect, useState } from 'react';
 import { Close, Minus } from '@icon-park/react';

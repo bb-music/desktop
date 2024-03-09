@@ -5,18 +5,15 @@ export default defineConfig({
   title: '哔哔音乐',
   npmClient: 'pnpm',
   mpa: {
-    // template: './template.html',
+    template: './template.html',
     // entry: {
     //   index: './src/index.tsx',
     // },
   },
   alias: {
     '@wails': path.resolve('./wailsjs'),
-    '@bb-music/web-app': path.resolve('./app'),
+    // '@bb-music/app': '/Users/lyy/code/project/bb-music/core/app',
   },
-  extraBabelIncludes: [
-    path.join(__dirname, './app'),
-    // '@bb-music/web-app'
-  ],
+  extraBabelIncludes: ['@bb-music/app'],
   mfsu: false,
 });

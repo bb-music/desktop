@@ -1,4 +1,4 @@
-import { SettingApi, SettingInfo } from '@bb-music/web-app';
+import { SettingApi, SettingInfo } from '@bb-music/app';
 import { GetConfig, OpenDirectoryDialog } from '@wails/go/app_base/App';
 import { JsonCacheStorage } from '@/lib/cacheStorage';
 

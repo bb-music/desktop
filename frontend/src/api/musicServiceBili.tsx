@@ -8,7 +8,7 @@ import {
   Button,
   Switch,
   message,
-} from '@bb-music/web-app';
+} from '@bb-music/app';
 import {
   getMusicServiceConfig,
   html2text,

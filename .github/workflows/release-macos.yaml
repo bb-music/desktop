@@ -18,8 +18,8 @@ jobs:
     strategy:
       matrix:
         platform:
-          - darwin/amd64
-          - darwin/arm64
+          - amd64
+          - arm64
     #          - darwin/universal
     steps:
       - name: Checkout source code
@@ -54,7 +54,7 @@ jobs:
       - name: Build wails app for macOS
         shell: bash
         run: |
-          CGO_ENABLED=1 wails build -platform ${{ matrix.platform }}
+          CGO_ENABLED=1 wails build -platform darwin/${{ matrix.platform }}
 
       - name: Checkout create-image
         uses: actions/checkout@v2
@@ -83,8 +83,13 @@ jobs:
             --icon "哔哔音乐.app" 180 180 \
             --hide-extension "哔哔音乐.app" \
             --app-drop-link 480 180 \
-            "bin/哔哔音乐.dmg" \
+            "bin/bb-music-darwin-${{ matrix.platform }}-${{inputs.tag}}.dmg" \
             "bin"
+
+      - name: ls
+        run: |
+          cd build/bin \ 
+          ls
 
       - name: Upload release
         uses: softprops/action-gh-release@v1

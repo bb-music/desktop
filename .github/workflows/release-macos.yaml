@@ -72,14 +72,15 @@ jobs:
       - name: Build macOS DMG
         shell: bash
         working-directory: ./build
-        run: ./create-dmg/create-dmg \
-          --volname bb-music \
-          --window-size 400 200 \
-          --icon-size 100 \
-          --icon bb-music 30 70 \
-          --app-drop-link 200 70 \
-          bin/bb-music-darwin-${{matrix.platform}}-${{ inputs.tag }}.dmg \
-          bin
+        run: |
+          ./create-dmg/create-dmg \
+            --volname bb-music \
+            --window-size 400 200 \
+            --icon-size 100 \
+            --icon bb-music 30 70 \
+            --app-drop-link 200 70 \
+            "bin/bb-music-darwin-${{matrix.platform}}-${{ inputs.tag }}.dmg" \
+            "bin"
 
       - name: Upload release
         uses: softprops/action-gh-release@v1

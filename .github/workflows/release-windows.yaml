@@ -16,6 +16,7 @@ jobs:
     name: Release Windows App
     runs-on: windows-latest
     strategy:
+      fail-fast: false
       matrix:
         platform:
           - amd64
@@ -46,6 +47,13 @@ jobs:
         with:
           version: 8
 
+      - name: Build frontend
+        shell: bash
+        run: |
+          cd frontend
+          pnpm install
+          pnpm build
+
       - name: Install upx
         uses: crazy-max/ghaction-chocolatey@v2
         with:
@@ -55,6 +63,8 @@ jobs:
         shell: bash
         run: |
           wails build -platform windows/${{ matrix.platform }} \
+          -s \
+          -skipbindings	\
           -upx \
           -o 哔哔音乐-${{ matrix.platform }}-${{inputs.tag}}
 

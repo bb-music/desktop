@@ -54,10 +54,10 @@ jobs:
           pnpm install
           pnpm build
 
-      - name: Install upx
-        uses: crazy-max/ghaction-chocolatey@v2
+      - name: Install UPX
+        uses: crazy-max/ghaction-upx@v3
         with:
-          args: install upx
+          install-only: true
 
       - name: Build Windows app
         shell: bash

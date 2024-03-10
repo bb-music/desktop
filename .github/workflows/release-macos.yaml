@@ -14,26 +14,23 @@ on:
 jobs:
   release:
     name: Release macOS App
-    runs-on: macos-latest
+    runs-on: macos-latest # We can cross compile but need to be on macOS to notarise
     strategy:
-      fail-fast: false
       matrix:
         platform:
-          - amd64
-          - arm64
-
+          - darwin/amd64
+          - darwin/arm64
+    #          - darwin/universal
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
+      - name: Checkout source code
+        uses: actions/checkout@v3
 
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
           go-version: stable
 
-      - name: Setup wails
+      - name: Install wails
         shell: bash
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
@@ -54,13 +51,10 @@ jobs:
           pnpm install
           pnpm build
 
-      - name: Build macOS app
+      - name: Build wails app for macOS
         shell: bash
         run: |
-          wails build -platform darwin/${{ matrix.platform }} \
-          -s \
-          -skipbindings	\
-          -o bbmusic.app
+          CGO_ENABLED=1 wails build -platform ${{ matrix.platform }}
 
       - name: Checkout create-image
         uses: actions/checkout@v2
@@ -73,13 +67,22 @@ jobs:
         shell: bash
         working-directory: ./build
         run: |
+          mv bin/哔哔音乐.app "bin/哔哔音乐.app"
           ./create-dmg/create-dmg \
-            --volname bb-music \
-            --window-size 400 200 \
-            --icon-size 100 \
-            --icon bb-music 30 70 \
-            --app-drop-link 200 70 \
-            "bin/bb-music-darwin-${{matrix.platform}}-${{ inputs.tag }}.dmg" \
+            --no-internet-enable \
+            --volname "哔哔音乐" \
+            --volicon "bin/哔哔音乐.app/Contents/Resources/iconfile.icns" \
+            --background "dmg/background.tiff" \
+            --text-size 12 \
+            --window-pos 400 400 \
+            --window-size 660 450 \
+            --icon-size 80 \
+            --icon "哔哔音乐.app" 180 180 \
+            --hide-extension "哔哔音乐.app" \
+            --app-drop-link 480 180 \
+            --add-file "Repair" "dmg/fix-app" 230 290 \
+            --add-file "损坏修复" "dmg/fix-app_zh" 430 290 \
+            "bin/哔哔音乐.dmg" \
             "bin"
 
       - name: Upload release
@@ -87,7 +90,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: ./build/bin/*
+          files: ./build/bin/*.dmg
           token: ${{ secrets.GITHUB_TOKEN }}
           name: ${{ inputs.tag }}
           tag_name: ${{ inputs.tag }}

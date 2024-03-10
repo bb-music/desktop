@@ -1,0 +1,91 @@
+name: Release macOS App
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Version tag'
+        required: true
+        default: 'v0.0.1'
+
+jobs:
+  release:
+    name: Release macOS App
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - amd64
+          - arm64
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: stable
+
+      - name: Setup wails
+        shell: bash
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Build frontend
+        shell: bash
+        run: |
+          cd frontend
+          pnpm install
+          pnpm build
+
+      - name: Build macOS app
+        shell: bash
+        run: |
+          wails build -platform darwin/${{ matrix.platform }} \
+          -s \
+          -skipbindings	\
+          -o bb-music.app
+
+      - name: Checkout create-image
+        uses: actions/checkout@v2
+        with:
+          repository: create-dmg/create-dmg
+          path: ./build/create-dmg
+          ref: main
+
+      - name: Build macOS DMG
+        shell: bash
+        working-directory: ./build
+        run: |
+          ./create-dmg/create-dmg \
+            --volname 哔哔音乐 \
+            --window-size 400 200 \
+            --icon-size 100 \
+            --icon 哔哔音乐 30 70 \
+            --app-drop-link 200 70 bin/bb-music-darwin-${{matrix.platform}}-${{ inputs.tag }}.dmg bin/bb-music.app
+
+      - name: Upload release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          files: ./build/bin/*
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{ inputs.tag }}
+          tag_name: ${{ inputs.tag }}

@@ -54,18 +54,22 @@ jobs:
           pnpm install
           pnpm build
 
-      - name: Setup UPX
-        uses: crazy-max/ghaction-upx@v3
-        with:
-          install-only: true
-
       - name: Build Windows app
         shell: bash
         run: |
           wails build -platform windows/${{ matrix.platform }} \
           -s \
           -skipbindings	\
-          -o bb-music-${{ matrix.platform }}-${{inputs.tag}}.exe
+          -o bb-music-windows-${{ matrix.platform }}-${{inputs.tag}}.exe
+
+      - name: Setup UPX
+        uses: crazy-max/ghaction-upx@v3
+        with:
+          install-only: true
+
+      - name: Compress
+        run: |
+          upx ./build/bin/bb-music-windows-${{ matrix.platform }}-${{inputs.tag}}.exe
 
       - name: Upload release
         uses: softprops/action-gh-release@v1

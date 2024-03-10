@@ -65,21 +65,14 @@ jobs:
           wails build -platform windows/${{ matrix.platform }} \
           -s \
           -skipbindings	\
-          -o 哔哔音乐-${{ matrix.platform }}-${{inputs.tag}}.exe
-
-      - name: ls
-        shell: bash
-        run: |
-          cd build
-          ls
-          cd bin
-          ls
-          pwd
+          -o bb-music-${{ matrix.platform }}-${{inputs.tag}}.exe
 
       - name: Upload release
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: ./build/bin/哔哔音乐-${{ matrix.platform }}-${{inputs.tag}}.exe
+          files: ./build/bin/*.exe
           token: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{ inputs.tag }}
+          tag_name: ${{ inputs.tag }}

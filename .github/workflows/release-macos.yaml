@@ -67,7 +67,7 @@ jobs:
         with:
           repository: create-dmg/create-dmg
           path: ./build/create-dmg
-          ref: main
+          ref: master
 
       - name: Build macOS DMG
         shell: bash

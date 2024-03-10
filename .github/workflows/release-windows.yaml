@@ -72,8 +72,9 @@ jobs:
         run: |
           cd build
           ls
-          cd build/bin
+          cd bin
           ls
+          pwd
 
       - name: Upload release
         uses: softprops/action-gh-release@v1

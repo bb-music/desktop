@@ -83,5 +83,3 @@ jobs:
         with:
           files: ./build/bin/哔哔音乐-${{ matrix.platform }}-${{inputs.tag}}.exe
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: ${{ inputs.tag }}
-          tag_name: ${{ inputs.tag }}

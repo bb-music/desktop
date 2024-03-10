@@ -63,16 +63,19 @@ jobs:
           path: ./build/create-dmg
           ref: master
 
+      - name: ls
+        run: |
+          cd build/bin \ 
+          ls
+
       - name: Build macOS DMG
         shell: bash
         working-directory: ./build
         run: |
-          mv bin/哔哔音乐.app "bin/哔哔音乐.app"
           ./create-dmg/create-dmg \
             --no-internet-enable \
             --volname "哔哔音乐" \
             --volicon "bin/哔哔音乐.app/Contents/Resources/iconfile.icns" \
-            --background "dmg/background.tiff" \
             --text-size 12 \
             --window-pos 400 400 \
             --window-size 660 450 \
@@ -80,8 +83,6 @@ jobs:
             --icon "哔哔音乐.app" 180 180 \
             --hide-extension "哔哔音乐.app" \
             --app-drop-link 480 180 \
-            --add-file "Repair" "dmg/fix-app" 230 290 \
-            --add-file "损坏修复" "dmg/fix-app_zh" 430 290 \
             "bin/哔哔音乐.dmg" \
             "bin"
 

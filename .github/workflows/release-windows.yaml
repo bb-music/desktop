@@ -65,7 +65,6 @@ jobs:
           wails build -platform windows/${{ matrix.platform }} \
           -s \
           -skipbindings	\
-          -upx \
           -o 哔哔音乐-${{ matrix.platform }}-${{inputs.tag}}
 
       - name: Upload release

@@ -60,7 +60,7 @@ jobs:
           wails build -platform darwin/${{ matrix.platform }} \
           -s \
           -skipbindings	\
-          -o 哔哔音乐.app
+          -o bbmusic.app
 
       - name: Checkout create-image
         uses: actions/checkout@v2
@@ -73,7 +73,7 @@ jobs:
         shell: bash
         working-directory: ./build
         run:
-          ./create-dmg/create-dmg --volname 哔哔音乐 --window-size 400 200 --icon-size 100 --icon 哔哔音乐 30 70 --app-drop-link 200 70  ./bin/./bin/bb-music-darwin-${{matrix.platform}}-${{ inputs.tag }}.dmg ./bin/哔哔音乐.app
+          ./create-dmg/create-dmg --volname 哔哔音乐 --window-size 400 200 --icon-size 100 --icon 哔哔音乐 30 70 --app-drop-link 200 70  ./bin/./bin/bb-music-darwin-${{matrix.platform}}-${{ inputs.tag }}.dmg ./bin/bbmusic.app
           # ./create-dmg/create-dmg \
           #   --volname 哔哔音乐 \
           #   --window-size 400 200 \

@@ -33,19 +33,20 @@ jobs:
         with:
           go-version: stable
 
-      - name: Install wails
+      - name: Setup wails
         shell: bash
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
-
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
         with:
           version: 8
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'pnpm'
 
       - name: Build frontend
         shell: bash
@@ -54,7 +55,7 @@ jobs:
           pnpm install
           pnpm build
 
-      - name: Install UPX
+      - name: Setup UPX
         uses: crazy-max/ghaction-upx@v3
         with:
           install-only: true
@@ -75,3 +76,4 @@ jobs:
           files: build/bin/*
           token: ${{ secrets.GITHUB_TOKEN }}
           name: ${{ inputs.tag }}
+          tag_name: ${{ inputs.tag }}

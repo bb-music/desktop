@@ -37,16 +37,15 @@ jobs:
         shell: bash
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 8
-
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
-          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
 
       - name: Build frontend
         shell: bash

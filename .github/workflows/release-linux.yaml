@@ -4,12 +4,12 @@ on:
   push:
     tags:
       - 'v*'
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: 'Version tag'
-        required: true
-        default: 'v0.0.1'
+  # workflow_dispatch:
+  #   inputs:
+  #     tag:
+  #       description: 'Version tag'
+  #       required: true
+  #       default: 'v0.0.1'
 
 jobs:
   release:
@@ -61,11 +61,12 @@ jobs:
 
       - name: Build Linux app
         shell: bash
+        if: github.event.release.tag_name
         run: |
           wails build -platform linux/${{ matrix.platform }} \
           -s \
           -skipbindings	\
-          -o bb-music-linux-${{ matrix.platform }}-${{inputs.tag}}
+          -o bb-music-linux-${{ matrix.platform }}-${{github.event.release.tag_name}}
 
       - name: Setup UPX
         uses: crazy-max/ghaction-upx@v3
@@ -74,7 +75,7 @@ jobs:
 
       - name: Compress
         run: |
-          upx ./build/bin/bb-music-linux-${{ matrix.platform }}-${{inputs.tag}}
+          upx ./build/bin/bb-music-linux-${{ matrix.platform }}-${{github.event.release.tag_name}}
 
       - name: Upload release
         uses: softprops/action-gh-release@v1
@@ -83,5 +84,5 @@ jobs:
         with:
           files: ./build/bin/*
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: ${{ inputs.tag }}
-          tag_name: ${{ inputs.tag }}
+          name: ${{ github.event.release.tag_name }}
+          tag_name: ${{ github.event.release.tag_name }}

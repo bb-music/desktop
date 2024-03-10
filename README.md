@@ -45,3 +45,7 @@ create-dmg --volname 哔哔音乐 --window-size 400 200 --icon-size 100 --icon �
 1. [SocialSisterYi](https://github.com/SocialSisterYi/bilibili-API-collect) 感谢这个库的作者和相关贡献者
 2. [wails](https://wails.io/zh-Hans/) 使用 Go 构建漂亮的跨平台应用程序
 3. 感谢广大 B 站网友们提供的视频资源
+
+## TODO
+
+1. bili_sdk 和 app_bili 中的 SpiData 和 SignData 存取存在冗余，需要优化

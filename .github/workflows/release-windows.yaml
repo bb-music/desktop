@@ -76,8 +76,9 @@ jobs:
           upx ./build/bin/bb-music.exe
 
       - name: Rename
+        working-directory: ./build/bin
         run: |
-          mv "./build/bin/bb-music" "./build/bin/bb-music-${{steps.get_version.outputs.VERSION}}-win-${{ matrix.platform }}.exe"
+          Rename-Item -Path "bb-music.exe" -NewName "bb-music-${{steps.get_version.outputs.VERSION}}-win-${{ matrix.platform }}.exe"
 
       - name: Upload release
         uses: softprops/action-gh-release@v1

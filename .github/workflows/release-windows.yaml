@@ -28,10 +28,6 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Get version
-        id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
@@ -80,7 +76,7 @@ jobs:
       - name: Rename
         working-directory: ./build/bin
         run: |
-          Rename-Item -Path "bb-music.exe" -NewName "bb-music-${{steps.get_version.outputs.VERSION}}-win-${{ matrix.platform }}.exe"
+          Rename-Item -Path "bb-music.exe" -NewName "bb-music-${{github.ref_name}}-win-${{ matrix.platform }}.exe"
 
       - name: Upload release
         uses: softprops/action-gh-release@v1

@@ -60,7 +60,7 @@ jobs:
           wails build -platform windows/${{ matrix.platform }} \
           -s \
           -skipbindings	\
-          -o bb-music-windows-${{ matrix.platform }}-${{github.event.release.tag_name}}.exe
+          -o bb-music-win-${{github.ref}}-${{ matrix.platform }}.exe
 
       - name: Setup UPX
         uses: crazy-max/ghaction-upx@v3
@@ -69,7 +69,7 @@ jobs:
 
       - name: Compress
         run: |
-          upx ./build/bin/bb-music-windows-${{ matrix.platform }}-${{github.event.release.tag_name}}.exe
+          upx ./build/bin/bb-music-${{github.ref}}-win-${{ matrix.platform }}.exe
 
       - name: Upload release
         uses: softprops/action-gh-release@v1
@@ -78,5 +78,3 @@ jobs:
         with:
           files: ./build/bin/*.exe
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: ${{ github.event.release.tag_name }}
-          tag_name: ${{ github.event.release.tag_name }}

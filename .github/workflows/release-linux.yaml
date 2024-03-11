@@ -61,12 +61,11 @@ jobs:
 
       - name: Build Linux app
         shell: bash
-        if: github.event.release.tag_name
         run: |
           wails build -platform linux/${{ matrix.platform }} \
           -s \
           -skipbindings	\
-          -o bb-music-linux-${{ matrix.platform }}-${{github.event.release.tag_name}}
+          -o bb-music-${{github.ref}}-linux-${{ matrix.platform }}
 
       - name: Setup UPX
         uses: crazy-max/ghaction-upx@v3
@@ -75,7 +74,7 @@ jobs:
 
       - name: Compress
         run: |
-          upx ./build/bin/bb-music-linux-${{ matrix.platform }}-${{github.event.release.tag_name}}
+          upx ./build/bin/bb-music-${{github.ref}}-linux-${{ matrix.platform }}
 
       - name: Upload release
         uses: softprops/action-gh-release@v1
@@ -84,5 +83,3 @@ jobs:
         with:
           files: ./build/bin/*
           token: ${{ secrets.GITHUB_TOKEN }}
-          name: ${{ github.event.release.tag_name }}
-          tag_name: ${{ github.event.release.tag_name }}

@@ -67,11 +67,6 @@ jobs:
           path: ./build/create-dmg
           ref: master
 
-      - name: ls
-        run: |
-          cd build/bin \ 
-          ls
-
       - name: Build macOS DMG
         shell: bash
         working-directory: ./build
@@ -89,11 +84,6 @@ jobs:
             --app-drop-link 480 180 \
             "bin/bb-music-${{steps.get_version.outputs.VERSION}}-darwin-${{matrix.platform}}.dmg" \
             "bin"
-
-      - name: ls
-        run: |
-          cd build/bin \ 
-          ls
 
       - name: Upload release
         uses: softprops/action-gh-release@v1

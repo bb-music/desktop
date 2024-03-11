@@ -68,10 +68,12 @@ jobs:
 
       - name: Setup UPX
         uses: crazy-max/ghaction-upx@v3
+        if: ${{ matrix.platform == 'amd64' }}
         with:
           install-only: true
 
       - name: Compress
+        if: ${{ matrix.platform == 'amd64' }}
         run: |
           upx ./build/bin/bb-music.exe
 

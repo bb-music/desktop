@@ -27,6 +27,10 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Get version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
@@ -65,7 +69,7 @@ jobs:
           wails build -platform linux/${{ matrix.platform }} \
           -s \
           -skipbindings	\
-          -o bb-music-${{github.ref}}-linux-${{ matrix.platform }}
+          -o bb-music
 
       - name: Setup UPX
         uses: crazy-max/ghaction-upx@v3
@@ -74,7 +78,11 @@ jobs:
 
       - name: Compress
         run: |
-          upx ./build/bin/bb-music-${{github.ref}}-linux-${{ matrix.platform }}
+          upx ./build/bin/bb-music
+
+      - name: Rename
+        run: |
+          mv "./build/bin/bb-music" "./build/bin/bb-music-${{steps.get_version.outputs.VERSION}}-linux-${{ matrix.platform }}"
 
       - name: Upload release
         uses: softprops/action-gh-release@v1

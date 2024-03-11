@@ -25,6 +25,10 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v3
 
+      - name: Get version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
@@ -83,7 +87,7 @@ jobs:
             --icon "哔哔音乐.app" 180 180 \
             --hide-extension "哔哔音乐.app" \
             --app-drop-link 480 180 \
-            "bin/bb-music-${{github.ref}}-darwin-${{ matrix.platform }}.dmg" \
+            "bin/bb-music-${{steps.get_version.outputs.VERSION}}-darwin-${{matrix.platform}}.dmg" \
             "bin"
 
       - name: ls

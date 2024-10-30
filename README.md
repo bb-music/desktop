@@ -1,3 +1,4 @@
+# 注意！！！此版本已不在维护，请使用 https://github.com/bb-music/flutter-app   支持 win 和安卓，功能更加完善
 # 哔哔音乐-桌面客户端
 
 使用 B 站作为歌曲源开发的音乐播放器
